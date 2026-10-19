@@ -1,0 +1,25 @@
+<section id="plan-idea" data-transition="fade" style="background:#F6F5F0; color:#1B1F2A; font-family:'IBM Plex Sans', Arial, sans-serif; padding:128px 128px 160px; display:flex; flex-direction:column; gap:48px">
+<div style="display:flex; flex-direction:column; gap:16px">
+<p style="font-size:24px; font-weight:600; letter-spacing:3px; text-transform:uppercase; color:#B5541C">Patrón de razonamiento · la idea</p>
+<h2 style="font-family:'Space Grotesk', Arial, sans-serif; font-size:64px; font-weight:600; line-height:1.1; color:#14171F">Plan-and-Execute: primero el plan, después los pasos</h2>
+</div>
+<div style="position:absolute; left:128px; top:300px; width:760px; display:flex; flex-direction:column; gap:24px">
+<div style="display:flex; flex-direction:column; gap:8px; background:#FDFCF9; border:2px dashed #4A5061; border-radius:16px; padding:20px 40px"><p style="font-size:28px; font-weight:600; color:#14171F">Improvisar paso a paso</p><p style="font-size:26px; line-height:1.4; color:#4A5061">Como ReAct: flexible, pero no ves el camino completo ni puedes aprobarlo antes de gastar.</p></div>
+<div style="display:flex; flex-direction:column; gap:8px; background:#FDFCF9; border:2px dashed #4A5061; border-radius:16px; padding:20px 40px"><p style="font-size:28px; font-weight:600; color:#14171F">Un plan que nadie revisa</p><p style="font-size:26px; line-height:1.4; color:#4A5061">Escribe una lista y la sigue a ciegas: si un paso falla, no se entera.</p></div>
+<div style="display:flex; flex-direction:column; gap:8px; background:#F7D9C4; border:2px solid #B5541C; border-radius:16px; padding:20px 40px"><p style="font-size:28px; font-weight:600; color:#14171F">Plan-and-Execute</p><p style="font-size:26px; line-height:1.4; color:#1B1F2A">Un planificador escribe la lista completa de pasos; un ejecutor la recorre en orden, y el plan se puede aprobar o rehacer.</p></div>
+</div>
+<div style="position:absolute; left:960px; top:300px; width:832px; display:flex; flex-direction:column; gap:28px">
+<div style="display:flex; flex-direction:column; gap:14px; background:#14171F; border-radius:16px; padding:28px 32px">
+<p style="font-size:24px; line-height:1.4; color:#9AA0AE">Tarea: construir el alta de empleados de HU-01</p>
+<p style="font-size:24px; line-height:1.4; color:#E6E3D8"><span style="font-weight:600; color:#F0935A">Plan ·</span> 1 · modelo Empleado · 2 · POST /api/empleados · 3 · formulario de alta</p>
+<p style="font-size:24px; line-height:1.4; color:#E6E3D8"><span style="font-weight:600; color:#F0935A">Aprobación ·</span> una persona revisa el plan y responde «sí»</p>
+<p style="font-size:24px; line-height:1.4; color:#E6E3D8"><span style="font-weight:600; color:#8DB7F0">Paso 1 ·</span> crea el modelo Empleado con sus validaciones</p>
+<p style="font-size:24px; line-height:1.4; color:#E6E3D8"><span style="font-weight:600; color:#8DB7F0">Paso 2 ·</span> crea el endpoint usando lo que dejó el paso 1</p>
+<p style="font-size:24px; line-height:1.4; color:#E6E3D8"><span style="font-weight:600; color:#8DB7F0">Paso 3 ·</span> crea el formulario con sus data-testid</p>
+<p style="font-size:24px; line-height:1.4; color:#E6E3D8"><span style="font-weight:600; color:#E6E3D8">Resultado ·</span> tres pasos, en el orden que se aprobó</p>
+</div>
+<p style="font-size:24px; line-height:1.4; color:#4A5061">El plan es un <b>dato</b>: se revisa antes de gastar en ejecutarlo, y si un paso falla se vuelve a planificar.</p>
+</div>
+<p style="position:absolute; left:128px; bottom:64px; width:1664px; font-size:24px; color:#6B7080">Sesión 1 · Patrones de razonamiento · Wang et al., «Plan-and-Solve Prompting» (2023) · LangChain, agentes Plan-and-Execute (2023)</p>
+<aside>3 minutos, antes del diagrama. Contrastar con ReAct, que acabamos de ver: en ReAct el modelo decide el siguiente paso en cada vuelta y nadie conoce el camino completo hasta el final. Plan-and-Execute separa dos papeles: un planificador que escribe toda la lista de pasos de una vez, y un ejecutor que los recorre en orden, cada uno con el resultado de los anteriores. Ventajas: el plan se puede revisar y aprobar antes de gastar, el costo es más predecible y el ejecutor puede ser un modelo más barato. Riesgo: si el mundo cambia a mitad del camino, el plan queda viejo; por eso existe la variante que replanifica cuando un paso falla. Pregunta para el grupo: ¿qué tarea de su trabajo conviene planificar completa antes de empezar, y cuál conviene improvisar?</aside>
+</section>

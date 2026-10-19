@@ -1,0 +1,18 @@
+<section id="s2-codigo" data-transition="fade" style="background:#F6F5F0; color:#1B1F2A; font-family:'IBM Plex Sans', Arial, sans-serif; padding:128px 128px 160px; display:flex; flex-direction:column; gap:48px">
+<div style="display:flex; flex-direction:column; gap:16px">
+<p style="font-size:24px; font-weight:600; letter-spacing:3px; text-transform:uppercase; color:#B5541C">2.3 · Claude Code como agente programable</p>
+<h2 style="font-family:'Space Grotesk', Arial, sans-serif; font-size:64px; font-weight:600; line-height:1.1; color:#14171F">Tú pones el marco; Claude Code programa</h2>
+</div>
+<div style="display:grid; grid-template-columns:1120px 1fr; gap:48px">
+<div style="background:#14171F; border-radius:16px; padding:40px">
+<p style="font-family:'JetBrains Mono', monospace; font-size:24px; line-height:1.5; color:#E6E3D8">opciones = ClaudeAgentOptions(<br>&#160;&#160;&#160;&#160;cwd=str(APP),&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;<span style="color:#9AA0AE"># solo app/</span><br>&#160;&#160;&#160;&#160;system_prompt={"type": "preset",<br>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;"preset": "claude_code", "append": rol},<br>&#160;&#160;&#160;&#160;setting_sources=["project"],&#160;&#160;&#160;<span style="color:#9AA0AE"># app/CLAUDE.md</span><br>&#160;&#160;&#160;&#160;permission_mode="acceptEdits",<br>&#160;&#160;&#160;&#160;allowed_tools=herramientas,<br>&#160;&#160;&#160;&#160;disallowed_tools=["WebFetch", "WebSearch"],<br>&#160;&#160;&#160;&#160;hooks=hooks_para(agente, ...),&#160;&#160;<span style="color:#9AA0AE"># permisos</span><br>&#160;&#160;&#160;&#160;max_turns=80,<br>&#160;&#160;&#160;&#160;max_budget_usd=2.0)</p>
+</div>
+<div style="display:flex; flex-direction:column; gap:28px">
+<p style="font-size:28px; line-height:1.4; color:#1B1F2A"><b>Planificar:</b> solo Read, Glob y Grep. Es el modo plan.</p>
+<p style="font-size:28px; line-height:1.4; color:#1B1F2A"><b>Construir:</b> edición y terminal, dentro de los hooks.</p>
+<p style="font-size:28px; line-height:1.4; color:#1B1F2A"><b>app/CLAUDE.md</b> fija stack, puertos y data-testid.</p>
+</div>
+</div>
+<p style="position:absolute; left:128px; bottom:64px; width:1664px; font-size:24px; color:#6B7080">agentes/claude_code.py y agentes/desarrollador.py</p>
+<aside>20 minutos. El agente 3 no usa el bucle de la sesión 1: delega en Claude Code mediante el Claude Agent SDK, que ya sabe leer, editar y usar la terminal. Nosotros decidimos el marco: la carpeta de trabajo, el preset de Claude Code más el rol, que cargue app/CLAUDE.md, qué herramientas puede usar, que no tenga internet, los hooks que limitan qué archivos escribe y cuánto puede gastar. Planificar usa solo herramientas de lectura: es el equivalente al modo plan, porque no puede cambiar nada antes de que una persona apruebe. Demostración: ejecutar desarrollador.planificar("HU-01") y leer el plan con la clase.</aside>
+</section>

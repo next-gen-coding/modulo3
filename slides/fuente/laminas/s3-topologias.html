@@ -1,0 +1,17 @@
+<section id="s3-topologias" data-transition="fade" style="background:#F6F5F0; color:#1B1F2A; font-family:'IBM Plex Sans', Arial, sans-serif; padding:128px 128px 160px; display:flex; flex-direction:column; gap:48px">
+<div style="display:flex; flex-direction:column; gap:16px">
+<p style="font-size:24px; font-weight:600; letter-spacing:3px; text-transform:uppercase; color:#B5541C">3.2 · Topologías</p>
+<h2 style="font-family:'Space Grotesk', Arial, sans-serif; font-size:64px; font-weight:600; line-height:1.1; color:#14171F">Quién decide define la topología</h2>
+</div>
+<table style="font-size:26px; color:#1B1F2A">
+<tr><th style="width:26%">Topología</th><th style="width:32%">Quién decide</th><th style="width:42%">En tu fábrica</th></tr>
+<tr style="background:#F7D9C4"><td><b>Orquestador con flujo fijo</b></td><td>El grafo decide el orden</td><td>Sesiones 2 y 3: LangGraph</td></tr>
+<tr><td><b>Supervisor</b></td><td>Un agente elige a quién delegar</td><td>Sesión 4: el triage</td></tr>
+<tr><td><b>Jerárquica</b></td><td>Supervisores de supervisores</td><td>No se usa; posible extensión</td></tr>
+<tr><td><b>Traspasos</b></td><td>El agente activo pasa el control</td><td>No se usa</td></tr>
+<tr><td><b>Pizarra</b></td><td>Todos leen un estado común</td><td>La carpeta salida/ y el estado del grafo</td></tr>
+</table>
+<p style="font-size:30px; line-height:1.4; color:#1B1F2A">Hoy: un orquestador con flujo fijo y <b>una rama en paralelo</b>.</p>
+<p style="position:absolute; left:128px; bottom:64px; width:1664px; font-size:24px; color:#6B7080">Sesión 3 · Sistemas multi-agente</p>
+<aside>10 minutos. Dibujar cada topología en el pizarrón. La fábrica usa la más controlable: un orquestador cuyo orden fija el código. Eso facilita depurar y auditar. En la sesión 4 aparece un supervisor, el triage, que sí decide con un modelo a quién delegar. Jerárquica y traspasos se mencionan como alternativas: un traspaso tendría sentido, por ejemplo, si el desarrollador pudiera pasarle el control directamente al automatizador. La carpeta salida/ funciona como una pizarra de solo lectura: cada agente deja ahí su artefacto y los siguientes lo leen.</aside>
+</section>

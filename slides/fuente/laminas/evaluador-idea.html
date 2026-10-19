@@ -1,0 +1,24 @@
+<section id="evaluador-idea" data-transition="fade" style="background:#F6F5F0; color:#1B1F2A; font-family:'IBM Plex Sans', Arial, sans-serif; padding:128px 128px 160px; display:flex; flex-direction:column; gap:48px">
+<div style="display:flex; flex-direction:column; gap:16px">
+<p style="font-size:24px; font-weight:600; letter-spacing:3px; text-transform:uppercase; color:#B5541C">Patrón de flujo · la idea</p>
+<h2 style="font-family:'Space Grotesk', Arial, sans-serif; font-size:64px; font-weight:600; line-height:1.1; color:#14171F">Evaluador-optimizador: uno genera, otro juzga</h2>
+</div>
+<div style="position:absolute; left:128px; top:300px; width:760px; display:flex; flex-direction:column; gap:24px">
+<div style="display:flex; flex-direction:column; gap:8px; background:#FDFCF9; border:2px dashed #4A5061; border-radius:16px; padding:20px 40px"><p style="font-size:28px; font-weight:600; color:#14171F">Creerle al generador</p><p style="font-size:26px; line-height:1.4; color:#4A5061">El agente dice «listo» y se le cree: una afirmación no es evidencia.</p></div>
+<div style="display:flex; flex-direction:column; gap:8px; background:#FDFCF9; border:2px dashed #4A5061; border-radius:16px; padding:20px 40px"><p style="font-size:28px; font-weight:600; color:#14171F">Reflexión</p><p style="font-size:26px; line-height:1.4; color:#4A5061">El mismo agente se critica: ayuda, pero tiende a aprobar su propio trabajo.</p></div>
+<div style="display:flex; flex-direction:column; gap:8px; background:#F7D9C4; border:2px solid #B5541C; border-radius:16px; padding:20px 40px"><p style="font-size:28px; font-weight:600; color:#14171F">Evaluador-optimizador</p><p style="font-size:26px; line-height:1.4; color:#1B1F2A">Un evaluador independiente, otro agente o una herramienta, juzga con un criterio claro y su retroalimentación vuelve al generador.</p></div>
+</div>
+<div style="position:absolute; left:960px; top:300px; width:832px; display:flex; flex-direction:column; gap:28px">
+<div style="display:flex; flex-direction:column; gap:14px; background:#14171F; border-radius:16px; padding:28px 32px">
+<p style="font-size:24px; line-height:1.4; color:#E6E3D8"><span style="font-weight:600; color:#8DB7F0">Generador ·</span> el desarrollador escribe la API de alta</p>
+<p style="font-size:24px; line-height:1.4; color:#E6E3D8"><span style="font-weight:600; color:#F0935A">Evaluador ·</span> pytest: test_correo_duplicado espera 409 y recibe 500</p>
+<p style="font-size:24px; line-height:1.4; color:#E6E3D8"><span style="font-weight:600; color:#F0935A">Retroalimentación ·</span> el error completo vuelve al prompt del desarrollador</p>
+<p style="font-size:24px; line-height:1.4; color:#E6E3D8"><span style="font-weight:600; color:#8DB7F0">Generador ·</span> intento 2: responde 409 ante un correo duplicado</p>
+<p style="font-size:24px; line-height:1.4; color:#E6E3D8"><span style="font-weight:600; color:#A9D18E">Evaluador ·</span> pytest: 12 de 12 pruebas pasan</p>
+<p style="font-size:24px; line-height:1.4; color:#E6E3D8"><span style="font-weight:600; color:#E6E3D8">Resultado ·</span> aprobado en el intento 2 de 3</p>
+</div>
+<p style="font-size:24px; line-height:1.4; color:#4A5061">Funciona cuando hay un criterio objetivo de calidad; siempre con tope de intentos y escalamiento a una persona.</p>
+</div>
+<p style="position:absolute; left:128px; bottom:64px; width:1664px; font-size:24px; color:#6B7080">Sesión 2 · Patrones de flujo · Anthropic, «Building effective agents» (2024)</p>
+<aside>2 minutos, dentro de los cinco del patrón. Dos papeles separados: un generador produce y un evaluador juzga. Si el evaluador rechaza, su retroalimentación, concreta, vuelve al generador para el siguiente intento. La diferencia con la reflexión es la independencia del juez: aquí no se califica a sí mismo. El mejor evaluador es una herramienta objetiva, como pytest o un compilador; si es otro modelo, conviene que tenga criterios escritos. Úsenlo cuando hay un criterio claro de calidad y cada vuelta realmente mejora el resultado. Esta es la regla de todo el curso: quien decide si el trabajo terminó es pytest, no la afirmación del agente. Pregunta: ¿qué harían si después de tres intentos sigue fallando?</aside>
+</section>

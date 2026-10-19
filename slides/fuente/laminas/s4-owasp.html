@@ -1,0 +1,19 @@
+<section id="s4-owasp" data-transition="fade" style="background:#F6F5F0; color:#1B1F2A; font-family:'IBM Plex Sans', Arial, sans-serif; padding:128px 128px 160px; display:flex; flex-direction:column; gap:40px">
+<div style="display:flex; flex-direction:column; gap:16px">
+<p style="font-size:24px; font-weight:600; letter-spacing:3px; text-transform:uppercase; color:#B5541C">4.1 · OWASP Top 10 for Agentic Applications 2026</p>
+<h2 style="font-family:'Space Grotesk', Arial, sans-serif; font-size:64px; font-weight:600; line-height:1.1; color:#14171F">Los riesgos, dentro de tu fábrica</h2>
+</div>
+<table style="font-size:24px; color:#1B1F2A">
+<tr><th style="width:30%">Riesgo</th><th style="width:36%">Dónde aparece</th><th style="width:34%">Qué lo mitiga</th></tr>
+<tr><td><b>ASI01</b> Secuestro del objetivo</td><td>Historia con órdenes ocultas</td><td>filtrar_historia</td></tr>
+<tr><td><b>ASI02</b> Mal uso de herramientas</td><td>El desarrollador reescribe pruebas</td><td>Hooks de rol</td></tr>
+<tr><td><b>ASI03</b> Abuso de privilegios</td><td>Un agente lee .env</td><td>confinar_lectura</td></tr>
+<tr><td><b>ASI04</b> Cadena de suministro</td><td>Un CLAUDE.md manipulado</td><td>Plan revisado por una persona</td></tr>
+<tr><td><b>ASI05</b> Ejecución inesperada</td><td>La app y las pruebas generadas corren</td><td>comandos_permitidos, contenedores</td></tr>
+<tr><td><b>ASI06</b> Contexto envenenado</td><td>contexto/ con órdenes</td><td>Revisar cambios en contexto/</td></tr>
+<tr><td><b>ASI08</b> Fallos en cascada</td><td>Un criterio mal escrito llega a 3 agentes</td><td>Validadores y límite de ciclos</td></tr>
+<tr><td><b>ASI09</b> Confianza excesiva</td><td>Aprobar el plan sin leerlo</td><td>Plan completo y decisión en bitácora</td></tr>
+</table>
+<p style="position:absolute; left:128px; bottom:64px; width:1664px; font-size:24px; color:#6B7080">Fuente: OWASP GenAI Security Project, diciembre de 2025</p>
+<aside>20 minutos. Publicado en diciembre de 2025: complementa al Top 10 para aplicaciones LLM; aquel cubre lo que el modelo dice, este lo que el agente hace. Para cada riesgo, pedir a la clase que señale el archivo de su fábrica donde aparece y el que lo mitiga. ASI07 (comunicación entre agentes) y ASI10 (agentes deshonestos) aplican menos porque los agentes de la fábrica no se hablan directamente: se comunican por archivos y por el estado del grafo. En el laboratorio atacaremos ASI01 y ASI06.</aside>
+</section>

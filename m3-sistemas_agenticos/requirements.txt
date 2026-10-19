@@ -1,0 +1,14 @@
+anthropic
+claude-agent-sdk
+langgraph
+langchain-anthropic
+pydantic
+python-dotenv
+httpx
+pytest
+pytest-playwright
+# Dependencias de la app generada (para verificarla fuera de Docker)
+fastapi
+uvicorn
+sqlalchemy
+email-validator

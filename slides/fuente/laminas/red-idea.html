@@ -1,0 +1,23 @@
+<section id="red-idea" data-transition="fade" style="background:#F6F5F0; color:#1B1F2A; font-family:'IBM Plex Sans', Arial, sans-serif; padding:128px 128px 160px; display:flex; flex-direction:column; gap:48px">
+<div style="display:flex; flex-direction:column; gap:16px">
+<p style="font-size:24px; font-weight:600; letter-spacing:3px; text-transform:uppercase; color:#B5541C">Topología multi-agente · la idea</p>
+<h2 style="font-family:'Space Grotesk', Arial, sans-serif; font-size:64px; font-weight:600; line-height:1.1; color:#14171F">Red: todos pueden hablar con todos</h2>
+</div>
+<div style="position:absolute; left:128px; top:300px; width:760px; display:flex; flex-direction:column; gap:24px">
+<div style="display:flex; flex-direction:column; gap:8px; background:#FDFCF9; border:2px dashed #4A5061; border-radius:16px; padding:20px 40px"><p style="font-size:28px; font-weight:600; color:#14171F">Supervisor</p><p style="font-size:26px; line-height:1.4; color:#4A5061">Un centro decide todo: predecible, pero rígido.</p></div>
+<div style="display:flex; flex-direction:column; gap:8px; background:#FDFCF9; border:2px dashed #4A5061; border-radius:16px; padding:20px 40px"><p style="font-size:28px; font-weight:600; color:#14171F">Traspasos</p><p style="font-size:26px; line-height:1.4; color:#4A5061">El control pasa de uno en uno, en cadena.</p></div>
+<div style="display:flex; flex-direction:column; gap:8px; background:#F7D9C4; border:2px solid #B5541C; border-radius:16px; padding:20px 40px"><p style="font-size:28px; font-weight:600; color:#14171F">Red</p><p style="font-size:26px; line-height:1.4; color:#1B1F2A">Cualquier agente puede pasar el trabajo a cualquier otro; el flujo surge de sus decisiones, no de un diseño fijo.</p></div>
+</div>
+<div style="position:absolute; left:960px; top:300px; width:832px; display:flex; flex-direction:column; gap:28px">
+<div style="display:flex; flex-direction:column; gap:14px; background:#14171F; border-radius:16px; padding:28px 32px">
+<p style="font-size:24px; line-height:1.4; color:#E6E3D8"><span style="font-weight:600; color:#8DB7F0">Analista</span> → Tester: «revisa si los criterios se pueden probar»</p>
+<p style="font-size:24px; line-height:1.4; color:#E6E3D8"><span style="font-weight:600; color:#8DB7F0">Tester</span> → Analista: «el escenario 3 es ambiguo»</p>
+<p style="font-size:24px; line-height:1.4; color:#E6E3D8"><span style="font-weight:600; color:#8DB7F0">Analista</span> → Desarrollador: «empieza con lo que está claro»</p>
+<p style="font-size:24px; line-height:1.4; color:#E6E3D8"><span style="font-weight:600; color:#8DB7F0">Desarrollador</span> → Revisor → Tester → Analista …</p>
+<p style="font-size:24px; line-height:1.4; color:#E6E3D8"><span style="font-weight:600; color:#F0935A">Límite ·</span> turno 12 de 12: el sistema se detiene</p>
+</div>
+<p style="font-size:24px; line-height:1.4; color:#4A5061">Flexible para exploración abierta; difícil de depurar, cara y con riesgo de ciclos. El límite de turnos es obligatorio.</p>
+</div>
+<p style="position:absolute; left:128px; bottom:64px; width:1664px; font-size:24px; color:#6B7080">Sesión 3 · Topologías · LangGraph, documentación de sistemas multi-agente</p>
+<aside>2 minutos, dentro de los cinco del patrón. La red, también llamada enjambre o swarm, quita toda estructura: cualquier agente puede pasarle el trabajo a cualquier otro. Es la más flexible porque el flujo surge de las decisiones de los agentes. También es la más difícil de predecir, depurar y detener: dos agentes pueden pasarse el trabajo sin fin. Los canales crecen rápido: con 4 agentes hay 6, con 10 hay 45. Sirve para exploración abierta o simulaciones; para la fábrica, con pasos conocidos, no la usamos. Pregunta: en la traza, ¿cuándo habría terminado sin el límite de turnos?</aside>
+</section>

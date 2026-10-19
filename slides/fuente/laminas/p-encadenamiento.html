@@ -1,0 +1,30 @@
+<section id="p-encadenamiento" data-transition="fade" style="background:#F6F5F0; color:#1B1F2A; font-family:'IBM Plex Sans', Arial, sans-serif; padding:128px 128px 160px; display:flex; flex-direction:column; gap:48px">
+<div style="display:flex; flex-direction:column; gap:16px">
+<p style="font-size:24px; font-weight:600; letter-spacing:3px; text-transform:uppercase; color:#B5541C">Patrón de flujo · 1 de 5</p>
+<h2 style="font-family:'Space Grotesk', Arial, sans-serif; font-size:64px; font-weight:600; line-height:1.1; color:#14171F">Encadenamiento: un paso tras otro</h2>
+</div>
+<p style="position:absolute; left:128px; top:362px; width:220px; font-size:24px; text-align:center; color:#4A5061">entra la historia</p>
+<div style="position:absolute; left:128px; top:420px; width:220px; height:110px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:4px; background:#F7D9C4; border:2px solid #B5541C; border-radius:16px; padding:0px 12px"><p style="font-size:28px; font-weight:600; text-align:center; color:#14171F">Analista</p><p style="font-size:24px; text-align:center; color:#4A5061">criterios</p></div>
+<div style="position:absolute; left:492px; top:420px; width:220px; height:110px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:4px; background:#FDFCF9; border:2px solid #4A5061; border-radius:16px; padding:0px 12px"><p style="font-size:28px; font-weight:600; text-align:center; color:#14171F">Diseñador</p><p style="font-size:24px; text-align:center; color:#4A5061">casos</p></div>
+<div style="position:absolute; left:856px; top:420px; width:220px; height:110px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:4px; background:#FDFCF9; border:2px solid #4A5061; border-radius:16px; padding:0px 12px"><p style="font-size:28px; font-weight:600; text-align:center; color:#14171F">Desarrollador</p><p style="font-size:24px; text-align:center; color:#4A5061">código</p></div>
+<div style="position:absolute; left:388px; top:443px; width:64px; height:64px; background:#DCE6F3; border:3px solid #2F5D9E; border-radius:50%"></div>
+<div style="position:absolute; left:752px; top:443px; width:64px; height:64px; background:#DCE6F3; border:3px solid #2F5D9E; border-radius:50%"></div>
+<x-connector x1="348" y1="475" x2="388" y2="475" style="color:#4A5061; border-width:3px"></x-connector>
+<x-connector x1="452" y1="475" x2="492" y2="475" style="color:#4A5061; border-width:3px"></x-connector>
+<x-connector x1="712" y1="475" x2="752" y2="475" style="color:#4A5061; border-width:3px"></x-connector>
+<x-connector x1="816" y1="475" x2="856" y2="475" style="color:#4A5061; border-width:3px"></x-connector>
+<p style="position:absolute; left:360px; top:400px; width:120px; font-size:24px; text-align:center; color:#2F5D9E">validar</p>
+<p style="position:absolute; left:724px; top:400px; width:120px; font-size:24px; text-align:center; color:#2F5D9E">validar</p>
+<x-connector x1="420" y1="507" x2="420" y2="600" head="none" style="color:#B5541C; border-width:3px; border-style:dashed"></x-connector>
+<x-connector x1="420" y1="600" x2="238" y2="600" head="none" style="color:#B5541C; border-width:3px; border-style:dashed"></x-connector>
+<x-connector x1="238" y1="600" x2="238" y2="530" style="color:#B5541C; border-width:3px; border-style:dashed"></x-connector>
+<p style="position:absolute; left:450px; top:580px; width:560px; font-size:24px; color:#B5541C">si falla, no avanza: regresa con el error</p>
+<p style="position:absolute; left:128px; top:690px; width:948px; font-size:24px; line-height:1.4; color:#1B1F2A; background:#ECEAE2; border-radius:12px; padding:16px 24px">Cada paso es pequeño, comprobable y fácil de depurar</p>
+<div style="position:absolute; left:1168px; top:300px; width:624px; display:flex; flex-direction:column; gap:28px">
+<div style="display:flex; flex-direction:column; gap:8px"><p style="font-size:24px; font-weight:600; letter-spacing:2px; text-transform:uppercase; color:#B5541C">Cómo funciona</p><p style="font-size:28px; line-height:1.4; color:#1B1F2A">La tarea se divide en pasos fijos: la salida de uno es la entrada del siguiente, con una compuerta entre ellos.</p></div>
+<div style="display:flex; flex-direction:column; gap:8px"><p style="font-size:24px; font-weight:600; letter-spacing:2px; text-transform:uppercase; color:#B5541C">Úsalo cuando</p><p style="font-size:28px; line-height:1.4; color:#1B1F2A">Los pasos se conocen de antemano y cada uno se puede verificar.</p></div>
+<div style="display:flex; flex-direction:column; gap:8px; background:#F7D9C4; border-radius:12px; padding:24px"><p style="font-size:24px; font-weight:600; letter-spacing:2px; text-transform:uppercase; color:#A34A17">En tu fábrica</p><p style="font-size:28px; line-height:1.4; color:#1B1F2A">historia → criterios → casos → código, con validar_gherkin y validar_plan como compuertas.</p></div>
+</div>
+<p style="position:absolute; left:128px; bottom:64px; width:1664px; font-size:24px; color:#6B7080">Sesión 2 · Patrones de flujo</p>
+<aside>El encadenamiento es el patrón de flujo más simple y el que más se usa: una secuencia fija de llamadas al modelo donde la salida de una es la entrada de la siguiente. La clave son las compuertas: entre paso y paso hay una validación en código. Si la salida no pasa, no avanza; regresa al mismo agente con el mensaje de error. En la fábrica, el analista produce criterios, validar_gherkin los revisa, el diseñador produce casos, validar_plan los revisa, y solo entonces trabaja el desarrollador. Pregunta para el grupo: ¿qué pasaría si quitamos las compuertas? El error del analista se propaga y lo descubrimos hasta las pruebas E2E, mucho más caro.</aside>
+</section>

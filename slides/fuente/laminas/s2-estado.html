@@ -1,0 +1,25 @@
+<section id="s2-estado" data-transition="fade" style="background:#F6F5F0; color:#1B1F2A; font-family:'IBM Plex Sans', Arial, sans-serif; padding:128px 128px 160px; display:flex; flex-direction:column; gap:48px">
+<div style="display:flex; flex-direction:column; gap:16px">
+<p style="font-size:24px; font-weight:600; letter-spacing:3px; text-transform:uppercase; color:#B5541C">2.2 · LangGraph 1.0</p>
+<h2 style="font-family:'Space Grotesk', Arial, sans-serif; font-size:64px; font-weight:600; line-height:1.1; color:#14171F">El flujo es un grafo con estado</h2>
+</div>
+<div style="display:flex; gap:32px">
+<div style="flex:1; display:flex; flex-direction:column; gap:16px; background:#FDFCF9; border:1px solid #DEDBD0; border-radius:16px; padding:40px">
+<h3 style="font-family:'Space Grotesk', Arial, sans-serif; font-size:40px; font-weight:600; line-height:1.2; color:#14171F">Estado</h3>
+<p style="font-size:26px; line-height:1.4; color:#4A5061">Un TypedDict viaja por el grafo. Cada nodo devuelve solo lo que cambia.</p>
+</div>
+<div style="flex:1; display:flex; flex-direction:column; gap:16px; background:#FDFCF9; border:1px solid #DEDBD0; border-radius:16px; padding:40px">
+<h3 style="font-family:'Space Grotesk', Arial, sans-serif; font-size:40px; font-weight:600; line-height:1.2; color:#14171F">Nodos y aristas</h3>
+<p style="font-size:26px; line-height:1.4; color:#4A5061">Funciones Python o LLM. Las aristas condicionales eligen el siguiente nodo.</p>
+</div>
+<div style="flex:1; display:flex; flex-direction:column; gap:16px; background:#FDFCF9; border:1px solid #DEDBD0; border-radius:16px; padding:40px">
+<h3 style="font-family:'Space Grotesk', Arial, sans-serif; font-size:40px; font-weight:600; line-height:1.2; color:#14171F">Checkpointer</h3>
+<p style="font-size:26px; line-height:1.4; color:#4A5061">Guarda cada paso por thread_id: reanudar, pausar y depurar.</p>
+</div>
+</div>
+<div style="background:#14171F; border-radius:16px; padding:40px">
+<p style="font-family:'JetBrains Mono', monospace; font-size:24px; line-height:1.5; color:#E6E3D8">g = StateGraph(Estado)<br>g.add_node("verificar", verificar)<br>g.add_conditional_edges("verificar", despues_de_verificar)<br>app = g.compile(checkpointer=InMemorySaver())</p>
+</div>
+<p style="position:absolute; left:128px; bottom:64px; width:1664px; font-size:24px; color:#6B7080">Sesión 2 · LangGraph 1.0 es estable desde octubre de 2025</p>
+<aside>25 minutos. El estado es la memoria del flujo; los reducers definen cómo se combinan las actualizaciones (sobrescribir o concatenar listas, como la bitácora y el costo de la fábrica). Las aristas condicionales son funciones que leen el estado y devuelven el nombre del siguiente nodo: aquí el código decide, no el modelo. El checkpointer guarda el estado tras cada paso, lo que permite reanudar tras una caída, pausar para aprobación humana y viajar en el tiempo para depurar. Los mismos conceptos existen en Microsoft Agent Framework y otros. En la fábrica, el estado guarda la historia, las rutas de los artefactos, el plan, los intentos y el costo acumulado.</aside>
+</section>

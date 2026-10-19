@@ -1,0 +1,878 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>M3 · Sesión 3 · Sistemas multi-agente</title>
+<link rel="stylesheet" href="assets/tec-inspira.css">
+<style>
+/* ── Láminas del módulo sobre el sistema Tec Editorial ── */
+.slide.lamina { padding: 0; }
+.lienzo { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; transform-origin: 0 0;
+          box-sizing: border-box; overflow: hidden; color: var(--ink); font-family: var(--sans); font-weight: var(--peso-texto); line-height: normal; }
+.lienzo * { margin: 0; box-sizing: border-box; }
+.lienzo p, .lienzo li { font-size: inherit; line-height: inherit; font-weight: inherit; max-width: none; }
+.lienzo p[style*="line-height"] { }
+.lienzo h2, .lienzo h3 { margin: 0; letter-spacing: -0.01em; }
+.lienzo b, .lienzo strong { color: var(--tec); font-weight: 700; }
+.lienzo ul, .lienzo ol { padding-left: 0; }
+.lienzo ul > li { padding-left: 1.4em; margin: .35em 0; }
+.lienzo ul > li::before { top: .62em; width: .6em; }
+.lienzo ol > li { padding-left: 2.4em; margin: .35em 0; }
+.lienzo table { width: 100%; border-collapse: collapse; margin-top: 0; }
+.lienzo th, .lienzo td { padding: .45em .7em; vertical-align: top; text-align: left; }
+.lienzo td { font-size: inherit; }
+.lienzo th { font-size: 19px; }
+.lienzo x-connector { position: absolute; left: 0; top: 0; width: 0; height: 0; }
+</style>
+</head>
+<body data-deck="Módulo 3 · Sesión 3 — Sistemas multi-agente">
+
+<section class="slide cover hero">
+  <div class="badge introduce">Introduce</div>
+  <div class="timebox">0:00 · Apertura</div>
+  <p class="eyebrow">Certificado</p>
+  <h1 class="programa">Next-Gen Coding: Desarrollo de Software con IA Generativa (Virtual)</h1>
+  <h2 class="sesion">Sistemas multi-agente</h2>
+  <div class="kicker">Módulo 3 · Construcción de Sistemas Agénticos</div>
+  <p class="big muted">Sesión 3 · 2 h 30 min · Nivel profesional</p>
+  <p class="muted">Dividir el trabajo solo cuando las especialidades lo justifican.</p>
+  <div class="notes">Bienvenida. Idea central: varios agentes se justifican cuando la tarea se divide en especialidades con contextos, herramientas o permisos distintos. Verifica que Docker Desktop corre y que los puertos 8000 y 8080 están libres.</div>
+</section>
+
+<section class="slide cover">
+  <div class="badge integra">Integra</div>
+  <div class="timebox">0:00 · 10 min</div>
+  <div class="kicker">Bloque 3.0</div>
+  <h1>Revisión del entregable 2</h1>
+  <p class="big muted">La tabla de criterios cumplidos: ¿qué falló y por qué?</p>
+  <div class="notes">Lo que falló en la tabla manual es justo lo que las pruebas automáticas de hoy deben atrapar.</div>
+</section>
+
+<section class="slide lamina" id="s3-objetivo">
+  <div class="badge integra">Integra</div>
+  <div class="timebox">0:00 · 10 min</div>
+  <div class="lienzo" style="font-family:var(--sans); padding:128px 128px 160px; display:flex; flex-direction:column; gap:48px">
+<div style="display:flex; flex-direction:column; gap:16px">
+<p style="font-size:20px; font-weight:600; letter-spacing:3px; text-transform:uppercase; color:var(--tec); font-family:var(--mono)">Sesión 3 · Objetivo</p>
+<h2 style="font-family:var(--serif); font-size:42px; font-weight:600; line-height:1.15; color:var(--ink)">Entender las arquitecturas multi-agente y cuándo conviene cada una</h2>
+</div>
+<div style="display:flex; gap:32px">
+<div style="flex:1; display:flex; flex-direction:column; gap:16px; background:color-mix(in srgb, var(--reta) 13%, var(--paper)); border-radius:0; padding:40px"><p style="font-size:20px; font-weight:600; letter-spacing:2px; text-transform:uppercase; color:var(--tec); font-family:var(--mono)">Aprendes</p><p style="font-size:28px; line-height:1.4; color:var(--ink)">Cinco topologías en código</p><p style="font-size:28px; line-height:1.4; color:var(--ink)">Cuándo conviene un agente, varios o ninguno</p><p style="font-size:28px; line-height:1.4; color:var(--ink)">Roles, permisos y contratos entre agentes</p></div>
+<div style="flex:1; display:flex; flex-direction:column; gap:16px; background:var(--paper-2); border:1px solid var(--rule); border-radius:0; padding:40px">
+<p style="font-size:20px; font-weight:600; letter-spacing:2px; text-transform:uppercase; color:var(--tec); font-family:var(--mono)">Aplicas en tu fábrica</p>
+<p style="font-size:28px; line-height:1.4; color:var(--ink)"><b>Agente 4 · Despliegue</b> con Docker Compose</p>
+<p style="font-size:28px; line-height:1.4; color:var(--ink)"><b>Agente 5 · Automatizador</b> con pytest y Playwright</p>
+<p style="font-size:28px; line-height:1.4; color:var(--ink)">El flujo <b>flujo_s3</b> con dos ramas en paralelo</p>
+</div>
+<div style="flex:1; display:flex; flex-direction:column; gap:16px; background:var(--paper-3); border-radius:0; padding:40px; border:1px solid var(--rule-2); border-left:3px solid var(--rule)">
+<p style="font-size:20px; font-weight:600; letter-spacing:2px; text-transform:uppercase; color:var(--tec); font-family:var(--mono)">Entregas hoy</p>
+<p style="font-family:var(--mono); font-size:22px; line-height:1.5; color:var(--ink)">app/docker-compose.yml<br/>app/tests/api/   app/tests/e2e/<br/>salida/HU-02/notas_s3.md</p>
+</div>
+</div>
+<p style="position:absolute; left:128px; bottom:64px; width:1664px; font-size:24px; color:var(--ink-2)">Sesión 3 · Sistemas multi-agente · 2 h 30 min</p>
+
+</div>
+  <div class="notes">Agenda: 0:00 revisión del entregable; 0:10 topologías en código; 0:35 qué arquitectura elijo, con ejercicio de clasificación; 0:50 roles, permisos y contratos; 1:00 descanso; 1:10 Lab 3A; 1:20 Lab 3B con HU-02; 1:50 Lab 3C inspeccionar; 2:15 cierre. Objetivo 4 del módulo; los agentes 4 y 5 en paralelo son donde se aplica. Verifiquen antes que Docker Desktop corre en las máquinas y que los puertos 8000 y 8080 están libres.</div>
+</section>
+
+<section class="slide cover">
+  <div class="badge nutre">Nutre</div>
+  <div class="timebox">0:10 · 15 min</div>
+  <div class="kicker">Bloque 3.1</div>
+  <h1>Topologías · 1</h1>
+  <p class="big muted">Cuándo usar varios agentes, supervisor y jerárquica.</p>
+  <div class="notes">Todas las topologías usan la misma pieza de LangGraph, Command; la diferencia está en qué nodos la usan.</div>
+</section>
+
+<section class="slide lamina" id="s3-cuando">
+  <div class="badge nutre">Nutre</div>
+  <div class="timebox">0:10 · 15 min</div>
+  <div class="lienzo" style="font-family:var(--sans); padding:128px 128px 160px; display:flex; flex-direction:column; gap:48px">
+<div style="display:flex; flex-direction:column; gap:16px">
+<p style="font-size:20px; font-weight:600; letter-spacing:3px; text-transform:uppercase; color:var(--tec); font-family:var(--mono)">3.1 · Cuándo sí y cuándo no</p>
+<h2 style="font-family:var(--serif); font-size:64px; font-weight:600; line-height:1.1; color:var(--ink)">Más agentes no es mejor por defecto</h2>
+</div>
+<div style="display:flex; gap:32px">
+<div style="flex:1; display:flex; flex-direction:column; gap:20px; background:var(--paper-2); border:1px solid var(--rule); border-radius:0; padding:40px">
+<div style="display:flex; gap:16px; align-items:center"><x-icon name="CheckCircle" style="color:var(--tec); width:48px; height:48px"></x-icon><h3 style="font-family:var(--serif); font-size:40px; font-weight:600; line-height:1.2; color:var(--ink)">Sí conviene</h3></div>
+<ul style="font-size:28px; line-height:1.5; color:var(--ink-2)">
+<li>Subtareas paralelizables</li>
+<li>Contextos que no caben juntos</li>
+<li>Herramientas o permisos que conviene aislar</li>
+<li>Equipos distintos mantienen cada agente</li>
+</ul>
+</div>
+<div style="flex:1; display:flex; flex-direction:column; gap:20px; background:var(--paper-2); border:1px solid var(--rule); border-radius:0; padding:40px">
+<div style="display:flex; gap:16px; align-items:center"><x-icon name="Warning" style="color:var(--reta); width:48px; height:48px"></x-icon><h3 style="font-family:var(--serif); font-size:40px; font-weight:600; line-height:1.2; color:var(--ink)">No conviene</h3></div>
+<ul style="font-size:28px; line-height:1.5; color:var(--ink-2)">
+<li>Tareas secuenciales y cortas</li>
+<li>La coordinación cuesta más que el trabajo</li>
+<li>No hay forma de evaluar el resultado</li>
+</ul>
+</div>
+</div>
+<p style="font-size:30px; line-height:1.4; color:var(--ink); border-left:6px solid var(--reta); padding:8px 32px"><b>Costos:</b> más tokens, más latencia y errores que se propagan entre agentes.</p>
+<p style="position:absolute; left:128px; bottom:64px; width:1664px; font-size:24px; color:var(--ink-2)">Sesión 3 · Sistemas multi-agente</p>
+
+</div>
+  <div class="notes">15 minutos. Empezar con un agente y buenas herramientas; dividir solo cuando los datos lo pidan. Cada agente relee contexto, así que el costo en tokens se multiplica. En la fábrica, el argumento principal es de permisos: quien escribe las pruebas no debe poder cambiar el código para que pasen, y quien despliega no debe tocar la aplicación.</div>
+</section>
+
+<section class="slide lamina" id="s3-topologias">
+  <div class="badge nutre">Nutre</div>
+  <div class="timebox">0:10 · 15 min</div>
+  <div class="lienzo" style="font-family:var(--sans); padding:128px 128px 160px; display:flex; flex-direction:column; gap:48px">
+<div style="display:flex; flex-direction:column; gap:16px">
+<p style="font-size:20px; font-weight:600; letter-spacing:3px; text-transform:uppercase; color:var(--tec); font-family:var(--mono)">3.2 · Topologías</p>
+<h2 style="font-family:var(--serif); font-size:64px; font-weight:600; line-height:1.1; color:var(--ink)">Quién decide define la topología</h2>
+</div>
+<table style="font-size:26px; color:var(--ink)">
+<tr><th style="width:26%">Topología</th><th style="width:32%">Quién decide</th><th style="width:42%">En tu fábrica</th></tr>
+<tr style="background:color-mix(in srgb, var(--reta) 13%, var(--paper))"><td><b>Orquestador con flujo fijo</b></td><td>El grafo decide el orden</td><td>Sesiones 2 y 3: LangGraph</td></tr>
+<tr><td><b>Supervisor</b></td><td>Un agente elige a quién delegar</td><td>Sesión 4: el triage</td></tr>
+<tr><td><b>Jerárquica</b></td><td>Supervisores de supervisores</td><td>No se usa; posible extensión</td></tr>
+<tr><td><b>Traspasos</b></td><td>El agente activo pasa el control</td><td>No se usa</td></tr>
+<tr><td><b>Pizarra</b></td><td>Todos leen un estado común</td><td>La carpeta salida/ y el estado del grafo</td></tr>
+</table>
+<p style="font-size:30px; line-height:1.4; color:var(--ink)">Hoy: un orquestador con flujo fijo y <b>una rama en paralelo</b>.</p>
+<p style="position:absolute; left:128px; bottom:64px; width:1664px; font-size:24px; color:var(--ink-2)">Sesión 3 · Sistemas multi-agente</p>
+
+</div>
+  <div class="notes">10 minutos. Dibujar cada topología en el pizarrón. La fábrica usa la más controlable: un orquestador cuyo orden fija el código. Eso facilita depurar y auditar. En la sesión 4 aparece un supervisor, el triage, que sí decide con un modelo a quién delegar. Jerárquica y traspasos se mencionan como alternativas: un traspaso tendría sentido, por ejemplo, si el desarrollador pudiera pasarle el control directamente al automatizador. La carpeta salida/ funciona como una pizarra de solo lectura: cada agente deja ahí su artefacto y los siguientes lo leen.</div>
+</section>
+
+<section class="slide lamina" id="supervisor-idea">
+  <div class="badge nutre">Nutre</div>
+  <div class="timebox">0:10 · 15 min</div>
+  <div class="lienzo" style="font-family:var(--sans); padding:128px 128px 160px; display:flex; flex-direction:column; gap:48px">
+<div style="display:flex; flex-direction:column; gap:16px">
+<p style="font-size:20px; font-weight:600; letter-spacing:3px; text-transform:uppercase; color:var(--tec); font-family:var(--mono)">Topología multi-agente · la idea</p>
+<h2 style="font-family:var(--serif); font-size:64px; font-weight:600; line-height:1.1; color:var(--ink)">Supervisor: un coordinador central</h2>
+</div>
+<div style="position:absolute; left:128px; top:300px; width:760px; display:flex; flex-direction:column; gap:24px">
+<div style="display:flex; flex-direction:column; gap:8px; background:var(--paper-2); border:1.5px dashed var(--ink-2); border-radius:0; padding:20px 40px"><p style="font-size:28px; font-weight:600; color:var(--ink)">Un agente con todo</p><p style="font-size:26px; line-height:1.4; color:var(--ink-2)">Demasiadas herramientas e instrucciones en un solo agente: elige mal y su contexto se llena.</p></div>
+<div style="display:flex; flex-direction:column; gap:8px; background:var(--paper-2); border:1.5px dashed var(--ink-2); border-radius:0; padding:20px 40px"><p style="font-size:28px; font-weight:600; color:var(--ink)">Agentes sin coordinación</p><p style="font-size:26px; line-height:1.4; color:var(--ink-2)">Cada uno hace lo suyo, pero nadie decide el orden ni sabe cuándo terminó el trabajo.</p></div>
+<div style="display:flex; flex-direction:column; gap:8px; background:color-mix(in srgb, var(--reta) 13%, var(--paper)); border:1px solid var(--reta); border-radius:0; padding:20px 40px"><p style="font-size:28px; font-weight:600; color:var(--ink)">Supervisor</p><p style="font-size:26px; line-height:1.4; color:var(--ink)">Un agente central recibe la tarea, decide a qué especialista delegar, recibe cada resultado y decide el siguiente paso.</p></div>
+</div>
+<div style="position:absolute; left:960px; top:300px; width:832px; display:flex; flex-direction:column; gap:28px">
+<div style="display:flex; flex-direction:column; gap:14px; background:var(--paper-3); border-radius:0; padding:28px 32px; border:1px solid var(--rule-2); border-left:3px solid var(--rule)">
+<p style="font-size:24px; line-height:1.4; color:var(--ink)"><span style="font-weight:600; color:var(--introduce)">Supervisor ·</span> hay una historia nueva → delega al analista</p>
+<p style="font-size:24px; line-height:1.4; color:var(--ink)"><span style="font-weight:600; color:var(--tec)">Analista ·</span> entrega criterios.feature → regresa al supervisor</p>
+<p style="font-size:24px; line-height:1.4; color:var(--ink)"><span style="font-weight:600; color:var(--introduce)">Supervisor</span> → delega al tester</p>
+<p style="font-size:24px; line-height:1.4; color:var(--ink)"><span style="font-weight:600; color:var(--tec)">Tester ·</span> entrega casos_prueba.json → regresa al supervisor</p>
+<p style="font-size:24px; line-height:1.4; color:var(--ink)"><span style="font-weight:600; color:var(--introduce)">Supervisor</span> → delega al desarrollador</p>
+<p style="font-size:24px; line-height:1.4; color:var(--ink)"><span style="font-weight:600; color:var(--ink)">Supervisor ·</span> todo está entregado: «terminado»</p>
+</div>
+<p style="font-size:24px; line-height:1.4; color:var(--ink-2)">Los especialistas nunca hablan entre sí: todo pasa por el supervisor. Es fácil de seguir, pero es un cuello de botella.</p>
+</div>
+<p style="position:absolute; left:128px; bottom:64px; width:1664px; font-size:24px; color:var(--ink-2)">Sesión 3 · Topologías · LangGraph, documentación de sistemas multi-agente</p>
+
+</div>
+  <div class="notes">2 minutos, dentro de los cinco del patrón. Pasamos de flujos a sistemas con varios agentes. Primero, por qué varios: un solo agente con muchas herramientas e instrucciones elige peor y llena su contexto. La topología más común es el supervisor: un agente central que recibe la tarea, delega en especialistas y decide el siguiente paso con cada resultado. Los especialistas no se hablan entre sí. Ventaja: control y trazabilidad en un solo lugar. Riesgo: el supervisor es cuello de botella y punto único de falla, y su contexto crece con cada resultado. Pregunta: el grafo de LangGraph de la fábrica, ¿es un supervisor? Sí, uno determinista, escrito en código en lugar de un modelo que decide.</div>
+</section>
+
+<section class="slide lamina" id="t-supervisor">
+  <div class="badge nutre">Nutre</div>
+  <div class="timebox">0:10 · 15 min</div>
+  <div class="lienzo" style="font-family:var(--sans); padding:128px 128px 160px; display:flex; flex-direction:column; gap:48px">
+<div style="display:flex; flex-direction:column; gap:16px">
+<p style="font-size:20px; font-weight:600; letter-spacing:3px; text-transform:uppercase; color:var(--tec); font-family:var(--mono)">Topología multi-agente · 1 de 5</p>
+<h2 style="font-family:var(--serif); font-size:64px; font-weight:600; line-height:1.1; color:var(--ink)">Supervisor: uno coordina a todos</h2>
+</div>
+<div style="position:absolute; left:448px; top:300px; width:240px; height:110px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:4px; background:color-mix(in srgb, var(--reta) 13%, var(--paper)); border:1px solid var(--reta); border-radius:0; padding:0px 12px"><p style="font-size:28px; font-weight:600; text-align:center; color:var(--ink)">Supervisor</p><p style="font-size:24px; text-align:center; color:var(--ink-2)">decide quién sigue</p></div>
+<x-connector head="none" style="color:var(--ink-2); border-width:3px" x1="568" x2="568" y1="410" y2="500"></x-connector>
+<x-connector head="none" style="color:var(--ink-2); border-width:3px" x1="248" x2="888" y1="500" y2="500"></x-connector>
+<x-connector head="both" style="color:var(--ink-2); border-width:3px" x1="248" x2="248" y1="500" y2="600"></x-connector>
+<x-connector head="both" style="color:var(--ink-2); border-width:3px" x1="568" x2="568" y1="500" y2="600"></x-connector>
+<x-connector head="both" style="color:var(--ink-2); border-width:3px" x1="888" x2="888" y1="500" y2="600"></x-connector>
+<div style="position:absolute; left:128px; top:600px; width:240px; height:110px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:4px; background:var(--paper-2); border:1px solid var(--ink-2); border-radius:0; padding:0px 12px"><p style="font-size:28px; font-weight:600; text-align:center; color:var(--ink)">Analista</p></div>
+<div style="position:absolute; left:448px; top:600px; width:240px; height:110px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:4px; background:var(--paper-2); border:1px solid var(--ink-2); border-radius:0; padding:0px 12px"><p style="font-size:28px; font-weight:600; text-align:center; color:var(--ink)">Tester</p></div>
+<div style="position:absolute; left:768px; top:600px; width:240px; height:110px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:4px; background:var(--paper-2); border:1px solid var(--ink-2); border-radius:0; padding:0px 12px"><p style="font-size:28px; font-weight:600; text-align:center; color:var(--ink)">Desarrollador</p></div>
+<p style="position:absolute; left:128px; top:770px; width:880px; font-size:24px; line-height:1.4; color:var(--ink); background:var(--paper-2); border-radius:0; padding:16px 24px">Los agentes no hablan entre sí: todo pasa por el supervisor</p>
+<div style="position:absolute; left:1168px; top:300px; width:624px; display:flex; flex-direction:column; gap:28px">
+<div style="display:flex; flex-direction:column; gap:8px"><p style="font-size:20px; font-weight:600; letter-spacing:2px; text-transform:uppercase; color:var(--tec); font-family:var(--mono)">Cómo funciona</p><p style="font-size:28px; line-height:1.4; color:var(--ink)">Un supervisor recibe la tarea, decide a qué agente delegar y recibe cada resultado.</p></div>
+<div style="display:flex; flex-direction:column; gap:8px"><p style="font-size:20px; font-weight:600; letter-spacing:2px; text-transform:uppercase; color:var(--tec); font-family:var(--mono)">Úsalo cuando</p><p style="font-size:28px; line-height:1.4; color:var(--ink)">Control y trazabilidad claros; el supervisor es cuello de botella y punto único de falla.</p></div>
+<div style="display:flex; flex-direction:column; gap:8px; background:color-mix(in srgb, var(--reta) 13%, var(--paper)); border-radius:0; padding:24px"><p style="font-size:20px; font-weight:600; letter-spacing:2px; text-transform:uppercase; color:var(--tec); font-family:var(--mono)">En tu fábrica</p><p style="font-size:28px; line-height:1.4; color:var(--ink)">Tu grafo de LangGraph es un supervisor determinista; con el Agent SDK, uno que razona.</p></div>
+</div>
+<p style="position:absolute; left:128px; bottom:64px; width:1664px; font-size:24px; color:var(--ink-2)">Sesión 3 · Topologías</p>
+
+</div>
+  <div class="notes">Supervisor: la topología más común y la que recomendamos para empezar. Un agente central recibe la tarea, decide a quién delegar, recibe el resultado y decide el siguiente paso. Los agentes especialistas no se hablan entre sí. Ventaja: es fácil saber quién hizo qué y poner límites en un solo lugar. Riesgo: todo pasa por el supervisor, así que su contexto crece y es un punto único de falla. Matiz importante: el grafo de LangGraph de las sesiones 2 a 4 también es un supervisor, solo que determinista, escrito en código. En el ejercicio con el Agent SDK, el supervisor es un modelo que razona y delega en subagentes.</div>
+</section>
+
+<section class="slide lamina" id="c-supervisor">
+  <div class="badge nutre">Nutre</div>
+  <div class="timebox">0:10 · 15 min</div>
+  <div class="lienzo" style="font-family:var(--sans); padding:128px 128px 160px; display:flex; flex-direction:column; gap:48px">
+<div style="display:flex; flex-direction:column; gap:16px">
+<p style="font-size:20px; font-weight:600; letter-spacing:3px; text-transform:uppercase; color:var(--tec); font-family:var(--mono)">Topología · en código</p>
+<h2 style="font-family:var(--serif); font-size:56px; font-weight:600; line-height:1.1; color:var(--ink)">Supervisor en código: él decide con Command</h2>
+</div>
+<div style="position:absolute; left:128px; top:296px; width:1040px; background:var(--paper-3); border-radius:0; padding:28px 16px; display:flex; flex-direction:column; font-family:var(--mono); font-size:22px; line-height:1.5; color:var(--ink); white-space:pre; border:1px solid var(--rule-2); border-left:3px solid var(--rule)"><p style="padding:0px 16px"><span style="color:var(--introduce)">class</span> Decision(<span style="color:var(--tec)">BaseModel</span>):</p><p style="padding:0px 16px">    siguiente: <span style="color:var(--tec)">Literal</span>[<span style="color:var(--practica)">"analista"</span>, <span style="color:var(--practica)">"tester"</span>, <span style="color:var(--practica)">"desarrollador"</span>, <span style="color:var(--practica)">"FIN"</span>]</p><p style="padding:0px 16px"> </p><p style="padding:0px 16px"><span style="color:var(--introduce)">def</span> supervisor(s: Estado) -&gt; <span style="color:var(--tec)">Command</span>[<span style="color:var(--tec)">Literal</span>[...]]:</p><p style="padding:0px 16px">    <span style="color:var(--introduce)">if</span> s[<span style="color:var(--practica)">"vueltas"</span>] &gt;= MAX_VUELTAS:</p><p style="padding:0px 16px">        <span style="color:var(--introduce)">return</span> <span style="color:var(--tec)">Command</span>(goto=<span style="color:var(--tec)">END</span>)</p><p style="padding:0px 16px">    d = modelo().with_structured_output(Decision).invoke(...)</p><p style="background:var(--tec-tint); border-left:4px solid var(--introduce); padding:0px 16px 0px 12px">    <span style="color:var(--introduce)">return</span> <span style="color:var(--tec)">Command</span>(goto=<span style="color:var(--tec)">END</span> <span style="color:var(--introduce)">if</span> d.siguiente == <span style="color:var(--practica)">"FIN"</span> <span style="color:var(--introduce)">else</span> d.siguiente,</p><p style="padding:0px 16px">                   update={<span style="color:var(--practica)">"vueltas"</span>: s[<span style="color:var(--practica)">"vueltas"</span>] + 1})</p><p style="padding:0px 16px"> </p><p style="padding:0px 16px"><span style="color:var(--introduce)">for</span> nombre <span style="color:var(--introduce)">in</span> AGENTES:</p><p style="padding:0px 16px">    grafo.add_node(nombre, especialista(nombre))</p><p style="background:var(--tec-tint); border-left:4px solid var(--introduce); padding:0px 16px 0px 12px">    grafo.add_edge(nombre, <span style="color:var(--practica)">"supervisor"</span>)      <span style="color:var(--ink-2)"># su única salida</span></p><p style="padding:0px 16px">grafo.add_edge(<span style="color:var(--tec)">START</span>, <span style="color:var(--practica)">"supervisor"</span>)</p></div>
+<div style="position:absolute; left:1216px; top:296px; width:576px; display:flex; flex-direction:column; gap:24px">
+<div style="display:flex; flex-direction:column; gap:8px"><p style="font-size:22px; font-weight:600; letter-spacing:2px; text-transform:uppercase; color:var(--tec); font-family:var(--mono)">Lo que lo distingue</p><p style="font-size:26px; line-height:1.4; color:var(--ink)"><b>Command(goto=…)</b> solo en el supervisor; cada especialista tiene una sola arista: de regreso a él.</p></div>
+<div style="display:flex; flex-direction:column; gap:8px"><p style="font-size:22px; font-weight:600; letter-spacing:2px; text-transform:uppercase; color:var(--tec); font-family:var(--mono)">Compáralo con</p><p style="font-size:26px; line-height:1.4; color:var(--ink)">Red: allí todos los nodos devuelven Command.</p></div>
+<div style="display:flex; flex-direction:column; gap:8px"><p style="font-size:22px; font-weight:600; letter-spacing:2px; text-transform:uppercase; color:var(--tec); font-family:var(--mono)">Ejecútalo</p><p style="font-family:var(--mono); font-size:19px; background:var(--paper-2); border-radius:0; padding:12px 16px; line-height:1.4; color:var(--ink)">python -m ejemplos.s3_topologias.supervisor</p></div>
+<div style="display:flex; flex-direction:column; gap:8px; background:color-mix(in srgb, var(--reta) 13%, var(--paper)); border-radius:0; padding:20px 24px"><p style="font-size:22px; font-weight:600; letter-spacing:2px; text-transform:uppercase; color:var(--tec); font-family:var(--mono)">En tu fábrica</p><p style="font-size:26px; line-height:1.4; color:var(--ink)">flujo_s4.py es un supervisor escrito en código; con el Agent SDK, uno que razona.</p></div>
+</div>
+<p style="position:absolute; left:128px; bottom:64px; width:1664px; font-size:24px; color:var(--ink-2)">Fragmento simplificado de ejemplos/s3_topologias/supervisor.py · las líneas resaltadas son el patrón</p>
+
+</div>
+  <div class="notes">Presentar Command: un nodo puede actualizar el estado y decidir el siguiente nodo en el mismo return, sin arista condicional. Señalar la asimetría: el supervisor tiene Command; los especialistas, un add_edge fijo. Esa asimetría es la topología. Preguntar: ¿en qué se parece al flujo_s4.py? En que hay un centro que decide; la diferencia es que allí decide código determinista y aquí un modelo.</div>
+</section>
+
+<section class="slide lamina" id="jerarquica-idea">
+  <div class="badge nutre">Nutre</div>
+  <div class="timebox">0:10 · 15 min</div>
+  <div class="lienzo" style="font-family:var(--sans); padding:128px 128px 160px; display:flex; flex-direction:column; gap:48px">
+<div style="display:flex; flex-direction:column; gap:16px">
+<p style="font-size:20px; font-weight:600; letter-spacing:3px; text-transform:uppercase; color:var(--tec); font-family:var(--mono)">Topología multi-agente · la idea</p>
+<h2 style="font-family:var(--serif); font-size:64px; font-weight:600; line-height:1.1; color:var(--ink)">Jerárquica: supervisores de supervisores</h2>
+</div>
+<div style="position:absolute; left:128px; top:300px; width:760px; display:flex; flex-direction:column; gap:24px">
+<div style="display:flex; flex-direction:column; gap:8px; background:var(--paper-2); border:1.5px dashed var(--ink-2); border-radius:0; padding:20px 40px"><p style="font-size:28px; font-weight:600; color:var(--ink)">Un supervisor con diez agentes</p><p style="font-size:26px; line-height:1.4; color:var(--ink-2)">Su contexto crece con cada resultado y le cuesta elegir entre tantos especialistas.</p></div>
+<div style="display:flex; flex-direction:column; gap:8px; background:var(--paper-2); border:1.5px dashed var(--ink-2); border-radius:0; padding:20px 40px"><p style="font-size:28px; font-weight:600; color:var(--ink)">Equipos sin director</p><p style="font-size:26px; line-height:1.4; color:var(--ink-2)">Cada equipo funciona por su cuenta, pero nadie integra su trabajo.</p></div>
+<div style="display:flex; flex-direction:column; gap:8px; background:color-mix(in srgb, var(--reta) 13%, var(--paper)); border:1px solid var(--reta); border-radius:0; padding:20px 40px"><p style="font-size:28px; font-weight:600; color:var(--ink)">Jerárquica</p><p style="font-size:26px; line-height:1.4; color:var(--ink)">Un director delega en líderes de equipo, y cada líder coordina a pocos especialistas. Cada nivel ve solo lo suyo.</p></div>
+</div>
+<div style="position:absolute; left:960px; top:300px; width:832px; display:flex; flex-direction:column; gap:28px">
+<div style="display:flex; flex-direction:column; gap:14px; background:var(--paper-3); border-radius:0; padding:28px 32px; border:1px solid var(--rule-2); border-left:3px solid var(--rule)">
+<p style="font-size:24px; line-height:1.4; color:var(--ink)"><span style="font-weight:600; color:var(--introduce)">Director ·</span> implementar HU-02 → delega al líder de Desarrollo</p>
+<p style="font-size:24px; line-height:1.4; color:var(--ink)"><span style="font-weight:600; color:var(--introduce)">Líder de Desarrollo</span> → delega a Backend y a Frontend</p>
+<p style="font-size:24px; line-height:1.4; color:var(--ink)"><span style="font-weight:600; color:var(--tec)">Backend y Frontend ·</span> entregan su código al líder</p>
+<p style="font-size:24px; line-height:1.4; color:var(--ink)"><span style="font-weight:600; color:var(--practica)">Líder de Desarrollo ·</span> resume «la app está lista» para el director</p>
+<p style="font-size:24px; line-height:1.4; color:var(--ink)"><span style="font-weight:600; color:var(--introduce)">Director</span> → delega al líder de Calidad</p>
+<p style="font-size:24px; line-height:1.4; color:var(--ink)"><span style="font-weight:600; color:var(--ink)">Líder de Calidad ·</span> tester y automatizador → «todo pasa»</p>
+</div>
+<p style="font-size:24px; line-height:1.4; color:var(--ink-2)">Escala a muchos agentes, pero cada nivel agrega latencia, costo y pérdida de detalle al resumir.</p>
+</div>
+<p style="position:absolute; left:128px; bottom:64px; width:1664px; font-size:24px; color:var(--ink-2)">Sesión 3 · Topologías · LangGraph, documentación de sistemas multi-agente</p>
+
+</div>
+  <div class="notes">2 minutos, dentro de los cinco del patrón. Cuando un supervisor tiene demasiados agentes a su cargo, se agrega un nivel: un director que habla con líderes, y cada líder con un equipo pequeño. Funciona como una organización: el director no necesita ver cada archivo, solo el resumen del líder. Eso mantiene los contextos pequeños. El precio es el teléfono descompuesto: cada nivel resume y puede perder un detalle importante, además de sumar latencia y costo. En la fábrica aparece sin diseñarla: nuestro flujo delega en Claude Code, que a su vez puede lanzar subagentes. Pregunta: ¿qué detalle podría perderse si el líder resume «la app está lista»?</div>
+</section>
+
+<section class="slide lamina" id="t-jerarquica">
+  <div class="badge nutre">Nutre</div>
+  <div class="timebox">0:10 · 15 min</div>
+  <div class="lienzo" style="font-family:var(--sans); padding:128px 128px 160px; display:flex; flex-direction:column; gap:48px">
+<div style="display:flex; flex-direction:column; gap:16px">
+<p style="font-size:20px; font-weight:600; letter-spacing:3px; text-transform:uppercase; color:var(--tec); font-family:var(--mono)">Topología multi-agente · 2 de 5</p>
+<h2 style="font-family:var(--serif); font-size:64px; font-weight:600; line-height:1.1; color:var(--ink)">Jerárquica: supervisores de supervisores</h2>
+</div>
+<div style="position:absolute; left:448px; top:290px; width:240px; height:100px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:4px; background:color-mix(in srgb, var(--reta) 13%, var(--paper)); border:1px solid var(--reta); border-radius:0; padding:0px 12px"><p style="font-size:28px; font-weight:600; text-align:center; color:var(--ink)">Director</p></div>
+<x-connector head="none" style="color:var(--ink-2); border-width:3px" x1="568" x2="568" y1="390" y2="430"></x-connector>
+<x-connector head="none" style="color:var(--ink-2); border-width:3px" x1="328" x2="808" y1="430" y2="430"></x-connector>
+<x-connector style="color:var(--ink-2); border-width:3px" x1="328" x2="328" y1="430" y2="470"></x-connector>
+<x-connector style="color:var(--ink-2); border-width:3px" x1="808" x2="808" y1="430" y2="470"></x-connector>
+<div style="position:absolute; left:208px; top:470px; width:240px; height:100px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:4px; background:var(--tec-tint); border:1px solid var(--tec); border-radius:0; padding:0px 12px"><p style="font-size:28px; font-weight:600; text-align:center; color:var(--ink)">Calidad</p><p style="font-size:24px; text-align:center; color:var(--ink-2)">líder</p></div>
+<div style="position:absolute; left:688px; top:470px; width:240px; height:100px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:4px; background:var(--tec-tint); border:1px solid var(--tec); border-radius:0; padding:0px 12px"><p style="font-size:28px; font-weight:600; text-align:center; color:var(--ink)">Desarrollo</p><p style="font-size:24px; text-align:center; color:var(--ink-2)">líder</p></div>
+<x-connector head="none" style="color:var(--ink-2); border-width:3px" x1="328" x2="328" y1="570" y2="610"></x-connector>
+<x-connector head="none" style="color:var(--ink-2); border-width:3px" x1="223" x2="433" y1="610" y2="610"></x-connector>
+<x-connector style="color:var(--ink-2); border-width:3px" x1="223" x2="223" y1="610" y2="650"></x-connector>
+<x-connector style="color:var(--ink-2); border-width:3px" x1="433" x2="433" y1="610" y2="650"></x-connector>
+<x-connector head="none" style="color:var(--ink-2); border-width:3px" x1="808" x2="808" y1="570" y2="610"></x-connector>
+<x-connector head="none" style="color:var(--ink-2); border-width:3px" x1="698" x2="918" y1="610" y2="610"></x-connector>
+<x-connector style="color:var(--ink-2); border-width:3px" x1="698" x2="698" y1="610" y2="650"></x-connector>
+<x-connector style="color:var(--ink-2); border-width:3px" x1="918" x2="918" y1="610" y2="650"></x-connector>
+<div style="position:absolute; left:128px; top:650px; width:190px; height:90px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:4px; background:var(--paper-2); border:1px solid var(--ink-2); border-radius:0; padding:0px 12px"><p style="font-size:28px; font-weight:600; text-align:center; color:var(--ink)">Analista</p></div>
+<div style="position:absolute; left:338px; top:650px; width:190px; height:90px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:4px; background:var(--paper-2); border:1px solid var(--ink-2); border-radius:0; padding:0px 12px"><p style="font-size:28px; font-weight:600; text-align:center; color:var(--ink)">Tester</p></div>
+<div style="position:absolute; left:603px; top:650px; width:190px; height:90px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:4px; background:var(--paper-2); border:1px solid var(--ink-2); border-radius:0; padding:0px 12px"><p style="font-size:28px; font-weight:600; text-align:center; color:var(--ink)">Backend</p></div>
+<div style="position:absolute; left:823px; top:650px; width:190px; height:90px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:4px; background:var(--paper-2); border:1px solid var(--ink-2); border-radius:0; padding:0px 12px"><p style="font-size:28px; font-weight:600; text-align:center; color:var(--ink)">Frontend</p></div>
+<p style="position:absolute; left:128px; top:790px; width:885px; font-size:24px; line-height:1.4; color:var(--ink); background:var(--paper-2); border-radius:0; padding:16px 24px">Cada nivel solo ve lo suyo</p>
+<div style="position:absolute; left:1168px; top:300px; width:624px; display:flex; flex-direction:column; gap:28px">
+<div style="display:flex; flex-direction:column; gap:8px"><p style="font-size:20px; font-weight:600; letter-spacing:2px; text-transform:uppercase; color:var(--tec); font-family:var(--mono)">Cómo funciona</p><p style="font-size:28px; line-height:1.4; color:var(--ink)">Varios supervisores organizados en niveles; cada uno coordina a un equipo pequeño.</p></div>
+<div style="display:flex; flex-direction:column; gap:8px"><p style="font-size:20px; font-weight:600; letter-spacing:2px; text-transform:uppercase; color:var(--tec); font-family:var(--mono)">Úsalo cuando</p><p style="font-size:28px; line-height:1.4; color:var(--ink)">Escala a muchos agentes; cada nivel agrega latencia, costo y pérdida de detalle.</p></div>
+<div style="display:flex; flex-direction:column; gap:8px; background:color-mix(in srgb, var(--reta) 13%, var(--paper)); border-radius:0; padding:24px"><p style="font-size:20px; font-weight:600; letter-spacing:2px; text-transform:uppercase; color:var(--tec); font-family:var(--mono)">En tu fábrica</p><p style="font-size:28px; line-height:1.4; color:var(--ink)">Claude Code como desarrollador, con sus propios subagentes: un equipo dentro de un agente.</p></div>
+</div>
+<p style="position:absolute; left:128px; bottom:64px; width:1664px; font-size:24px; color:var(--ink-2)">Sesión 3 · Topologías</p>
+
+</div>
+  <div class="notes">Jerárquica: cuando un supervisor tiene demasiados agentes a su cargo, se agrega un nivel intermedio. El director habla con líderes, y cada líder con su equipo. Funciona como una organización: cada nivel solo ve lo que necesita, lo que mantiene los contextos pequeños. El precio es latencia, costo y teléfono descompuesto: cada nivel resume y puede perder detalle. En la fábrica aparece sin que la diseñemos: nuestro flujo delega en Claude Code, y Claude Code a su vez puede lanzar sus propios subagentes. Recomendación: no empiecen con una jerarquía; llegan a ella cuando un supervisor ya no alcanza.</div>
+</section>
+
+<section class="slide lamina" id="c-jerarquica">
+  <div class="badge nutre">Nutre</div>
+  <div class="timebox">0:10 · 15 min</div>
+  <div class="lienzo" style="font-family:var(--sans); padding:128px 128px 160px; display:flex; flex-direction:column; gap:48px">
+<div style="display:flex; flex-direction:column; gap:16px">
+<p style="font-size:20px; font-weight:600; letter-spacing:3px; text-transform:uppercase; color:var(--tec); font-family:var(--mono)">Topología · en código</p>
+<h2 style="font-family:var(--serif); font-size:56px; font-weight:600; line-height:1.1; color:var(--ink)">Jerárquica en código: un grafo dentro de otro</h2>
+</div>
+<div style="position:absolute; left:128px; top:296px; width:1040px; background:var(--paper-3); border-radius:0; padding:28px 16px; display:flex; flex-direction:column; font-family:var(--mono); font-size:22px; line-height:1.5; color:var(--ink); white-space:pre; border:1px solid var(--rule-2); border-left:3px solid var(--rule)"><p style="padding:0px 16px"><span style="color:var(--introduce)">def</span> equipo(nombre: str, miembros: list) -&gt; CompiledStateGraph:</p><p style="padding:0px 16px">    g = <span style="color:var(--tec)">StateGraph</span>(Estado)</p><p style="padding:0px 16px">    ...                                 <span style="color:var(--ink-2)"># miembros en cadena + líder</span></p><p style="padding:0px 16px">    <span style="color:var(--introduce)">return</span> g.compile()</p><p style="padding:0px 16px"> </p><p style="background:var(--tec-tint); border-left:4px solid var(--introduce); padding:0px 16px 0px 12px">equipo_calidad = equipo(<span style="color:var(--practica)">"calidad"</span>, [analista, tester])</p><p style="background:var(--tec-tint); border-left:4px solid var(--introduce); padding:0px 16px 0px 12px">equipo_desarrollo = equipo(<span style="color:var(--practica)">"desarrollo"</span>, [backend, frontend])</p><p style="padding:0px 16px"> </p><p style="padding:0px 16px">grafo = <span style="color:var(--tec)">StateGraph</span>(Estado)</p><p style="padding:0px 16px">grafo.add_node(<span style="color:var(--practica)">"director"</span>, director)        <span style="color:var(--ink-2)"># decide qué equipo sigue</span></p><p style="background:var(--tec-tint); border-left:4px solid var(--introduce); padding:0px 16px 0px 12px">grafo.add_node(<span style="color:var(--practica)">"calidad"</span>, equipo_calidad)   <span style="color:var(--ink-2)"># un grafo como nodo</span></p><p style="background:var(--tec-tint); border-left:4px solid var(--introduce); padding:0px 16px 0px 12px">grafo.add_node(<span style="color:var(--practica)">"desarrollo"</span>, equipo_desarrollo)</p><p style="padding:0px 16px">grafo.add_edge(<span style="color:var(--practica)">"calidad"</span>, <span style="color:var(--practica)">"director"</span>)       <span style="color:var(--ink-2)"># sube solo el resumen</span></p><p style="padding:0px 16px">grafo.add_edge(<span style="color:var(--practica)">"desarrollo"</span>, <span style="color:var(--practica)">"director"</span>)</p></div>
+<div style="position:absolute; left:1216px; top:296px; width:576px; display:flex; flex-direction:column; gap:24px">
+<div style="display:flex; flex-direction:column; gap:8px"><p style="font-size:22px; font-weight:600; letter-spacing:2px; text-transform:uppercase; color:var(--tec); font-family:var(--mono)">Lo que lo distingue</p><p style="font-size:26px; line-height:1.4; color:var(--ink)">Un grafo <b>compilado</b> se agrega como nodo de otro grafo. Al director solo le llega el resumen del líder.</p></div>
+<div style="display:flex; flex-direction:column; gap:8px"><p style="font-size:22px; font-weight:600; letter-spacing:2px; text-transform:uppercase; color:var(--tec); font-family:var(--mono)">Compáralo con</p><p style="font-size:26px; line-height:1.4; color:var(--ink)">Supervisor: un solo nivel, todos los agentes en el mismo grafo.</p></div>
+<div style="display:flex; flex-direction:column; gap:8px"><p style="font-size:22px; font-weight:600; letter-spacing:2px; text-transform:uppercase; color:var(--tec); font-family:var(--mono)">Ejecútalo</p><p style="font-family:var(--mono); font-size:19px; background:var(--paper-2); border-radius:0; padding:12px 16px; line-height:1.4; color:var(--ink)">python -m ejemplos.s3_topologias.jerarquica</p></div>
+<div style="display:flex; flex-direction:column; gap:8px; background:color-mix(in srgb, var(--reta) 13%, var(--paper)); border-radius:0; padding:20px 24px"><p style="font-size:22px; font-weight:600; letter-spacing:2px; text-transform:uppercase; color:var(--tec); font-family:var(--mono)">En tu fábrica</p><p style="font-size:26px; line-height:1.4; color:var(--ink)">Tu flujo delega en Claude Code, y Claude Code puede lanzar sus propios subagentes.</p></div>
+</div>
+<p style="position:absolute; left:128px; bottom:64px; width:1664px; font-size:24px; color:var(--ink-2)">Fragmento simplificado de ejemplos/s3_topologias/jerarquica.py · las líneas resaltadas son el patrón</p>
+
+</div>
+  <div class="notes">En la salida, la sangría muestra los niveles: director, líder, miembros. Señalar que el líder borra el detalle y sube solo un resumen: así cada nivel mantiene su contexto pequeño, pero también es donde se pierde información. Dibujar el grafo con draw_mermaid(xray=True) para ver los subgrafos por dentro.</div>
+</section>
+
+<section class="slide cover">
+  <div class="badge nutre">Nutre</div>
+  <div class="timebox">0:25 · 15 min</div>
+  <div class="kicker">Bloque 3.2</div>
+  <h1>Topologías · 2</h1>
+  <p class="big muted">Traspasos, red y pizarra.</p>
+  <div class="notes">Compara supervisor.py con red.py: misma pieza, distinta distribución del poder de decisión.</div>
+</section>
+
+<section class="slide lamina" id="traspasos-idea">
+  <div class="badge nutre">Nutre</div>
+  <div class="timebox">0:25 · 15 min</div>
+  <div class="lienzo" style="font-family:var(--sans); padding:128px 128px 160px; display:flex; flex-direction:column; gap:48px">
+<div style="display:flex; flex-direction:column; gap:16px">
+<p style="font-size:20px; font-weight:600; letter-spacing:3px; text-transform:uppercase; color:var(--tec); font-family:var(--mono)">Topología multi-agente · la idea</p>
+<h2 style="font-family:var(--serif); font-size:60px; font-weight:600; line-height:1.1; color:var(--ink)">Traspasos: el control pasa de un agente a otro</h2>
+</div>
+<div style="position:absolute; left:128px; top:300px; width:760px; display:flex; flex-direction:column; gap:24px">
+<div style="display:flex; flex-direction:column; gap:8px; background:var(--paper-2); border:1.5px dashed var(--ink-2); border-radius:0; padding:20px 40px"><p style="font-size:28px; font-weight:600; color:var(--ink)">Todo vuelve al centro</p><p style="font-size:26px; line-height:1.4; color:var(--ink-2)">Con un supervisor, cada paso regresa al centro aunque el siguiente sea obvio.</p></div>
+<div style="display:flex; flex-direction:column; gap:8px; background:var(--paper-2); border:1.5px dashed var(--ink-2); border-radius:0; padding:20px 40px"><p style="font-size:28px; font-weight:600; color:var(--ink)">Un agente con todos los roles</p><p style="font-size:26px; line-height:1.4; color:var(--ink-2)">Un prompt enorme que intenta ser recepción, altas y directorio a la vez.</p></div>
+<div style="display:flex; flex-direction:column; gap:8px; background:color-mix(in srgb, var(--reta) 13%, var(--paper)); border:1px solid var(--reta); border-radius:0; padding:20px 40px"><p style="font-size:28px; font-weight:600; color:var(--ink)">Traspasos</p><p style="font-size:26px; line-height:1.4; color:var(--ink)">El agente activo atiende hasta que decide pasar el control a otro con una herramienta de traspaso; la conversación viaja con él.</p></div>
+</div>
+<div style="position:absolute; left:960px; top:300px; width:832px; display:flex; flex-direction:column; gap:28px">
+<div style="display:flex; flex-direction:column; gap:14px; background:var(--paper-3); border-radius:0; padding:28px 32px; border:1px solid var(--rule-2); border-left:3px solid var(--rule)">
+<p style="font-size:24px; line-height:1.4; color:var(--ink-2)">Usuario: «Quiero dar de alta a Paola y después ver el organigrama»</p>
+<p style="font-size:24px; line-height:1.4; color:var(--ink)"><span style="font-weight:600; color:var(--introduce)">Recepción ·</span> transferir_a_altas(«es un alta»)</p>
+<p style="font-size:24px; line-height:1.4; color:var(--ink)"><span style="font-weight:600; color:var(--tec)">Altas ·</span> registra a Paola como EMP-0006</p>
+<p style="font-size:24px; line-height:1.4; color:var(--ink)"><span style="font-weight:600; color:var(--introduce)">Altas ·</span> transferir_a_directorio(«pide el organigrama»)</p>
+<p style="font-size:24px; line-height:1.4; color:var(--ink)"><span style="font-weight:600; color:var(--ink)">Directorio ·</span> responde con el organigrama</p>
+</div>
+<p style="font-size:24px; line-height:1.4; color:var(--ink-2)">No hay supervisor: el orden lo deciden los agentes. Es natural para atender por etapas, pero el control puede rebotar.</p>
+</div>
+<p style="position:absolute; left:128px; bottom:64px; width:1664px; font-size:24px; color:var(--ink-2)">Sesión 3 · Topologías · LangGraph, documentación de sistemas multi-agente</p>
+
+</div>
+  <div class="notes">2 minutos, dentro de los cinco del patrón. En los traspasos, o handoffs, no hay un centro. Hay un agente activo que conversa; cuando decide que otro debe seguir, llama a una herramienta de traspaso, como transferir_a_altas con un motivo, y el control pasa con toda la conversación. Es la topología típica de atención a clientes: recepción, ventas, soporte. Ventaja: cada agente tiene un prompt corto y no hay vueltas innecesarias al centro. Riesgo: el orden lo deciden los modelos, así que el control puede rebotar entre dos agentes. Pregunta: ¿cómo evitarían un rebote infinito entre altas y directorio? Con un límite de traspasos.</div>
+</section>
+
+<section class="slide lamina" id="t-traspasos">
+  <div class="badge nutre">Nutre</div>
+  <div class="timebox">0:25 · 15 min</div>
+  <div class="lienzo" style="font-family:var(--sans); padding:128px 128px 160px; display:flex; flex-direction:column; gap:48px">
+<div style="display:flex; flex-direction:column; gap:16px">
+<p style="font-size:20px; font-weight:600; letter-spacing:3px; text-transform:uppercase; color:var(--tec); font-family:var(--mono)">Topología multi-agente · 3 de 5</p>
+<h2 style="font-family:var(--serif); font-size:64px; font-weight:600; line-height:1.1; color:var(--ink)">Traspasos: el control pasa de mano</h2>
+</div>
+<div style="position:absolute; left:128px; top:320px; width:960px; height:80px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:4px; background:var(--paper-2); border:1.5px dashed var(--ink-2); border-radius:0; padding:0px 12px"><p style="font-size:28px; font-weight:600; text-align:center; color:var(--ink)">Una sola conversación: quien la tiene, responde</p></div>
+<x-connector head="none" style="color:var(--ink-2); border-width:3px; border-style:dashed" x1="248" x2="248" y1="400" y2="480"></x-connector>
+<x-connector head="none" style="color:var(--reta); border-width:3px; border-style:dashed" x1="608" x2="608" y1="400" y2="480"></x-connector>
+<x-connector head="none" style="color:var(--ink-2); border-width:3px; border-style:dashed" x1="968" x2="968" y1="400" y2="480"></x-connector>
+<div style="position:absolute; left:128px; top:480px; width:240px; height:110px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:4px; background:var(--paper-2); border:1px solid var(--ink-2); border-radius:0; padding:0px 12px"><p style="font-size:28px; font-weight:600; text-align:center; color:var(--ink)">Analista</p><p style="font-size:24px; text-align:center; color:var(--ink-2)">terminó</p></div>
+<div style="position:absolute; left:488px; top:480px; width:240px; height:110px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:4px; background:color-mix(in srgb, var(--reta) 13%, var(--paper)); border:1px solid var(--reta); border-radius:0; padding:0px 12px"><p style="font-size:28px; font-weight:600; text-align:center; color:var(--ink)">Diseñador</p><p style="font-size:24px; text-align:center; color:var(--ink-2)">tiene el control</p></div>
+<div style="position:absolute; left:848px; top:480px; width:240px; height:110px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:4px; background:var(--paper-2); border:1px solid var(--ink-2); border-radius:0; padding:0px 12px"><p style="font-size:28px; font-weight:600; text-align:center; color:var(--ink)">Desarrollador</p><p style="font-size:24px; text-align:center; color:var(--ink-2)">en espera</p></div>
+<x-connector style="color:var(--reta); border-width:3px" x1="368" x2="488" y1="535" y2="535"></x-connector>
+<x-connector style="color:var(--ink-2); border-width:3px; border-style:dashed" x1="728" x2="848" y1="535" y2="535"></x-connector>
+<p style="position:absolute; left:368px; top:488px; width:120px; font-size:24px; text-align:center; color:var(--reta)">pasa</p>
+<p style="position:absolute; left:728px; top:488px; width:120px; font-size:24px; text-align:center; color:var(--ink-2)">pasará</p>
+<p style="position:absolute; left:128px; top:670px; width:960px; font-size:24px; line-height:1.4; color:var(--ink); background:var(--paper-2); border-radius:0; padding:16px 24px; font-family:var(--mono)">transferir_a(agente, motivo)</p>
+<p style="position:absolute; left:128px; top:770px; width:960px; font-size:24px; line-height:1.4; color:var(--ink); background:var(--paper-2); border-radius:0; padding:16px 24px">Sin supervisor: el control viaja con la conversación</p>
+<div style="position:absolute; left:1168px; top:300px; width:624px; display:flex; flex-direction:column; gap:28px">
+<div style="display:flex; flex-direction:column; gap:8px"><p style="font-size:20px; font-weight:600; letter-spacing:2px; text-transform:uppercase; color:var(--tec); font-family:var(--mono)">Cómo funciona</p><p style="font-size:28px; line-height:1.4; color:var(--ink)">El agente activo atiende hasta que decide pasar el control a otro con una herramienta de traspaso.</p></div>
+<div style="display:flex; flex-direction:column; gap:8px"><p style="font-size:20px; font-weight:600; letter-spacing:2px; text-transform:uppercase; color:var(--tec); font-family:var(--mono)">Úsalo cuando</p><p style="font-size:28px; line-height:1.4; color:var(--ink)">Natural para trabajo por etapas; difícil de seguir y puede rebotar entre agentes.</p></div>
+<div style="display:flex; flex-direction:column; gap:8px; background:color-mix(in srgb, var(--reta) 13%, var(--paper)); border-radius:0; padding:24px"><p style="font-size:20px; font-weight:600; letter-spacing:2px; text-transform:uppercase; color:var(--tec); font-family:var(--mono)">En tu fábrica</p><p style="font-size:28px; line-height:1.4; color:var(--ink)">Analista → diseñador → desarrollador podrían ser traspasos; usamos el grafo para fijar el orden.</p></div>
+</div>
+<p style="position:absolute; left:128px; bottom:64px; width:1664px; font-size:24px; color:var(--ink-2)">Sesión 3 · Topologías</p>
+
+</div>
+  <div class="notes">Traspasos, o handoffs: no hay supervisor. Hay un agente activo que atiende, y cuando decide que otro debe seguir, llama a una herramienta de traspaso, por ejemplo transferir_a con el agente y el motivo. El historial completo viaja con el control. Es la topología típica de atención a clientes: recepción, ventas, soporte. Ventaja: cada agente tiene un prompt corto. Riesgo: el orden lo deciden los modelos, así que puede haber rebotes, por ejemplo el diseñador regresa al analista y el analista al diseñador. En la fábrica las etapas son las mismas, pero preferimos que el grafo fije el orden para que sea predecible.</div>
+</section>
+
+<section class="slide lamina" id="c-traspasos">
+  <div class="badge nutre">Nutre</div>
+  <div class="timebox">0:25 · 15 min</div>
+  <div class="lienzo" style="font-family:var(--sans); padding:128px 128px 160px; display:flex; flex-direction:column; gap:48px">
+<div style="display:flex; flex-direction:column; gap:16px">
+<p style="font-size:20px; font-weight:600; letter-spacing:3px; text-transform:uppercase; color:var(--tec); font-family:var(--mono)">Topología · en código</p>
+<h2 style="font-family:var(--serif); font-size:51px; font-weight:600; line-height:1.1; color:var(--ink)">Traspasos en código: herramientas que pasan el control</h2>
+</div>
+<div style="position:absolute; left:128px; top:296px; width:1040px; background:var(--paper-3); border-radius:0; padding:28px 16px; display:flex; flex-direction:column; font-family:var(--mono); font-size:22px; line-height:1.5; color:var(--ink); white-space:pre; border:1px solid var(--rule-2); border-left:3px solid var(--rule)"><p style="padding:0px 16px">@tool</p><p style="padding:0px 16px"><span style="color:var(--introduce)">def</span> transferir_a_altas(motivo: str) -&gt; str:</p><p style="padding:0px 16px">    <span style="color:var(--practica)">""</span><span style="color:var(--practica)">"Pasa la conversación al agente de altas y bajas."</span><span style="color:var(--practica)">""</span></p><p style="padding:0px 16px">    <span style="color:var(--introduce)">return</span> motivo</p><p style="padding:0px 16px"> </p><p style="padding:0px 16px"><span style="color:var(--introduce)">def</span> nodo(s: Estado) -&gt; <span style="color:var(--tec)">Command</span>[<span style="color:var(--tec)">Literal</span>[<span style="color:var(--practica)">"altas"</span>, <span style="color:var(--practica)">"directorio"</span>, ...]]:</p><p style="background:var(--tec-tint); border-left:4px solid var(--introduce); padding:0px 16px 0px 12px">    resp = modelo().bind_tools(herramientas).invoke(s[<span style="color:var(--practica)">"mensajes"</span>])</p><p style="background:var(--tec-tint); border-left:4px solid var(--introduce); padding:0px 16px 0px 12px">    <span style="color:var(--introduce)">if</span> resp.tool_calls:                         <span style="color:var(--ink-2)"># quiere traspasar</span></p><p style="padding:0px 16px">        llamada = resp.tool_calls[0]</p><p style="padding:0px 16px">        destino = llamada[<span style="color:var(--practica)">"name"</span>].removeprefix(<span style="color:var(--practica)">"transferir_a_"</span>)</p><p style="background:var(--tec-tint); border-left:4px solid var(--introduce); padding:0px 16px 0px 12px">        <span style="color:var(--introduce)">return</span> <span style="color:var(--tec)">Command</span>(goto=destino, update={<span style="color:var(--practica)">"mensajes"</span>: [nota]})</p><p style="padding:0px 16px">    <span style="color:var(--introduce)">return</span> <span style="color:var(--tec)">Command</span>(goto=<span style="color:var(--tec)">END</span>, update={<span style="color:var(--practica)">"mensajes"</span>: [resp]})</p><p style="padding:0px 16px"> </p><p style="padding:0px 16px"><span style="color:var(--introduce)">class</span> Estado(<span style="color:var(--tec)">TypedDict</span>):</p><p style="background:var(--tec-tint); border-left:4px solid var(--introduce); padding:0px 16px 0px 12px">    mensajes: <span style="color:var(--tec)">Annotated</span>[list, add_messages]     <span style="color:var(--ink-2)"># una conversación</span></p></div>
+<div style="position:absolute; left:1216px; top:296px; width:576px; display:flex; flex-direction:column; gap:24px">
+<div style="display:flex; flex-direction:column; gap:8px"><p style="font-size:22px; font-weight:600; letter-spacing:2px; text-transform:uppercase; color:var(--tec); font-family:var(--mono)">Lo que lo distingue</p><p style="font-size:26px; line-height:1.4; color:var(--ink)">Herramientas <b>transferir_a_*</b>: llamarlas es decidir quién sigue. Una sola conversación viaja con el control.</p></div>
+<div style="display:flex; flex-direction:column; gap:8px"><p style="font-size:22px; font-weight:600; letter-spacing:2px; text-transform:uppercase; color:var(--tec); font-family:var(--mono)">Compáralo con</p><p style="font-size:26px; line-height:1.4; color:var(--ink)">Supervisor: allí el control siempre regresa al centro.</p></div>
+<div style="display:flex; flex-direction:column; gap:8px"><p style="font-size:22px; font-weight:600; letter-spacing:2px; text-transform:uppercase; color:var(--tec); font-family:var(--mono)">Ejecútalo</p><p style="font-family:var(--mono); font-size:19px; background:var(--paper-2); border-radius:0; padding:12px 16px; line-height:1.4; color:var(--ink)">python -m ejemplos.s3_topologias.traspasos</p></div>
+<div style="display:flex; flex-direction:column; gap:8px; background:color-mix(in srgb, var(--reta) 13%, var(--paper)); border-radius:0; padding:20px 24px"><p style="font-size:22px; font-weight:600; letter-spacing:2px; text-transform:uppercase; color:var(--tec); font-family:var(--mono)">En tu fábrica</p><p style="font-size:26px; line-height:1.4; color:var(--ink)">Analista → diseñador → desarrollador podrían ser traspasos; el grafo fija el orden.</p></div>
+</div>
+<p style="position:absolute; left:128px; bottom:64px; width:1664px; font-size:24px; color:var(--ink-2)">Fragmento simplificado de ejemplos/s3_topologias/traspasos.py · las líneas resaltadas son el patrón</p>
+
+</div>
+  <div class="notes">El ejemplo es una recepción de RR. HH.: una pregunta de alta termina con el agente de altas y una de consulta con el de directorio. La herramienta de traspaso no hace nada por sí misma; su valor es que el modelo la elige, y el nodo la traduce en Command. Comparar con el supervisor: aquí no hay centro, el control salta de agente en agente. Por eso el límite MAX_TRASPASOS evita que dos agentes se pasen la conversación sin fin.</div>
+</section>
+
+<section class="slide lamina" id="red-idea">
+  <div class="badge nutre">Nutre</div>
+  <div class="timebox">0:25 · 15 min</div>
+  <div class="lienzo" style="font-family:var(--sans); padding:128px 128px 160px; display:flex; flex-direction:column; gap:48px">
+<div style="display:flex; flex-direction:column; gap:16px">
+<p style="font-size:20px; font-weight:600; letter-spacing:3px; text-transform:uppercase; color:var(--tec); font-family:var(--mono)">Topología multi-agente · la idea</p>
+<h2 style="font-family:var(--serif); font-size:64px; font-weight:600; line-height:1.1; color:var(--ink)">Red: todos pueden hablar con todos</h2>
+</div>
+<div style="position:absolute; left:128px; top:300px; width:760px; display:flex; flex-direction:column; gap:24px">
+<div style="display:flex; flex-direction:column; gap:8px; background:var(--paper-2); border:1.5px dashed var(--ink-2); border-radius:0; padding:20px 40px"><p style="font-size:28px; font-weight:600; color:var(--ink)">Supervisor</p><p style="font-size:26px; line-height:1.4; color:var(--ink-2)">Un centro decide todo: predecible, pero rígido.</p></div>
+<div style="display:flex; flex-direction:column; gap:8px; background:var(--paper-2); border:1.5px dashed var(--ink-2); border-radius:0; padding:20px 40px"><p style="font-size:28px; font-weight:600; color:var(--ink)">Traspasos</p><p style="font-size:26px; line-height:1.4; color:var(--ink-2)">El control pasa de uno en uno, en cadena.</p></div>
+<div style="display:flex; flex-direction:column; gap:8px; background:color-mix(in srgb, var(--reta) 13%, var(--paper)); border:1px solid var(--reta); border-radius:0; padding:20px 40px"><p style="font-size:28px; font-weight:600; color:var(--ink)">Red</p><p style="font-size:26px; line-height:1.4; color:var(--ink)">Cualquier agente puede pasar el trabajo a cualquier otro; el flujo surge de sus decisiones, no de un diseño fijo.</p></div>
+</div>
+<div style="position:absolute; left:960px; top:300px; width:832px; display:flex; flex-direction:column; gap:28px">
+<div style="display:flex; flex-direction:column; gap:14px; background:var(--paper-3); border-radius:0; padding:28px 32px; border:1px solid var(--rule-2); border-left:3px solid var(--rule)">
+<p style="font-size:24px; line-height:1.4; color:var(--ink)"><span style="font-weight:600; color:var(--tec)">Analista</span> → Tester: «revisa si los criterios se pueden probar»</p>
+<p style="font-size:24px; line-height:1.4; color:var(--ink)"><span style="font-weight:600; color:var(--tec)">Tester</span> → Analista: «el escenario 3 es ambiguo»</p>
+<p style="font-size:24px; line-height:1.4; color:var(--ink)"><span style="font-weight:600; color:var(--tec)">Analista</span> → Desarrollador: «empieza con lo que está claro»</p>
+<p style="font-size:24px; line-height:1.4; color:var(--ink)"><span style="font-weight:600; color:var(--tec)">Desarrollador</span> → Revisor → Tester → Analista …</p>
+<p style="font-size:24px; line-height:1.4; color:var(--ink)"><span style="font-weight:600; color:var(--introduce)">Límite ·</span> turno 12 de 12: el sistema se detiene</p>
+</div>
+<p style="font-size:24px; line-height:1.4; color:var(--ink-2)">Flexible para exploración abierta; difícil de depurar, cara y con riesgo de ciclos. El límite de turnos es obligatorio.</p>
+</div>
+<p style="position:absolute; left:128px; bottom:64px; width:1664px; font-size:24px; color:var(--ink-2)">Sesión 3 · Topologías · LangGraph, documentación de sistemas multi-agente</p>
+
+</div>
+  <div class="notes">2 minutos, dentro de los cinco del patrón. La red, también llamada enjambre o swarm, quita toda estructura: cualquier agente puede pasarle el trabajo a cualquier otro. Es la más flexible porque el flujo surge de las decisiones de los agentes. También es la más difícil de predecir, depurar y detener: dos agentes pueden pasarse el trabajo sin fin. Los canales crecen rápido: con 4 agentes hay 6, con 10 hay 45. Sirve para exploración abierta o simulaciones; para la fábrica, con pasos conocidos, no la usamos. Pregunta: en la traza, ¿cuándo habría terminado sin el límite de turnos?</div>
+</section>
+
+<section class="slide lamina" id="t-red">
+  <div class="badge nutre">Nutre</div>
+  <div class="timebox">0:25 · 15 min</div>
+  <div class="lienzo" style="font-family:var(--sans); padding:128px 128px 160px; display:flex; flex-direction:column; gap:48px">
+<div style="display:flex; flex-direction:column; gap:16px">
+<p style="font-size:20px; font-weight:600; letter-spacing:3px; text-transform:uppercase; color:var(--tec); font-family:var(--mono)">Topología multi-agente · 4 de 5</p>
+<h2 style="font-family:var(--serif); font-size:64px; font-weight:600; line-height:1.1; color:var(--ink)">Red: todos con todos</h2>
+</div>
+<div style="position:absolute; left:188px; top:330px; width:240px; height:100px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:4px; background:var(--paper-2); border:1px solid var(--ink-2); border-radius:0; padding:0px 12px"><p style="font-size:28px; font-weight:600; text-align:center; color:var(--ink)">Analista</p></div>
+<div style="position:absolute; left:688px; top:330px; width:240px; height:100px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:4px; background:var(--paper-2); border:1px solid var(--ink-2); border-radius:0; padding:0px 12px"><p style="font-size:28px; font-weight:600; text-align:center; color:var(--ink)">Tester</p></div>
+<div style="position:absolute; left:188px; top:640px; width:240px; height:100px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:4px; background:var(--paper-2); border:1px solid var(--ink-2); border-radius:0; padding:0px 12px"><p style="font-size:28px; font-weight:600; text-align:center; color:var(--ink)">Desarrollador</p></div>
+<div style="position:absolute; left:688px; top:640px; width:240px; height:100px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:4px; background:var(--paper-2); border:1px solid var(--ink-2); border-radius:0; padding:0px 12px"><p style="font-size:28px; font-weight:600; text-align:center; color:var(--ink)">Revisor</p></div>
+<x-connector head="both" style="color:var(--ink-2); border-width:3px" x1="428" x2="688" y1="380" y2="380"></x-connector>
+<x-connector head="both" style="color:var(--ink-2); border-width:3px" x1="428" x2="688" y1="690" y2="690"></x-connector>
+<x-connector head="both" style="color:var(--ink-2); border-width:3px" x1="308" x2="308" y1="430" y2="640"></x-connector>
+<x-connector head="both" style="color:var(--ink-2); border-width:3px" x1="808" x2="808" y1="430" y2="640"></x-connector>
+<x-connector head="both" style="color:var(--reta); border-width:3px" x1="428" x2="688" y1="430" y2="640"></x-connector>
+<x-connector head="both" style="color:var(--reta); border-width:3px" x1="688" x2="428" y1="430" y2="640"></x-connector>
+<p style="position:absolute; left:128px; top:790px; width:880px; font-size:24px; line-height:1.4; color:var(--ink); background:var(--paper-2); border-radius:0; padding:16px 24px">4 agentes = 6 canales · 10 agentes = 45 canales</p>
+<div style="position:absolute; left:1168px; top:300px; width:624px; display:flex; flex-direction:column; gap:28px">
+<div style="display:flex; flex-direction:column; gap:8px"><p style="font-size:20px; font-weight:600; letter-spacing:2px; text-transform:uppercase; color:var(--tec); font-family:var(--mono)">Cómo funciona</p><p style="font-size:28px; line-height:1.4; color:var(--ink)">Cualquier agente puede hablar con cualquier otro y decide a quién pasarle el trabajo.</p></div>
+<div style="display:flex; flex-direction:column; gap:8px"><p style="font-size:20px; font-weight:600; letter-spacing:2px; text-transform:uppercase; color:var(--tec); font-family:var(--mono)">Úsalo cuando</p><p style="font-size:28px; line-height:1.4; color:var(--ink)">Flexible y emergente; difícil de depurar, cara y puede entrar en ciclos sin fin.</p></div>
+<div style="display:flex; flex-direction:column; gap:8px; background:color-mix(in srgb, var(--reta) 13%, var(--paper)); border-radius:0; padding:24px"><p style="font-size:20px; font-weight:600; letter-spacing:2px; text-transform:uppercase; color:var(--tec); font-family:var(--mono)">En tu fábrica</p><p style="font-size:28px; line-height:1.4; color:var(--ink)">No la usamos: con pasos conocidos, un grafo es más predecible y más barato.</p></div>
+</div>
+<p style="position:absolute; left:128px; bottom:64px; width:1664px; font-size:24px; color:var(--ink-2)">Sesión 3 · Topologías</p>
+
+</div>
+  <div class="notes">Red, también llamada enjambre o swarm: todos los agentes pueden hablar con todos. Es la más flexible, porque el flujo emerge de las decisiones de los agentes. También es la más difícil de depurar, de predecir en costo y de detener: pueden aparecer ciclos donde dos agentes se pasan el trabajo sin fin. Los canales crecen rápido: con n agentes hay n por n menos uno entre dos; con 4 son 6, con 10 son 45. Para la fábrica no la usamos, porque conocemos los pasos. Es útil en exploración abierta o simulaciones. Si la usan, límite de turnos y de presupuesto obligatorios.</div>
+</section>
+
+<section class="slide lamina" id="c-red">
+  <div class="badge nutre">Nutre</div>
+  <div class="timebox">0:25 · 15 min</div>
+  <div class="lienzo" style="font-family:var(--sans); padding:128px 128px 160px; display:flex; flex-direction:column; gap:48px">
+<div style="display:flex; flex-direction:column; gap:16px">
+<p style="font-size:20px; font-weight:600; letter-spacing:3px; text-transform:uppercase; color:var(--tec); font-family:var(--mono)">Topología · en código</p>
+<h2 style="font-family:var(--serif); font-size:56px; font-weight:600; line-height:1.1; color:var(--ink)">Red en código: todos con Command a todos</h2>
+</div>
+<div style="position:absolute; left:128px; top:296px; width:1040px; background:var(--paper-3); border-radius:0; padding:28px 16px; display:flex; flex-direction:column; font-family:var(--mono); font-size:22px; line-height:1.5; color:var(--ink); white-space:pre; border:1px solid var(--rule-2); border-left:3px solid var(--rule)"><p style="padding:0px 16px"><span style="color:var(--introduce)">class</span> Turno(<span style="color:var(--tec)">BaseModel</span>):</p><p style="padding:0px 16px">    aporte: str</p><p style="background:var(--tec-tint); border-left:4px solid var(--introduce); padding:0px 16px 0px 12px">    siguiente: <span style="color:var(--tec)">Literal</span>[<span style="color:var(--practica)">"analista"</span>, <span style="color:var(--practica)">"tester"</span>, <span style="color:var(--practica)">"desarrollador"</span>,</p><p style="background:var(--tec-tint); border-left:4px solid var(--introduce); padding:0px 16px 0px 12px">                       <span style="color:var(--practica)">"revisor"</span>, <span style="color:var(--practica)">"FIN"</span>]</p><p style="padding:0px 16px"> </p><p style="padding:0px 16px"><span style="color:var(--introduce)">def</span> par(nombre: str):</p><p style="padding:0px 16px">    <span style="color:var(--introduce)">def</span> nodo(s: Estado) -&gt; <span style="color:var(--tec)">Command</span>[Destino]:    <span style="color:var(--ink-2)"># Destino = todos</span></p><p style="padding:0px 16px">        t = modelo().with_structured_output(Turno).invoke(...)</p><p style="background:var(--tec-tint); border-left:4px solid var(--introduce); padding:0px 16px 0px 12px">        fin = t.siguiente == <span style="color:var(--practica)">"FIN"</span> <span style="color:var(--introduce)">or</span> s[<span style="color:var(--practica)">"turnos"</span>] &gt;= MAX_TURNOS</p><p style="background:var(--tec-tint); border-left:4px solid var(--introduce); padding:0px 16px 0px 12px">        <span style="color:var(--introduce)">return</span> <span style="color:var(--tec)">Command</span>(goto=<span style="color:var(--tec)">END</span> <span style="color:var(--introduce)">if</span> fin <span style="color:var(--introduce)">else</span> t.siguiente, update=...)</p><p style="padding:0px 16px">    <span style="color:var(--introduce)">return</span> nodo</p><p style="padding:0px 16px"> </p><p style="padding:0px 16px"><span style="color:var(--introduce)">for</span> nombre <span style="color:var(--introduce)">in</span> ROLES:</p><p style="padding:0px 16px">    grafo.add_node(nombre, par(nombre))</p><p style="background:var(--tec-tint); border-left:4px solid var(--introduce); padding:0px 16px 0px 12px">grafo.add_edge(<span style="color:var(--tec)">START</span>, <span style="color:var(--practica)">"analista"</span>)     <span style="color:var(--ink-2)"># la única arista fija</span></p></div>
+<div style="position:absolute; left:1216px; top:296px; width:576px; display:flex; flex-direction:column; gap:24px">
+<div style="display:flex; flex-direction:column; gap:8px"><p style="font-size:22px; font-weight:600; letter-spacing:2px; text-transform:uppercase; color:var(--tec); font-family:var(--mono)">Lo que lo distingue</p><p style="font-size:26px; line-height:1.4; color:var(--ink)"><b>Todos</b> los nodos devuelven Command hacia cualquier otro. Sin aristas fijas, el tope de turnos es obligatorio.</p></div>
+<div style="display:flex; flex-direction:column; gap:8px"><p style="font-size:22px; font-weight:600; letter-spacing:2px; text-transform:uppercase; color:var(--tec); font-family:var(--mono)">Compáralo con</p><p style="font-size:26px; line-height:1.4; color:var(--ink)">Supervisor: misma pieza (Command), pero solo en un nodo.</p></div>
+<div style="display:flex; flex-direction:column; gap:8px"><p style="font-size:22px; font-weight:600; letter-spacing:2px; text-transform:uppercase; color:var(--tec); font-family:var(--mono)">Ejecútalo</p><p style="font-family:var(--mono); font-size:19px; background:var(--paper-2); border-radius:0; padding:12px 16px; line-height:1.4; color:var(--ink)">python -m ejemplos.s3_topologias.red</p></div>
+<div style="display:flex; flex-direction:column; gap:8px; background:color-mix(in srgb, var(--reta) 13%, var(--paper)); border-radius:0; padding:20px 24px"><p style="font-size:22px; font-weight:600; letter-spacing:2px; text-transform:uppercase; color:var(--tec); font-family:var(--mono)">En tu fábrica</p><p style="font-size:26px; line-height:1.4; color:var(--ink)">No la usamos: con pasos conocidos, un grafo fijo es más predecible y barato.</p></div>
+</div>
+<p style="position:absolute; left:128px; bottom:64px; width:1664px; font-size:24px; color:var(--ink-2)">Fragmento simplificado de ejemplos/s3_topologias/red.py · las líneas resaltadas son el patrón</p>
+
+</div>
+  <div class="notes">Ejecutar dos o tres veces: el recorrido cambia en cada ejecución. Eso es lo flexible y también lo difícil de depurar. Mostrar el contador de turnos al final. Ejercicio: subir MAX_TURNOS a 30 y ver cuánto cuesta; muchas veces los agentes no deciden terminar solos. Conclusión: misma pieza de código que el supervisor, distinta distribución del poder de decisión.</div>
+</section>
+
+<section class="slide lamina" id="pizarra-idea">
+  <div class="badge nutre">Nutre</div>
+  <div class="timebox">0:25 · 15 min</div>
+  <div class="lienzo" style="font-family:var(--sans); padding:128px 128px 160px; display:flex; flex-direction:column; gap:48px">
+<div style="display:flex; flex-direction:column; gap:16px">
+<p style="font-size:20px; font-weight:600; letter-spacing:3px; text-transform:uppercase; color:var(--tec); font-family:var(--mono)">Topología multi-agente · la idea</p>
+<h2 style="font-family:var(--serif); font-size:64px; font-weight:600; line-height:1.1; color:var(--ink)">Pizarra: un espacio de trabajo compartido</h2>
+</div>
+<div style="position:absolute; left:128px; top:300px; width:760px; display:flex; flex-direction:column; gap:24px">
+<div style="display:flex; flex-direction:column; gap:8px; background:var(--paper-2); border:1.5px dashed var(--ink-2); border-radius:0; padding:20px 40px"><p style="font-size:28px; font-weight:600; color:var(--ink)">Mensajes directos</p><p style="font-size:26px; line-height:1.4; color:var(--ink-2)">Cada agente debe saber a quién avisar: agregar uno nuevo obliga a cambiar a los demás.</p></div>
+<div style="display:flex; flex-direction:column; gap:8px; background:var(--paper-2); border:1.5px dashed var(--ink-2); border-radius:0; padding:20px 40px"><p style="font-size:28px; font-weight:600; color:var(--ink)">Un supervisor</p><p style="font-size:26px; line-height:1.4; color:var(--ink-2)">Alguien tiene que decidir, en cada paso, quién sigue.</p></div>
+<div style="display:flex; flex-direction:column; gap:8px; background:color-mix(in srgb, var(--reta) 13%, var(--paper)); border:1px solid var(--reta); border-radius:0; padding:20px 40px"><p style="font-size:28px; font-weight:600; color:var(--ink)">Pizarra</p><p style="font-size:26px; line-height:1.4; color:var(--ink)">Los agentes leen y escriben en un espacio común; un controlador activa al agente cuya entrada ya está disponible.</p></div>
+</div>
+<div style="position:absolute; left:960px; top:300px; width:832px; display:flex; flex-direction:column; gap:28px">
+<div style="display:flex; flex-direction:column; gap:14px; background:var(--paper-3); border-radius:0; padding:28px 32px; border:1px solid var(--rule-2); border-left:3px solid var(--rule)">
+<p style="font-size:24px; line-height:1.4; color:var(--ink-2)">Pizarra: historia ✓ · criterios — · casos — · código —</p>
+<p style="font-size:24px; line-height:1.4; color:var(--ink)"><span style="font-weight:600; color:var(--introduce)">Controlador ·</span> hay historia y faltan criterios → Analista</p>
+<p style="font-size:24px; line-height:1.4; color:var(--ink)"><span style="font-weight:600; color:var(--practica)">Pizarra ·</span> criterios ✓ → el Diseñador ya puede trabajar</p>
+<p style="font-size:24px; line-height:1.4; color:var(--ink)"><span style="font-weight:600; color:var(--practica)">Pizarra ·</span> casos ✓ → el Desarrollador ya puede trabajar</p>
+<p style="font-size:24px; line-height:1.4; color:var(--ink)"><span style="font-weight:600; color:var(--ink)">Pizarra ·</span> todo ✓ → terminado</p>
+</div>
+<p style="font-size:24px; line-height:1.4; color:var(--ink-2)">Desacopla a los agentes; hay que definir quién escribe cada campo para que no se pisen.</p>
+</div>
+<p style="position:absolute; left:128px; bottom:64px; width:1664px; font-size:24px; color:var(--ink-2)">Sesión 3 · Topologías · LangGraph, documentación de sistemas multi-agente · Erman et al., Hearsay-II (1980)</p>
+
+</div>
+  <div class="notes">2 minutos, dentro de los cinco del patrón. La pizarra, o blackboard, es una idea de los años ochenta, del sistema Hearsay-II de reconocimiento de voz. Los agentes no se mandan mensajes: leen y escriben en un espacio común. Un controlador mira qué hay en la pizarra y activa al agente cuya entrada ya está lista; por ejemplo, el diseñador cuando aparecen los criterios. Ventaja: los agentes están desacoplados; para agregar uno nuevo solo se dice qué lee y qué escribe. Riesgo: dos agentes pueden escribir el mismo campo; hay que definir dueños. En la fábrica ya existe: el estado de LangGraph y la carpeta salida/HU-xx son pizarras. Pregunta: ¿qué agente escribe cada archivo de salida/HU-xx?</div>
+</section>
+
+<section class="slide lamina" id="t-pizarra">
+  <div class="badge nutre">Nutre</div>
+  <div class="timebox">0:25 · 15 min</div>
+  <div class="lienzo" style="font-family:var(--sans); padding:128px 128px 160px; display:flex; flex-direction:column; gap:48px">
+<div style="display:flex; flex-direction:column; gap:16px">
+<p style="font-size:20px; font-weight:600; letter-spacing:3px; text-transform:uppercase; color:var(--tec); font-family:var(--mono)">Topología multi-agente · 5 de 5</p>
+<h2 style="font-family:var(--serif); font-size:64px; font-weight:600; line-height:1.1; color:var(--ink)">Pizarra: un estado compartido</h2>
+</div>
+<div style="position:absolute; left:368px; top:460px; width:400px; height:130px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:4px; background:var(--tec-tint); border:1px solid var(--tec); border-radius:0; padding:0px 12px"><p style="font-size:28px; font-weight:600; text-align:center; color:var(--ink)">Pizarra</p><p style="font-size:24px; text-align:center; color:var(--ink-2)">criterios · casos · plan · errores</p></div>
+<div style="position:absolute; left:128px; top:300px; width:220px; height:90px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:4px; background:var(--paper-2); border:1px solid var(--ink-2); border-radius:0; padding:0px 12px"><p style="font-size:28px; font-weight:600; text-align:center; color:var(--ink)">Analista</p></div>
+<div style="position:absolute; left:868px; top:300px; width:220px; height:90px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:4px; background:var(--paper-2); border:1px solid var(--ink-2); border-radius:0; padding:0px 12px"><p style="font-size:28px; font-weight:600; text-align:center; color:var(--ink)">Diseñador</p></div>
+<div style="position:absolute; left:128px; top:680px; width:220px; height:90px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:4px; background:var(--paper-2); border:1px solid var(--ink-2); border-radius:0; padding:0px 12px"><p style="font-size:28px; font-weight:600; text-align:center; color:var(--ink)">Desarrollador</p></div>
+<div style="position:absolute; left:868px; top:680px; width:220px; height:90px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:4px; background:var(--paper-2); border:1px solid var(--ink-2); border-radius:0; padding:0px 12px"><p style="font-size:28px; font-weight:600; text-align:center; color:var(--ink)">Automatizador</p></div>
+<x-connector head="both" style="color:var(--ink-2); border-width:3px" x1="300" x2="420" y1="390" y2="460"></x-connector>
+<x-connector head="both" style="color:var(--ink-2); border-width:3px" x1="916" x2="716" y1="390" y2="460"></x-connector>
+<x-connector head="both" style="color:var(--ink-2); border-width:3px" x1="300" x2="420" y1="680" y2="590"></x-connector>
+<x-connector head="both" style="color:var(--ink-2); border-width:3px" x1="916" x2="716" y1="680" y2="590"></x-connector>
+<p style="position:absolute; left:128px; top:810px; width:960px; font-size:24px; text-align:center; color:var(--reta)">Los agentes no se hablan: leen y escriben en la pizarra</p>
+<div style="position:absolute; left:1168px; top:300px; width:624px; display:flex; flex-direction:column; gap:28px">
+<div style="display:flex; flex-direction:column; gap:8px"><p style="font-size:20px; font-weight:600; letter-spacing:2px; text-transform:uppercase; color:var(--tec); font-family:var(--mono)">Cómo funciona</p><p style="font-size:28px; line-height:1.4; color:var(--ink)">Los agentes leen y escriben en un espacio compartido; cada uno actúa cuando hay algo que le toca.</p></div>
+<div style="display:flex; flex-direction:column; gap:8px"><p style="font-size:20px; font-weight:600; letter-spacing:2px; text-transform:uppercase; color:var(--tec); font-family:var(--mono)">Úsalo cuando</p><p style="font-size:28px; line-height:1.4; color:var(--ink)">Desacopla a los agentes; hay que controlar quién escribe qué para no pisarse.</p></div>
+<div style="display:flex; flex-direction:column; gap:8px; background:color-mix(in srgb, var(--reta) 13%, var(--paper)); border-radius:0; padding:24px"><p style="font-size:20px; font-weight:600; letter-spacing:2px; text-transform:uppercase; color:var(--tec); font-family:var(--mono)">En tu fábrica</p><p style="font-size:28px; line-height:1.4; color:var(--ink)">El estado de LangGraph es tu pizarra, y también la carpeta salida/HU-xx.</p></div>
+</div>
+<p style="position:absolute; left:128px; bottom:64px; width:1664px; font-size:24px; color:var(--ink-2)">Sesión 3 · Topologías</p>
+
+</div>
+  <div class="notes">Pizarra, o blackboard: los agentes no se mandan mensajes; leen y escriben en un espacio compartido. Cada uno actúa cuando aparece algo que le toca, por ejemplo el diseñador cuando ya hay criterios. Ventaja: los agentes están desacoplados; puedes agregar uno nuevo sin cambiar a los demás. Riesgo: dos agentes pueden escribir lo mismo y pisarse, así que hay que definir quién escribe cada campo. En la fábrica la usamos sin nombrarla: el estado de LangGraph es la pizarra, con reductores para los campos que escriben varios nodos, y la carpeta salida/HU-xx es una pizarra en disco. Esto también es seguridad: el hook confinar_escritura decide quién escribe dónde.</div>
+</section>
+
+<section class="slide lamina" id="c-pizarra">
+  <div class="badge nutre">Nutre</div>
+  <div class="timebox">0:25 · 15 min</div>
+  <div class="lienzo" style="font-family:var(--sans); padding:128px 128px 160px; display:flex; flex-direction:column; gap:48px">
+<div style="display:flex; flex-direction:column; gap:16px">
+<p style="font-size:20px; font-weight:600; letter-spacing:3px; text-transform:uppercase; color:var(--tec); font-family:var(--mono)">Topología · en código</p>
+<h2 style="font-family:var(--serif); font-size:56px; font-weight:600; line-height:1.1; color:var(--ink)">Pizarra en código: una tabla y un controlador</h2>
+</div>
+<div style="position:absolute; left:128px; top:296px; width:1040px; background:var(--paper-3); border-radius:0; padding:28px 16px; display:flex; flex-direction:column; font-family:var(--mono); font-size:22px; line-height:1.5; color:var(--ink); white-space:pre; border:1px solid var(--rule-2); border-left:3px solid var(--rule)"><p style="background:var(--tec-tint); border-left:4px solid var(--introduce); padding:0px 16px 0px 12px">AGENTES = {   <span style="color:var(--ink-2)"># agente: (lo que lee, lo que escribe)</span></p><p style="background:var(--tec-tint); border-left:4px solid var(--introduce); padding:0px 16px 0px 12px">    <span style="color:var(--practica)">"analista"</span>:  ([<span style="color:var(--practica)">"historia"</span>], <span style="color:var(--practica)">"criterios"</span>),</p><p style="background:var(--tec-tint); border-left:4px solid var(--introduce); padding:0px 16px 0px 12px">    <span style="color:var(--practica)">"disenador"</span>: ([<span style="color:var(--practica)">"criterios"</span>], <span style="color:var(--practica)">"casos"</span>),</p><p style="background:var(--tec-tint); border-left:4px solid var(--introduce); padding:0px 16px 0px 12px">    <span style="color:var(--practica)">"backend"</span>:   ([<span style="color:var(--practica)">"criterios"</span>], <span style="color:var(--practica)">"endpoint"</span>),</p><p style="background:var(--tec-tint); border-left:4px solid var(--introduce); padding:0px 16px 0px 12px">    <span style="color:var(--practica)">"pantalla"</span>:  ([<span style="color:var(--practica)">"criterios"</span>, <span style="color:var(--practica)">"endpoint"</span>], <span style="color:var(--practica)">"pantalla"</span>),</p><p style="padding:0px 16px">}</p><p style="padding:0px 16px"> </p><p style="padding:0px 16px"><span style="color:var(--introduce)">def</span> elegir(p: Pizarra) -&gt; str:                 <span style="color:var(--ink-2)"># el controlador</span></p><p style="padding:0px 16px">    listos = [a <span style="color:var(--introduce)">for</span> a, (lee, escribe) <span style="color:var(--introduce)">in</span> AGENTES.items()</p><p style="padding:0px 16px">              <span style="color:var(--introduce)">if</span> all(p.get(c) <span style="color:var(--introduce)">for</span> c <span style="color:var(--introduce)">in</span> lee) <span style="color:var(--introduce)">and</span> <span style="color:var(--introduce)">not</span> p.get(escribe)]</p><p style="padding:0px 16px">    <span style="color:var(--introduce)">return</span> listos[0] <span style="color:var(--introduce)">if</span> listos <span style="color:var(--introduce)">else</span> <span style="color:var(--tec)">END</span></p><p style="padding:0px 16px"> </p><p style="padding:0px 16px"><span style="color:var(--introduce)">for</span> nombre <span style="color:var(--introduce)">in</span> AGENTES:</p><p style="padding:0px 16px">    grafo.add_edge(nombre, <span style="color:var(--practica)">"controlador"</span>)       <span style="color:var(--ink-2)"># todos vuelven</span></p><p style="padding:0px 16px">grafo.add_conditional_edges(<span style="color:var(--practica)">"controlador"</span>, elegir, [*AGENTES, <span style="color:var(--tec)">END</span>])</p></div>
+<div style="position:absolute; left:1216px; top:296px; width:576px; display:flex; flex-direction:column; gap:24px">
+<div style="display:flex; flex-direction:column; gap:8px"><p style="font-size:22px; font-weight:600; letter-spacing:2px; text-transform:uppercase; color:var(--tec); font-family:var(--mono)">Lo que lo distingue</p><p style="font-size:26px; line-height:1.4; color:var(--ink)">Cada agente declara qué <b>lee</b> y qué <b>escribe</b>; un controlador en código activa a quien ya puede trabajar.</p></div>
+<div style="display:flex; flex-direction:column; gap:8px"><p style="font-size:22px; font-weight:600; letter-spacing:2px; text-transform:uppercase; color:var(--tec); font-family:var(--mono)">Compáralo con</p><p style="font-size:26px; line-height:1.4; color:var(--ink)">Supervisor: allí un modelo elige; aquí lo decide el estado de la pizarra.</p></div>
+<div style="display:flex; flex-direction:column; gap:8px"><p style="font-size:22px; font-weight:600; letter-spacing:2px; text-transform:uppercase; color:var(--tec); font-family:var(--mono)">Ejecútalo</p><p style="font-family:var(--mono); font-size:19px; background:var(--paper-2); border-radius:0; padding:12px 16px; line-height:1.4; color:var(--ink)">python -m ejemplos.s3_topologias.pizarra</p></div>
+<div style="display:flex; flex-direction:column; gap:8px; background:color-mix(in srgb, var(--reta) 13%, var(--paper)); border-radius:0; padding:20px 24px"><p style="font-size:22px; font-weight:600; letter-spacing:2px; text-transform:uppercase; color:var(--tec); font-family:var(--mono)">En tu fábrica</p><p style="font-size:26px; line-height:1.4; color:var(--ink)">El estado de LangGraph es tu pizarra; también la carpeta salida/HU-xx/.</p></div>
+</div>
+<p style="position:absolute; left:128px; bottom:64px; width:1664px; font-size:24px; color:var(--ink-2)">Fragmento simplificado de ejemplos/s3_topologias/pizarra.py · las líneas resaltadas son el patrón</p>
+
+</div>
+  <div class="notes">En el archivo, la tabla está desordenada a propósito: el orden de ejecución sale de las dependencias, no del orden en el código. La salida muestra en cada vuelta qué hay en la pizarra y quién puede trabajar. Ejercicio: agregar un agente «revisor» que lee casos y endpoint y escribe «revision»; basta una línea en la tabla. Enlace con seguridad: que cada agente escriba solo su campo es lo mismo que confinar_escritura hace con carpetas.</div>
+</section>
+
+<section class="slide cover">
+  <div class="badge nutre">Nutre</div>
+  <div class="timebox">0:40 · 10 min</div>
+  <div class="kicker">Bloque 3.3</div>
+  <h1>¿Qué arquitectura elijo?</h1>
+  <p class="big muted">Tres preguntas, en orden, y un ejercicio en parejas.</p>
+  <div class="notes">Objetivo 4 del módulo. Se califica la justificación, no la etiqueta.</div>
+</section>
+
+<section class="slide lamina" id="t-decision">
+  <div class="badge nutre">Nutre</div>
+  <div class="timebox">0:40 · 10 min</div>
+  <div class="lienzo" style="font-family:var(--sans); padding:128px 128px 160px; display:flex; flex-direction:column; gap:36px">
+<div style="display:flex; flex-direction:column; gap:16px"><p style="font-size:20px; font-weight:600; letter-spacing:3px; text-transform:uppercase; color:var(--tec); font-family:var(--mono)">Arquitecturas · síntesis</p><h2 style="font-family:var(--serif); font-weight:600; line-height:1.1; color:var(--ink); font-size:64px">¿Qué arquitectura elijo?</h2></div>
+<div style="display:flex; gap:24px"><div style="flex:1; display:flex; gap:16px; align-items:center; background:var(--tec-tint); border-radius:0; padding:16px 24px"><p style="font-family:var(--serif); font-size:40px; font-weight:600; color:var(--tec)">1</p><p style="font-size:26px; line-height:1.3; color:var(--ink)">¿Los pasos se conocen de antemano?</p></div><div style="flex:1; display:flex; gap:16px; align-items:center; background:var(--tec-tint); border-radius:0; padding:16px 24px"><p style="font-family:var(--serif); font-size:40px; font-weight:600; color:var(--tec)">2</p><p style="font-size:26px; line-height:1.3; color:var(--ink)">¿Un solo agente con buenas herramientas alcanza?</p></div><div style="flex:1; display:flex; gap:16px; align-items:center; background:var(--tec-tint); border-radius:0; padding:16px 24px"><p style="font-family:var(--serif); font-size:40px; font-weight:600; color:var(--tec)">3</p><p style="font-size:26px; line-height:1.3; color:var(--ink)">¿Quién debe decidir el siguiente paso?</p></div></div>
+<table style="font-size:24px; color:var(--ink)">
+<tr><th style="width:15%">Arquitectura</th><th style="width:25%">Quién decide el siguiente paso</th><th style="width:32%">Úsala cuando</th><th style="width:28%">Evítala cuando</th></tr>
+<tr style="background:color-mix(in srgb, var(--reta) 13%, var(--paper))"><td><b>Workflow</b></td><td>El código</td><td>Los pasos se conocen de antemano</td><td>La tarea cambia con cada entrada</td></tr><tr><td><b>Un agente</b></td><td>El modelo, en su bucle</td><td>Tarea abierta que cabe en un contexto y unos permisos</td><td>Mezcla permisos o especialidades</td></tr><tr><td><b>Supervisor</b></td><td>Un agente central o código</td><td>Varias especialidades, orden según el caso</td><td>El centro se vuelve cuello de botella</td></tr><tr><td><b>Jerárquica</b></td><td>Un supervisor por nivel</td><td>Muchos agentes agrupados en equipos</td><td>Hay pocos agentes</td></tr><tr><td><b>Traspasos</b></td><td>El agente activo</td><td>Atención por etapas en una conversación</td><td>El orden debe ser fijo y auditable</td></tr><tr><td><b>Red</b></td><td>Cualquier agente</td><td>Exploración abierta o simulaciones</td><td>Casi siempre, en producción</td></tr><tr><td><b>Pizarra</b></td><td>Un controlador que mira el estado</td><td>Agentes desacoplados que aportan por insumos</td><td>Varios escriben el mismo campo</td></tr>
+</table>
+<p style="position:absolute; left:128px; bottom:64px; width:1664px; font-size:24px; color:var(--ink-2)">Sesión 3 · La fábrica: un workflow orquestado por código, con agentes dentro de algunos nodos</p>
+
+</div>
+  <div class="notes">Objetivo 4 del módulo. Después de ver cada topología por separado, esta diapositiva las junta en una decisión de tres preguntas, en orden. Primera: si los pasos se conocen de antemano, basta un workflow con los patrones de flujo de la sesión 2, donde decide el código. Segunda: casi siempre un solo agente con buenas herramientas alcanza; varios agentes se justifican cuando las partes necesitan contextos, herramientas o permisos que no deben mezclarse, o cuando hay trabajo en paralelo. Tercera: quién debe decidir el siguiente paso, y esa respuesta elige la topología. Ejercicio de clase, en parejas: clasificar cuatro casos. Dudas de empleados sobre políticas: un agente con una herramienta de búsqueda. Procesar facturas: un workflow encadenado con compuertas. Mesa de ayuda de Recursos Humanos con altas, vacaciones y nómina: traspasos o supervisor, según quién deba controlar el orden. La fábrica: un workflow orquestado por código, que es un supervisor determinista, con agentes dentro de algunos nodos. Se califica la justificación, no la etiqueta.</div>
+</section>
+
+<section class="slide cover">
+  <div class="badge nutre">Nutre</div>
+  <div class="timebox">0:50 · 10 min</div>
+  <div class="kicker">Bloque 3.4</div>
+  <h1>Roles, permisos y contratos</h1>
+  <p class="big muted">Cada agente toca solo lo suyo.</p>
+  <div class="notes">La razón principal para tener varios agentes en la fábrica es separar permisos.</div>
+</section>
+
+<section class="slide lamina" id="s3-protocolos">
+  <div class="badge nutre">Nutre</div>
+  <div class="timebox">0:50 · 10 min</div>
+  <div class="lienzo" style="font-family:var(--sans); padding:128px 128px 160px; display:flex; flex-direction:column; gap:48px">
+<div style="display:flex; flex-direction:column; gap:16px">
+<p style="font-size:20px; font-weight:600; letter-spacing:3px; text-transform:uppercase; color:var(--tec); font-family:var(--mono)">3.3 · Roles, permisos y contratos</p>
+<h2 style="font-family:var(--serif); font-size:64px; font-weight:600; line-height:1.1; color:var(--ink)">Cada agente toca solo lo suyo</h2>
+</div>
+<table style="font-size:26px; color:var(--ink)">
+<tr><th style="width:22%">Agente</th><th style="width:34%">Puede escribir</th><th style="width:20%">Puede ejecutar</th><th style="width:24%">Entrega</th></tr>
+<tr><td><b>1 · 2</b> Analista y diseñador</td><td>salida/HU-xx/</td><td>Nada</td><td>.feature y .json</td></tr>
+<tr><td><b>3</b> Desarrollador</td><td>backend/*, frontend/*</td><td>npm, python</td><td>App que arranca</td></tr>
+<tr style="background:color-mix(in srgb, var(--reta) 13%, var(--paper))"><td><b>4</b> Despliegue</td><td>Dockerfiles y compose</td><td>docker, curl</td><td>Contenedores sanos</td></tr>
+<tr style="background:color-mix(in srgb, var(--reta) 13%, var(--paper))"><td><b>5</b> Automatizador</td><td>tests/*</td><td>python, pytest</td><td>Un test por caso</td></tr>
+</table>
+<p style="font-size:30px; line-height:1.4; color:var(--ink); border-left:6px solid var(--reta); padding:8px 32px">Los permisos viven en <b>hooks</b>, no en el prompt. Los archivos de salida/ son el contrato.</p>
+<p style="position:absolute; left:128px; bottom:64px; width:1664px; font-size:24px; color:var(--ink-2)">Más allá de un disco compartido: MCP conecta agentes con herramientas (siguiente) y A2A, agentes entre sistemas</p>
+
+</div>
+  <div class="notes">15 minutos. La razón principal para tener varios agentes en la fábrica es separar permisos: el automatizador escribe solo en tests/, así que no puede hacer pasar una prueba cambiando la aplicación; el agente de despliegue solo toca archivos de Docker. Esos límites se aplican con hooks PreToolUse en seguridad/hooks.py, que niegan la escritura antes de que ocurra. El contrato entre agentes son los artefactos: el automatizador recibe casos_prueba.json y debe dejar un test por cada id de caso; la verificación lo comprueba. Si los agentes no compartieran disco, los estándares serían MCP para herramientas y A2A para comunicar agentes de distintos sistemas.</div>
+</section>
+
+<section class="slide cover">
+  <div class="badge nutre">Nutre</div>
+  <div class="timebox">1:00 · 10 min</div>
+  <div class="kicker">Bloque 3.5</div>
+  <h1>MCP</h1>
+  <p class="big muted">Herramientas que cualquier agente descubre.</p>
+  <div class="notes">Demostración con mcp_cliente.py y con Claude Code (claude mcp add). Al terminar, claude mcp remove directorio.</div>
+</section>
+
+<section class="slide lamina" id="p-mcp">
+  <div class="badge nutre">Nutre</div>
+  <div class="timebox">1:00 · 10 min</div>
+  <div class="lienzo" style="font-family:var(--sans); padding:128px 128px 160px; display:flex; flex-direction:column; gap:48px">
+<div style="display:flex; flex-direction:column; gap:16px">
+<p style="font-size:20px; font-weight:600; letter-spacing:3px; text-transform:uppercase; color:var(--tec); font-family:var(--mono)">Protocolos · MCP</p>
+<h2 style="font-family:var(--serif); font-size:59px; font-weight:600; line-height:1.1; color:var(--ink)">MCP: herramientas que cualquier agente descubre</h2>
+</div>
+<div style="position:absolute; left:128px; top:310px; width:260px; height:100px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:4px; background:var(--paper-2); border:1px solid var(--ink-2); border-radius:0; padding:0px 12px"><p style="font-size:28px; font-weight:600; text-align:center; color:var(--ink)">Claude Code</p><p style="font-size:24px; text-align:center; color:var(--ink-2)">claude mcp add</p></div>
+<div style="position:absolute; left:128px; top:470px; width:260px; height:100px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:4px; background:color-mix(in srgb, var(--reta) 13%, var(--paper)); border:1px solid var(--reta); border-radius:0; padding:0px 12px"><p style="font-size:28px; font-weight:600; text-align:center; color:var(--ink)">mcp_cliente.py</p><p style="font-size:24px; text-align:center; color:var(--ink-2)">tu agente</p></div>
+<div style="position:absolute; left:128px; top:630px; width:260px; height:100px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:4px; background:var(--paper-2); border:1.5px dashed var(--ink-2); border-radius:0; padding:0px 12px"><p style="font-size:28px; font-weight:600; text-align:center; color:var(--ink)">Otro agente</p><p style="font-size:24px; text-align:center; color:var(--ink-2)">cualquier cliente</p></div>
+<x-connector head="none" style="color:var(--ink-2); border-width:3px" x1="388" x2="448" y1="360" y2="360"></x-connector>
+<x-connector head="none" style="color:var(--ink-2); border-width:3px" x1="388" x2="448" y1="520" y2="520"></x-connector>
+<x-connector head="none" style="color:var(--ink-2); border-width:3px" x1="388" x2="448" y1="680" y2="680"></x-connector>
+<x-connector head="none" style="color:var(--ink-2); border-width:3px" x1="448" x2="448" y1="360" y2="680"></x-connector>
+<x-connector head="both" style="color:var(--tec); border-width:3px" x1="448" x2="608" y1="520" y2="520"></x-connector>
+<p style="position:absolute; left:448px; top:470px; width:160px; font-size:24px; text-align:center; color:var(--tec)">MCP · stdio</p>
+<div style="position:absolute; left:608px; top:440px; width:280px; height:160px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:4px; background:var(--tec-tint); border:1px solid var(--tec); border-radius:0; padding:0px 12px"><p style="font-size:28px; font-weight:600; text-align:center; color:var(--ink)">Servidor MCP</p><p style="font-size:24px; text-align:center; color:var(--ink-2)">directorio-empleados</p></div>
+<x-connector style="color:var(--ink-2); border-width:3px" x1="888" x2="948" y1="520" y2="520"></x-connector>
+<div style="position:absolute; left:948px; top:460px; width:140px; height:120px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:4px; background:var(--paper-2); border:1px solid var(--ink-2); border-radius:0; padding:0px 12px"><p style="font-size:28px; font-weight:600; text-align:center; color:var(--ink)">Datos</p><p style="font-size:24px; text-align:center; color:var(--ink-2)">empleados</p></div>
+<p style="position:absolute; left:608px; top:640px; width:480px; font-size:24px; line-height:1.4; color:var(--ink); background:var(--paper-2); border-radius:0; padding:16px 24px; font-family:var(--mono)">1 · list_tools() → descubre<br/>2 · call_tool() → actúa</p>
+<p style="position:absolute; left:128px; top:790px; width:960px; font-size:24px; color:var(--reta)">Una herramienta, muchos agentes: nadie importa el código del otro</p>
+<div style="position:absolute; left:1168px; top:300px; width:624px; display:flex; flex-direction:column; gap:28px">
+<div style="display:flex; flex-direction:column; gap:8px"><p style="font-size:20px; font-weight:600; letter-spacing:2px; text-transform:uppercase; color:var(--tec); font-family:var(--mono)">Cómo funciona</p><p style="font-size:28px; line-height:1.4; color:var(--ink)">Un servidor publica herramientas con nombre, descripción y esquema; el cliente las descubre y las llama por el protocolo.</p></div>
+<div style="display:flex; flex-direction:column; gap:8px"><p style="font-size:20px; font-weight:600; letter-spacing:2px; text-transform:uppercase; color:var(--tec); font-family:var(--mono)">Úsalo cuando</p><p style="font-size:28px; line-height:1.4; color:var(--ink)">Varios agentes o apps necesitan las mismas herramientas o datos de la empresa.</p></div>
+<div style="display:flex; flex-direction:column; gap:8px; background:color-mix(in srgb, var(--reta) 13%, var(--paper)); border-radius:0; padding:24px"><p style="font-size:20px; font-weight:600; letter-spacing:2px; text-transform:uppercase; color:var(--tec); font-family:var(--mono)">En tu fábrica</p><p style="font-size:28px; line-height:1.4; color:var(--ink)">Con claude mcp add, los agentes 3 a 5 podrían consultar el directorio sin cambiar su código.</p></div>
+</div>
+<p style="position:absolute; left:128px; bottom:64px; width:1664px; font-size:24px; color:var(--ink-2)">Sesión 3 · Conectar agentes con herramientas · A2A hace lo mismo entre agentes de distintos sistemas</p>
+
+</div>
+  <div class="notes">MCP, Model Context Protocol, es un estándar abierto para conectar agentes con herramientas y datos. Sin él, cada agente escribe sus propios esquemas y conectores: con M agentes y N sistemas son M por N integraciones. Con MCP, cada sistema publica un servidor una vez y cualquier cliente lo usa. El servidor publica herramientas, recursos y prompts; en clase usamos solo herramientas. El cliente hace dos cosas: list_tools para descubrir qué hay, con su descripción y esquema, y call_tool para ejecutarla. Lo importante para el curso: MCP no cambia el bucle del agente, cambia de dónde salen las herramientas. A2A, Agent2Agent, es el estándar hermano para que un agente le delegue una tarea a otro agente de otro sistema; aquí solo lo mencionamos. Puente a la sesión 4: la descripción de la herramienta entra al contexto del modelo, así que un servidor MCP de terceros es código y texto que no escribimos. Es la cadena de suministro de ASI04: revisar, fijar versiones y publicar lo mínimo, de solo lectura.</div>
+</section>
+
+<section class="slide lamina" id="c-mcp">
+  <div class="badge nutre">Nutre</div>
+  <div class="timebox">1:00 · 10 min</div>
+  <div class="lienzo" style="font-family:var(--sans); padding:128px 128px 160px; display:flex; flex-direction:column; gap:48px">
+<div style="display:flex; flex-direction:column; gap:16px">
+<p style="font-size:20px; font-weight:600; letter-spacing:3px; text-transform:uppercase; color:var(--tec); font-family:var(--mono)">Protocolos · en código</p>
+<h2 style="font-family:var(--serif); font-size:56px; font-weight:600; line-height:1.1; color:var(--ink)">MCP en código: publicar y descubrir</h2>
+</div>
+<div style="position:absolute; left:128px; top:296px; width:1040px; background:var(--paper-3); border-radius:0; padding:28px 16px; display:flex; flex-direction:column; font-family:var(--mono); font-size:22px; line-height:1.5; color:var(--ink); white-space:pre; border:1px solid var(--rule-2); border-left:3px solid var(--rule)"><p style="padding:0px 16px"><span style="color:var(--ink-2)"># servidor · mcp_directorio.py</span></p><p style="padding:0px 16px">servidor = <span style="color:var(--tec)">FastMCP</span>(<span style="color:var(--practica)">"directorio-empleados"</span>)</p><p style="background:var(--tec-tint); border-left:4px solid var(--introduce); padding:0px 16px 0px 12px">@servidor.tool()                          <span style="color:var(--ink-2)"># tipos + docstring = esquema</span></p><p style="padding:0px 16px"><span style="color:var(--introduce)">def</span> buscar_empleados(departamento: str) -&gt; str:</p><p style="padding:0px 16px">    <span style="color:var(--practica)">""</span><span style="color:var(--practica)">"Empleados de un departamento. Ej.: 'Tecnología'."</span><span style="color:var(--practica)">""</span></p><p style="padding:0px 16px">    ...</p><p style="padding:0px 16px">servidor.run()                            <span style="color:var(--ink-2)"># stdio</span></p><p style="padding:0px 16px"> </p><p style="padding:0px 16px"><span style="color:var(--ink-2)"># cliente · mcp_cliente.py (el bucle es el de react.py)</span></p><p style="padding:0px 16px"><span style="color:var(--introduce)">async</span> <span style="color:var(--introduce)">with</span> <span style="color:var(--tec)">ClientSession</span>(lectura, escritura) as sesion:</p><p style="background:var(--tec-tint); border-left:4px solid var(--introduce); padding:0px 16px 0px 12px">    lista = <span style="color:var(--introduce)">await</span> sesion.list_tools()             <span style="color:var(--ink-2)"># DESCUBRIR</span></p><p style="padding:0px 16px">    esquemas = [{<span style="color:var(--practica)">"name"</span>: h.name, <span style="color:var(--practica)">"description"</span>: h.description,</p><p style="padding:0px 16px">                 <span style="color:var(--practica)">"input_schema"</span>: h.inputSchema} <span style="color:var(--introduce)">for</span> h <span style="color:var(--introduce)">in</span> lista.tools]</p><p style="padding:0px 16px">    ...</p><p style="background:var(--tec-tint); border-left:4px solid var(--introduce); padding:0px 16px 0px 12px">    r = <span style="color:var(--introduce)">await</span> sesion.call_tool(b.name, b.input)   <span style="color:var(--ink-2)"># ACTUAR</span></p></div>
+<div style="position:absolute; left:1216px; top:296px; width:576px; display:flex; flex-direction:column; gap:24px">
+<div style="display:flex; flex-direction:column; gap:8px"><p style="font-size:22px; font-weight:600; letter-spacing:2px; text-transform:uppercase; color:var(--tec); font-family:var(--mono)">Lo que lo distingue</p><p style="font-size:26px; line-height:1.4; color:var(--ink)">El agente no tiene ni un esquema escrito a mano: <b>list_tools()</b> los descubre y <b>call_tool()</b> los ejecuta en el servidor.</p></div>
+<div style="display:flex; flex-direction:column; gap:8px"><p style="font-size:22px; font-weight:600; letter-spacing:2px; text-transform:uppercase; color:var(--tec); font-family:var(--mono)">Compáralo con</p><p style="font-size:26px; line-height:1.4; color:var(--ink)">react.py: la misma herramienta, pero escrita dentro del agente; solo él podía usarla.</p></div>
+<div style="display:flex; flex-direction:column; gap:8px"><p style="font-size:22px; font-weight:600; letter-spacing:2px; text-transform:uppercase; color:var(--tec); font-family:var(--mono)">Ejecútalo</p><p style="font-family:var(--mono); font-size:19px; background:var(--paper-2); border-radius:0; padding:12px 16px; line-height:1.4; color:var(--ink)">python -m ejemplos.s3_topologias.mcp_cliente<br/>claude mcp add directorio -- python -m ejemplos.s3_topologias.mcp_directorio</p></div>
+<div style="display:flex; flex-direction:column; gap:8px; background:color-mix(in srgb, var(--reta) 13%, var(--paper)); border-radius:0; padding:20px 24px"><p style="font-size:22px; font-weight:600; letter-spacing:2px; text-transform:uppercase; color:var(--tec); font-family:var(--mono)">En tu fábrica</p><p style="font-size:26px; line-height:1.4; color:var(--ink)">Claude Code hace list_tools y call_tool por ti en cuanto registras el servidor.</p></div>
+</div>
+<p style="position:absolute; left:128px; bottom:64px; width:1664px; font-size:24px; color:var(--ink-2)">Fragmento simplificado de ejemplos/s3_topologias/mcp_directorio.py y mcp_cliente.py · las líneas resaltadas son el patrón</p>
+
+</div>
+  <div class="notes">Diez minutos. Primero ejecutar mcp_cliente.py: la primera línea dice qué herramientas descubrió, y en la pregunta sobre EMP-0099 el servidor responde con un error que regresa al modelo con is_error, igual que en react.py. Después, con el .venv activado, registrar el mismo servidor en Claude Code con claude mcp add, revisar claude mcp list, que debe decir Connected, abrir claude y preguntar quién es el empleado activo más antiguo de Tecnología: Claude Code pide permiso para usar la herramienta del servidor directorio. Señalar que el servidor no cambió: dos clientes distintos, cero líneas de integración. Al terminar, claude mcp remove directorio. El registro es local, no se guarda en el repo, para que los agentes de la fábrica no lo carguen.</div>
+</section>
+
+<section class="slide" data-timer="10">
+  <div class="badge acompana">Acompaña</div>
+  <div class="timebox">1:10 · 10 min</div>
+  <h2 style="text-align:center">DESCANSO</h2>
+  <div class="countdown">10:00</div>
+  <p class="muted" style="text-align:center; max-width:none">Volvemos con el Lab 3: dos agentes en paralelo.</p>
+  <div class="notes">Quédate en la sala los primeros 2 minutos: ahí llegan las dudas 1:1.</div>
+</section>
+
+<section class="slide cover">
+  <div class="badge practica">Practica</div>
+  <div class="timebox">1:20 · 10 min</div>
+  <div class="kicker">Laboratorio 3A</div>
+  <h1>Leer los agentes 4 y 5</h1>
+  <p class="big muted">Instrucciones, permisos y la rama paralela de flujo_s3.</p>
+  <div class="notes">Pregunta: ¿por qué el automatizador puede trabajar al mismo tiempo que el despliegue?</div>
+</section>
+
+<section class="slide lamina" id="s3-lab">
+  <div class="badge practica">Practica</div>
+  <div class="timebox">1:20 · 10 min</div>
+  <div class="lienzo" style="font-family:var(--sans); padding:128px 128px 160px; display:flex; flex-direction:column; gap:48px">
+<div style="display:flex; flex-direction:column; gap:16px">
+<p style="font-size:20px; font-weight:600; letter-spacing:3px; text-transform:uppercase; color:var(--tec); font-family:var(--mono)">Lab 3 · flujos/flujo_s3.py</p>
+<h2 style="font-family:var(--serif); font-size:64px; font-weight:600; line-height:1.1; color:var(--ink)">Dos agentes en paralelo, una unión</h2>
+</div>
+
+<div style="position:absolute; left:128px; top:470px; width:280px; height:120px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:4px; background:var(--tec-tint); border:1px solid var(--tec); border-radius:0"><p style="font-size:28px; font-weight:600; text-align:center; color:var(--ink)">Verificar</p><p style="font-size:24px; text-align:center; color:var(--ink-2)">app de HU-02 OK</p></div>
+<div style="position:absolute; left:568px; top:330px; width:400px; height:140px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:4px; background:color-mix(in srgb, var(--reta) 13%, var(--paper)); border:1px solid var(--reta); border-radius:0"><p style="font-size:28px; font-weight:600; text-align:center; color:var(--ink)">4 · Despliegue</p><p style="font-size:24px; text-align:center; color:var(--ink-2)">Docker · 8000 y 8080</p><p style="font-family:var(--mono); font-size:24px; text-align:center; color:var(--ink-2)">escribe: Dockerfiles</p></div>
+<div style="position:absolute; left:568px; top:590px; width:400px; height:140px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:4px; background:color-mix(in srgb, var(--reta) 13%, var(--paper)); border:1px solid var(--reta); border-radius:0"><p style="font-size:28px; font-weight:600; text-align:center; color:var(--ink)">5 · Automatizador</p><p style="font-size:24px; text-align:center; color:var(--ink-2)">pytest + Playwright</p><p style="font-family:var(--mono); font-size:24px; text-align:center; color:var(--ink-2)">escribe: tests/</p></div>
+<div style="position:absolute; left:1128px; top:470px; width:280px; height:120px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:4px; background:var(--paper); border:1px solid var(--ink-2); border-radius:0"><p style="font-size:28px; font-weight:600; text-align:center; color:var(--ink)">Listo</p><p style="font-size:24px; text-align:center; color:var(--ink-2)">espera a ambos</p></div>
+<div style="position:absolute; left:1488px; top:470px; width:304px; height:120px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:4px; background:var(--paper-2); border:1.5px dashed var(--ink-2); border-radius:0"><p style="font-size:28px; font-weight:600; text-align:center; color:var(--ink)">Pruebas E2E</p><p style="font-size:24px; text-align:center; color:var(--ink-2)">sesión 4</p></div>
+<x-connector route="elbow" style="color:var(--ink-2); border-width:3px" x1="408" x2="568" y1="530" y2="400"></x-connector>
+<x-connector route="elbow" style="color:var(--ink-2); border-width:3px" x1="408" x2="568" y1="530" y2="660"></x-connector>
+<x-connector route="elbow" style="color:var(--ink-2); border-width:3px" x1="968" x2="1128" y1="400" y2="510"></x-connector>
+<x-connector route="elbow" style="color:var(--ink-2); border-width:3px" x1="968" x2="1128" y1="660" y2="550"></x-connector>
+<x-connector style="color:var(--ink-2); border-width:3px; border-style:dashed" x1="1408" x2="1488" y1="530" y2="530"></x-connector>
+<p style="position:absolute; left:128px; top:780px; width:804px; font-size:24px; line-height:1.4; color:var(--ink); background:var(--paper); border-radius:0; padding:16px 24px">Ramas en paralelo: la ruta devuelve una lista de nodos</p>
+<p style="position:absolute; left:988px; top:780px; width:804px; font-size:24px; line-height:1.4; color:var(--ink); background:var(--paper); border-radius:0; padding:16px 24px">Unión: add_edge(["desplegar", "automatizar"], "listo")</p>
+<p style="position:absolute; left:128px; bottom:64px; width:1664px; font-size:24px; color:var(--ink-2)">python -m flujos.flujo_s3 historias/HU-02-consultar-directorio.md</p>
+
+</div>
+  <div class="notes">Al flujo de la sesión 2 se le agregan dos agentes que trabajan al mismo tiempo. Cuando la verificación aprueba la app, la función de ruta devuelve una lista con dos nodos, y LangGraph los ejecuta en paralelo. El automatizador puede trabajar sin la app corriendo porque solo necesita los casos de prueba y los data-testid de las convenciones. Cada rama termina en una verificación sin LLM: el despliegue comprueba que responden la API, el front-end y el proxy; las pruebas, que se recolectan y que cada caso tiene su test. El nodo listo espera a ambas ramas antes de seguir.</div>
+</section>
+
+<section class="slide cover">
+  <div class="badge practica">Practica</div>
+  <div class="timebox">1:30 · 30 min</div>
+  <div class="kicker">Laboratorio 3B</div>
+  <h1>Ejecutar con HU-02</h1>
+  <p class="big muted">La fábrica extiende la app y la despliega.</p>
+  <div class="notes">Aprobar el plan solo si extiende el código de HU-01 sin romperlo.</div>
+</section>
+
+<section class="slide lamina" id="s3-sdk">
+  <div class="badge practica">Practica</div>
+  <div class="timebox">1:30 · 30 min</div>
+  <div class="lienzo" style="font-family:var(--sans); padding:128px 128px 160px; display:flex; flex-direction:column; gap:48px">
+<div style="display:flex; flex-direction:column; gap:16px">
+<p style="font-size:20px; font-weight:600; letter-spacing:3px; text-transform:uppercase; color:var(--tec); font-family:var(--mono)">Lab 3 · 65 min · individual</p>
+<h2 style="font-family:var(--serif); font-size:64px; font-weight:600; line-height:1.1; color:var(--ink)">Desplegar, probar e inspeccionar</h2>
+</div>
+<div style="display:grid; grid-template-columns:1000px 1fr; gap:48px">
+<div style="background:var(--paper-3); border-radius:0; padding:40px; border:1px solid var(--rule-2); border-left:3px solid var(--rule)">
+<p style="font-family:var(--mono); font-size:24px; line-height:1.5; color:var(--ink)"><span style="color:var(--ink-2)"># 3B · ejecutar con HU-02 (30 min)</span><br/>python -m flujos.flujo_s3 \<br/>  historias/HU-02-consultar-directorio.md<br/><br/><span style="color:var(--ink-2)"># 3C · inspeccionar (25 min)</span><br/>cd app<br/>docker compose ps<br/>python -m pytest tests/api -q<br/>python -m pytest tests/e2e -q --headed</p>
+</div>
+<div style="display:flex; flex-direction:column; gap:24px">
+<p style="font-size:28px; line-height:1.4; color:var(--ink)"><b>3A · 10 min:</b> lee los agentes 4 y 5 y la rama paralela.</p>
+<p style="font-size:28px; line-height:1.4; color:var(--ink)"><b>Control:</b> bitácora con «Despliegue: OK» y «Pruebas: OK».</p>
+<p style="font-size:28px; line-height:1.4; color:var(--ink)"><b>Compara</b> las pruebas con tu tabla manual de la sesión 2.</p>
+<p style="font-size:28px; line-height:1.4; color:var(--reta)"><b>Busca</b> en auditoria.jsonl un intento fuera de rol.</p>
+</div>
+</div>
+<p style="position:absolute; left:128px; bottom:64px; width:1664px; font-size:24px; color:var(--ink-2)">Cierre 15 min: quiz · commit con Docker, tests/, salida/HU-02/ y notas_s3.md</p>
+
+</div>
+  <div class="notes">3A: leer agentes/despliegue.py y agentes/automatizador.py, sus listas ESCRITURA y PROGRAMAS, y la función despues_de_verificar de flujo_s3. Pregunta: ¿por qué el automatizador puede trabajar al mismo tiempo que el despliegue? Porque solo necesita los casos y los data-testid. 3B: aprobar el plan solo si dice que extiende el código de HU-01 sin romperlo. 3C: comprobar contenedores, correr las pruebas de API y las E2E viendo el navegador, y comparar con la tabla manual. Errores frecuentes: Docker cerrado, puerto ocupado, 502 por nginx mal configurado (el agente 4 lo corrige), falta el navegador de Playwright.</div>
+</section>
+
+<section class="slide cover">
+  <div class="badge practica">Practica</div>
+  <div class="timebox">2:00 · 15 min</div>
+  <div class="kicker">Laboratorio 3C</div>
+  <h1>Inspeccionar</h1>
+  <p class="big muted">Contenedores, pruebas y auditoría por agente.</p>
+  <div class="notes">Comparar las pruebas con la tabla manual de la sesión 2 y buscar en auditoria.jsonl un intento fuera de rol.</div>
+</section>
+
+<section class="slide cover">
+  <div class="badge integra">Integra</div>
+  <div class="timebox">2:15 · 15 min</div>
+  <div class="kicker">Cierre</div>
+  <h1>Preguntas, quiz y entrega</h1>
+  <p class="big muted">docker-compose.yml, app/tests/ y notas_s3.md en un commit.</p>
+  <div class="notes">Preguntas que conectan: ¿qué topología es tu fábrica? ¿Qué denegación encontraste en la auditoría?</div>
+</section>
+
+<script>/* Láminas del módulo: cada una se dibujó en un lienzo de 1920 × 1080 px. Aquí se convierten sus
+   conectores e iconos a SVG y el lienzo se escala para que quepa entre la banda superior y el pie. */
+(() => {
+  const NS = "http://www.w3.org/2000/svg";
+  const ICONOS = {
+    Check: '<path d="M20 6 9 17l-5-5"/>',
+    CheckCircle: '<circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/>',
+    Code: '<path d="m16 18 6-6-6-6"/><path d="m8 6-6 6 6 6"/>',
+    Search: '<circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>',
+    Settings: '<circle cx="12" cy="12" r="3.5"/><path d="M12 2v3M12 19v3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M2 12h3M19 12h3M4.9 19.1 7 17M17 7l2.1-2.1"/>',
+    Warning: '<path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/><path d="M12 9v4M12 17h.01"/>',
+    Database: '<ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v14c0 1.7 4 3 9 3s9-1.3 9-3V5"/><path d="M3 12c0 1.7 4 3 9 3s9-1.3 9-3"/>',
+    Globe: '<circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15 15 0 0 1 0 20a15 15 0 0 1 0-20"/>',
+    PaperPlane: '<path d="m22 2-7 20-4-9-9-4z"/><path d="M22 2 11 13"/>'
+  };
+
+  // <x-icon>: iconos de línea en SVG
+  document.querySelectorAll("x-icon").forEach(el => {
+    const svg = document.createElementNS(NS, "svg");
+    svg.setAttribute("viewBox", "0 0 24 24");
+    svg.setAttribute("fill", "none");
+    svg.setAttribute("stroke-width", "2");
+    svg.setAttribute("stroke-linecap", "round");
+    svg.setAttribute("stroke-linejoin", "round");
+    svg.setAttribute("aria-hidden", "true");
+    svg.style.cssText = el.style.cssText + ";flex-shrink:0";
+    svg.style.stroke = el.style.color || "currentColor";
+    svg.innerHTML = ICONOS[el.getAttribute("name")] || "";
+    el.replaceWith(svg);
+  });
+
+  // <x-shape>: flechas y rombos como SVG que llenan su caja
+  document.querySelectorAll("x-shape").forEach(el => {
+    const tipo = el.getAttribute("kind"), est = el.style;
+    const relleno = est.backgroundColor || "#4A5061";
+    const svg = document.createElementNS(NS, "svg");
+    svg.setAttribute("viewBox", "0 0 100 100");
+    svg.setAttribute("preserveAspectRatio", "none");
+    svg.style.cssText = el.style.cssText + ";background:none;border:none;flex-shrink:0";
+    const formas = {
+      "arrow-right": "0,30 60,30 60,0 100,50 60,100 60,70 0,70",
+      "diamond": "50,2 98,50 50,98 2,50"
+    };
+    svg.innerHTML = `<polygon points="${formas[tipo] || formas.diamond}" style="fill:${relleno};stroke:${est.borderColor || "none"}" stroke-width="3" vector-effect="non-scaling-stroke"/>`;
+    el.replaceWith(svg);
+  });
+
+  // <x-connector>: líneas con punta, en coordenadas de la diapositiva
+  let n = 0;
+  document.querySelectorAll(".lienzo").forEach(seccion => {
+    const conectores = seccion.querySelectorAll("x-connector");
+    if (!conectores.length) return;
+    const svg = document.createElementNS(NS, "svg");
+    svg.setAttribute("width", "1920"); svg.setAttribute("height", "1080");
+    svg.style.cssText = "position:absolute;left:0;top:0;pointer-events:none;overflow:visible";
+    let defs = "", trazos = "";
+    conectores.forEach(c => {
+      const [x1, y1, x2, y2] = ["x1", "y1", "x2", "y2"].map(a => parseFloat(c.getAttribute(a)));
+      const color = c.style.color || "#4A5061";
+      const ancho = parseFloat(c.style.borderWidth) || 2;
+      const guiones = c.style.borderStyle === "dashed" ? `stroke-dasharray="${ancho * 4} ${ancho * 3}"` : "";
+      const ruta = c.getAttribute("route") || "straight", punta = c.getAttribute("head") || "end";
+      let d = `M${x1} ${y1} L${x2} ${y2}`;
+      if (ruta === "hv") d = `M${x1} ${y1} H${x2} V${y2}`;
+      if (ruta === "vh") d = `M${x1} ${y1} V${y2} H${x2}`;
+      if (ruta === "elbow") {
+        d = Math.abs(x2 - x1) >= Math.abs(y2 - y1)
+          ? `M${x1} ${y1} H${(x1 + x2) / 2} V${y2} H${x2}`
+          : `M${x1} ${y1} V${(y1 + y2) / 2} H${x2} V${y2}`;
+      }
+      const id = "punta" + (n++);
+      defs += `<marker id="${id}" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="${4.5}" markerHeight="${4.5}" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" style="fill:${color}"/></marker>`;
+      const fin = punta === "end" || punta === "both" ? `marker-end="url(#${id})"` : "";
+      const inicio = punta === "both" ? `marker-start="url(#${id})"` : "";
+      trazos += `<path d="${d}" fill="none" style="stroke:${color}" stroke-width="${ancho}" stroke-linecap="round" stroke-linejoin="round" ${guiones} ${fin} ${inicio}/>`;
+      c.remove();
+    });
+    svg.innerHTML = `<defs>${defs}</defs>${trazos}`;
+    seccion.appendChild(svg);
+  });
+
+
+  function ajustar() {
+    const s = Math.min(innerWidth / 1920, innerHeight / 1080) * 0.9;
+    document.querySelectorAll('.lienzo').forEach(l => {
+      l.style.transform = 'scale(' + s + ')';
+      l.style.left = ((innerWidth - 1920 * s) / 2) + 'px';
+      l.style.top = (innerHeight * 0.075) + 'px';
+    });
+  }
+  ajustar();
+  addEventListener('resize', ajustar);
+  addEventListener('beforeprint', ajustar);
+})();
+</script>
+<script src="assets/deck.js"></script>
+</body>
+</html>

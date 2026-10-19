@@ -1,0 +1,17 @@
+<section id="s1-componentes" data-transition="fade" style="background:#F6F5F0; color:#1B1F2A; font-family:'IBM Plex Sans', Arial, sans-serif; padding:128px 128px 160px; display:flex; flex-direction:column; gap:48px">
+<div style="display:flex; flex-direction:column; gap:16px">
+<p style="font-size:24px; font-weight:600; letter-spacing:3px; text-transform:uppercase; color:#B5541C">1.2 · Componentes</p>
+<h2 style="font-family:'Space Grotesk', Arial, sans-serif; font-size:64px; font-weight:600; line-height:1.1; color:#14171F">Cinco piezas, en tu agente analista</h2>
+</div>
+<table style="font-size:26px; color:#1B1F2A">
+<tr><th style="width:20%">Componente</th><th style="width:38%">Qué es</th><th style="width:42%">En el agente analista</th></tr>
+<tr><td><b>Modelo</b></td><td>Razona y elige la siguiente acción</td><td>El valor de MODEL en .env</td></tr>
+<tr><td><b>Instrucciones</b></td><td>Rol, pasos, reglas y formato</td><td>SISTEMA en agentes/analista.py</td></tr>
+<tr><td><b>Herramientas</b></td><td>Acciones con un esquema</td><td>leer, listar y escribir archivos</td></tr>
+<tr><td><b>Memoria</b></td><td>Lo que recuerda en la tarea</td><td>La lista mensajes del bucle</td></tr>
+<tr><td><b>Bucle y límites</b></td><td>Llamar, ejecutar, devolver, repetir</td><td>ejecutar_agente, máximo 10 pasos</td></tr>
+</table>
+<p style="font-size:30px; line-height:1.4; color:#1B1F2A; border-left:6px solid #B5541C; padding:8px 32px">Los permisos viven en la herramienta: el analista <b>no puede</b> escribir fuera de salida/HU-xx/.</p>
+<p style="position:absolute; left:128px; bottom:64px; width:1664px; font-size:24px; color:#6B7080">Sesión 1 · Arquitectura de agentes</p>
+<aside>20 minutos. Recorrer cada fila con el código abierto. La descripción de una herramienta es parte del prompt: el modelo decide leyéndola. Un error devuelto como texto, con is_error, permite que el agente se corrija. Y el permiso no es una frase en el prompt: herramientas_archivos recibe las carpetas de lectura y la única carpeta de escritura, y rechaza todo lo demás con un PermissionError. Comparar con Claude Code: su modelo, su system prompt más CLAUDE.md, sus herramientas Read, Edit y Bash, y su bucle.</aside>
+</section>

@@ -1,0 +1,16 @@
+<section id="s3-protocolos" data-transition="fade" style="background:#F6F5F0; color:#1B1F2A; font-family:'IBM Plex Sans', Arial, sans-serif; padding:128px 128px 160px; display:flex; flex-direction:column; gap:48px">
+<div style="display:flex; flex-direction:column; gap:16px">
+<p style="font-size:24px; font-weight:600; letter-spacing:3px; text-transform:uppercase; color:#B5541C">3.3 · Roles, permisos y contratos</p>
+<h2 style="font-family:'Space Grotesk', Arial, sans-serif; font-size:64px; font-weight:600; line-height:1.1; color:#14171F">Cada agente toca solo lo suyo</h2>
+</div>
+<table style="font-size:26px; color:#1B1F2A">
+<tr><th style="width:22%">Agente</th><th style="width:34%">Puede escribir</th><th style="width:20%">Puede ejecutar</th><th style="width:24%">Entrega</th></tr>
+<tr><td><b>1 · 2</b> Analista y diseñador</td><td>salida/HU-xx/</td><td>Nada</td><td>.feature y .json</td></tr>
+<tr><td><b>3</b> Desarrollador</td><td>backend/*, frontend/*</td><td>npm, python</td><td>App que arranca</td></tr>
+<tr style="background:#F7D9C4"><td><b>4</b> Despliegue</td><td>Dockerfiles y compose</td><td>docker, curl</td><td>Contenedores sanos</td></tr>
+<tr style="background:#F7D9C4"><td><b>5</b> Automatizador</td><td>tests/*</td><td>python, pytest</td><td>Un test por caso</td></tr>
+</table>
+<p style="font-size:30px; line-height:1.4; color:#1B1F2A; border-left:6px solid #B5541C; padding:8px 32px">Los permisos viven en <b>hooks</b>, no en el prompt. Los archivos de salida/ son el contrato.</p>
+<p style="position:absolute; left:128px; bottom:64px; width:1664px; font-size:24px; color:#6B7080">Más allá de un disco compartido: MCP conecta agentes con herramientas (siguiente) y A2A, agentes entre sistemas</p>
+<aside>15 minutos. La razón principal para tener varios agentes en la fábrica es separar permisos: el automatizador escribe solo en tests/, así que no puede hacer pasar una prueba cambiando la aplicación; el agente de despliegue solo toca archivos de Docker. Esos límites se aplican con hooks PreToolUse en seguridad/hooks.py, que niegan la escritura antes de que ocurra. El contrato entre agentes son los artefactos: el automatizador recibe casos_prueba.json y debe dejar un test por cada id de caso; la verificación lo comprueba. Si los agentes no compartieran disco, los estándares serían MCP para herramientas y A2A para comunicar agentes de distintos sistemas.</aside>
+</section>

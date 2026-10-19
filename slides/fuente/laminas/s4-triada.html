@@ -1,0 +1,28 @@
+<section id="s4-triada" data-transition="fade" style="background:#14171F; color:#F6F5F0; font-family:'IBM Plex Sans', Arial, sans-serif; padding:128px 128px 160px; display:flex; flex-direction:column; gap:48px">
+<div style="display:flex; flex-direction:column; gap:16px">
+<p style="font-size:24px; font-weight:600; letter-spacing:3px; text-transform:uppercase; color:#F0935A">4.2 · Inyección indirecta</p>
+<h2 style="font-family:'Space Grotesk', Arial, sans-serif; font-size:64px; font-weight:600; line-height:1.1; color:#F6F5F0">La tríada letal</h2>
+</div>
+<div style="display:flex; gap:24px; align-items:center">
+<div style="flex:1; display:flex; flex-direction:column; gap:16px; background:#222634; border:1px solid #3A3F4D; border-radius:16px; padding:40px">
+<x-icon name="Database" style="color:#F0935A; width:56px; height:56px"></x-icon>
+<h3 style="font-family:'Space Grotesk', Arial, sans-serif; font-size:40px; font-weight:600; line-height:1.2; color:#F6F5F0">Datos privados</h3>
+<p style="font-size:26px; line-height:1.4; color:#B9BDC8">Archivos, claves, variables de entorno.</p>
+</div>
+<p style="font-family:'Space Grotesk', Arial, sans-serif; font-size:64px; font-weight:600; color:#F0935A">+</p>
+<div style="flex:1; display:flex; flex-direction:column; gap:16px; background:#222634; border:1px solid #3A3F4D; border-radius:16px; padding:40px">
+<x-icon name="Globe" style="color:#F0935A; width:56px; height:56px"></x-icon>
+<h3 style="font-family:'Space Grotesk', Arial, sans-serif; font-size:40px; font-weight:600; line-height:1.2; color:#F6F5F0">Contenido no confiable</h3>
+<p style="font-size:26px; line-height:1.4; color:#B9BDC8">Historias de usuario, web, PDF, resultados de herramientas.</p>
+</div>
+<p style="font-family:'Space Grotesk', Arial, sans-serif; font-size:64px; font-weight:600; color:#F0935A">+</p>
+<div style="flex:1; display:flex; flex-direction:column; gap:16px; background:#222634; border:1px solid #3A3F4D; border-radius:16px; padding:40px">
+<x-icon name="PaperPlane" style="color:#F0935A; width:56px; height:56px"></x-icon>
+<h3 style="font-family:'Space Grotesk', Arial, sans-serif; font-size:40px; font-weight:600; line-height:1.2; color:#F6F5F0">Comunicación externa</h3>
+<p style="font-size:26px; line-height:1.4; color:#B9BDC8">En tu fábrica: desactivada, sin WebFetch ni WebSearch.</p>
+</div>
+</div>
+<p style="font-size:34px; line-height:1.4; color:#F6F5F0">Con las tres presentes, una inyección puede exfiltrar datos. <span style="color:#F0935A"><b>Diseña para romper al menos una.</b></span></p>
+<p style="position:absolute; left:128px; bottom:64px; width:1664px; font-size:24px; color:#B9BDC8">Concepto: Simon Willison, «The lethal trifecta for AI agents», 2025</p>
+<aside>15 minutos. Inyección directa: el usuario intenta manipular al agente. Indirecta: la orden llega escondida en contenido que el agente lee. Hoy no existe un filtro que detecte el 100% de las inyecciones; por eso la defensa principal es arquitectónica. Si un agente lee contenido no confiable, que no tenga acceso a datos privados o que no pueda comunicarse hacia fuera sin aprobación. Nuestra fábrica de código la reúne por diseño: lee una historia no confiable, accede a archivos y ejecuta el código que genera. El Lab 4 la ataca y luego la rompe.</aside>
+</section>

@@ -1,0 +1,23 @@
+<section id="traspasos-idea" data-transition="fade" style="background:#F6F5F0; color:#1B1F2A; font-family:'IBM Plex Sans', Arial, sans-serif; padding:128px 128px 160px; display:flex; flex-direction:column; gap:48px">
+<div style="display:flex; flex-direction:column; gap:16px">
+<p style="font-size:24px; font-weight:600; letter-spacing:3px; text-transform:uppercase; color:#B5541C">Topología multi-agente · la idea</p>
+<h2 style="font-family:'Space Grotesk', Arial, sans-serif; font-size:64px; font-weight:600; line-height:1.1; color:#14171F">Traspasos: el control pasa de un agente a otro</h2>
+</div>
+<div style="position:absolute; left:128px; top:300px; width:760px; display:flex; flex-direction:column; gap:24px">
+<div style="display:flex; flex-direction:column; gap:8px; background:#FDFCF9; border:2px dashed #4A5061; border-radius:16px; padding:20px 40px"><p style="font-size:28px; font-weight:600; color:#14171F">Todo vuelve al centro</p><p style="font-size:26px; line-height:1.4; color:#4A5061">Con un supervisor, cada paso regresa al centro aunque el siguiente sea obvio.</p></div>
+<div style="display:flex; flex-direction:column; gap:8px; background:#FDFCF9; border:2px dashed #4A5061; border-radius:16px; padding:20px 40px"><p style="font-size:28px; font-weight:600; color:#14171F">Un agente con todos los roles</p><p style="font-size:26px; line-height:1.4; color:#4A5061">Un prompt enorme que intenta ser recepción, altas y directorio a la vez.</p></div>
+<div style="display:flex; flex-direction:column; gap:8px; background:#F7D9C4; border:2px solid #B5541C; border-radius:16px; padding:20px 40px"><p style="font-size:28px; font-weight:600; color:#14171F">Traspasos</p><p style="font-size:26px; line-height:1.4; color:#1B1F2A">El agente activo atiende hasta que decide pasar el control a otro con una herramienta de traspaso; la conversación viaja con él.</p></div>
+</div>
+<div style="position:absolute; left:960px; top:300px; width:832px; display:flex; flex-direction:column; gap:28px">
+<div style="display:flex; flex-direction:column; gap:14px; background:#14171F; border-radius:16px; padding:28px 32px">
+<p style="font-size:24px; line-height:1.4; color:#9AA0AE">Usuario: «Quiero dar de alta a Paola y después ver el organigrama»</p>
+<p style="font-size:24px; line-height:1.4; color:#E6E3D8"><span style="font-weight:600; color:#F0935A">Recepción ·</span> transferir_a_altas(«es un alta»)</p>
+<p style="font-size:24px; line-height:1.4; color:#E6E3D8"><span style="font-weight:600; color:#8DB7F0">Altas ·</span> registra a Paola como EMP-0006</p>
+<p style="font-size:24px; line-height:1.4; color:#E6E3D8"><span style="font-weight:600; color:#F0935A">Altas ·</span> transferir_a_directorio(«pide el organigrama»)</p>
+<p style="font-size:24px; line-height:1.4; color:#E6E3D8"><span style="font-weight:600; color:#E6E3D8">Directorio ·</span> responde con el organigrama</p>
+</div>
+<p style="font-size:24px; line-height:1.4; color:#4A5061">No hay supervisor: el orden lo deciden los agentes. Es natural para atender por etapas, pero el control puede rebotar.</p>
+</div>
+<p style="position:absolute; left:128px; bottom:64px; width:1664px; font-size:24px; color:#6B7080">Sesión 3 · Topologías · LangGraph, documentación de sistemas multi-agente</p>
+<aside>2 minutos, dentro de los cinco del patrón. En los traspasos, o handoffs, no hay un centro. Hay un agente activo que conversa; cuando decide que otro debe seguir, llama a una herramienta de traspaso, como transferir_a_altas con un motivo, y el control pasa con toda la conversación. Es la topología típica de atención a clientes: recepción, ventas, soporte. Ventaja: cada agente tiene un prompt corto y no hay vueltas innecesarias al centro. Riesgo: el orden lo deciden los modelos, así que el control puede rebotar entre dos agentes. Pregunta: ¿cómo evitarían un rebote infinito entre altas y directorio? Con un límite de traspasos.</aside>
+</section>

@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>M3 · Sesión 4 · Seguridad en sistemas agénticos</title>
+<link rel="stylesheet" href="assets/tec-inspira.css">
+<style>
+/* ── Láminas del módulo sobre el sistema Tec Editorial ── */
+.slide.lamina { padding: 0; }
+.lienzo { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; transform-origin: 0 0;
+          box-sizing: border-box; overflow: hidden; color: var(--ink); font-family: var(--sans); font-weight: var(--peso-texto); line-height: normal; }
+.lienzo * { margin: 0; box-sizing: border-box; }
+.lienzo p, .lienzo li { font-size: inherit; line-height: inherit; font-weight: inherit; max-width: none; }
+.lienzo p[style*="line-height"] { }
+.lienzo h2, .lienzo h3 { margin: 0; letter-spacing: -0.01em; }
+.lienzo b, .lienzo strong { color: var(--tec); font-weight: 700; }
+.lienzo ul, .lienzo ol { padding-left: 0; }
+.lienzo ul > li { padding-left: 1.4em; margin: .35em 0; }
+.lienzo ul > li::before { top: .62em; width: .6em; }
+.lienzo ol > li { padding-left: 2.4em; margin: .35em 0; }
+.lienzo table { width: 100%; border-collapse: collapse; margin-top: 0; }
+.lienzo th, .lienzo td { padding: .45em .7em; vertical-align: top; text-align: left; }
+.lienzo td { font-size: inherit; }
+.lienzo th { font-size: 19px; }
+.lienzo x-connector { position: absolute; left: 0; top: 0; width: 0; height: 0; }
+</style>
+</head>
+<body data-deck="Módulo 3 · Sesión 4 — Seguridad en sistemas agénticos">
+
+<section class="slide cover hero">
+  <div class="badge introduce">Introduce</div>
+  <div class="timebox">0:00 · Apertura</div>
+  <p class="eyebrow">Certificado</p>
+  <h1 class="programa">Next-Gen Coding: Desarrollo de Software con IA Generativa (Virtual)</h1>
+  <h2 class="sesion">Seguridad en sistemas agénticos</h2>
+  <div class="kicker">Módulo 3 · Construcción de Sistemas Agénticos</div>
+  <p class="big muted">Sesión 4 · 2 h 30 min · Nivel profesional</p>
+  <p class="muted">Limitar lo que el agente puede hacer, aunque lo engañen.</p>
+  <div class="notes">Bienvenida. Idea central: un agente convierte texto en acciones con credenciales reales, así que cualquier texto que lea es una posible orden. Antes de la sesión, ejecuta el ataque con y sin defensas.</div>
+</section>
+
+<section class="slide cover">
+  <div class="badge integra">Integra</div>
+  <div class="timebox">0:00 · 10 min</div>
+  <div class="kicker">Bloque 4.0</div>
+  <h1>Revisión del entregable 3</h1>
+  <p class="big muted">Resultados de pytest y denegaciones de la auditoría.</p>
+  <div class="notes">Las denegaciones encontradas son la mejor entrada al tema de hoy.</div>
+</section>
+
+<section class="slide lamina" id="s4-objetivo">
+  <div class="badge integra">Integra</div>
+  <div class="timebox">0:00 · 10 min</div>
+  <div class="lienzo" style="font-family:var(--sans); padding:128px 128px 160px; display:flex; flex-direction:column; gap:48px">
+<div style="display:flex; flex-direction:column; gap:16px">
+<p style="font-size:20px; font-weight:600; letter-spacing:3px; text-transform:uppercase; color:var(--tec); font-family:var(--mono)">Sesión 4 · Objetivo</p>
+<h2 style="font-family:var(--serif); font-size:42px; font-weight:600; line-height:1.15; color:var(--ink)">Entender los riesgos de un sistema agéntico y defenderlo por capas</h2>
+</div>
+<div style="display:flex; gap:32px">
+<div style="flex:1; display:flex; flex-direction:column; gap:16px; background:color-mix(in srgb, var(--reta) 13%, var(--paper)); border-radius:0; padding:40px"><p style="font-size:20px; font-weight:600; letter-spacing:2px; text-transform:uppercase; color:var(--tec); font-family:var(--mono)">Aprendes</p><p style="font-size:28px; line-height:1.4; color:var(--ink)">OWASP Top 10 agéntico y la tríada letal</p><p style="font-size:28px; line-height:1.4; color:var(--ink)">Defensas en código, no en el prompt</p><p style="font-size:28px; line-height:1.4; color:var(--ink)">Flujo de punta a punta con triage y escalamiento</p></div>
+<div style="flex:1; display:flex; flex-direction:column; gap:16px; background:var(--paper-2); border:1px solid var(--rule); border-radius:0; padding:40px">
+<p style="font-size:20px; font-weight:600; letter-spacing:2px; text-transform:uppercase; color:var(--tec); font-family:var(--mono)">Aplicas en tu fábrica</p>
+<p style="font-size:28px; line-height:1.4; color:var(--ink)"><b>6 · Flujo E2E</b> con un agente de triage</p>
+<p style="font-size:28px; line-height:1.4; color:var(--ink)">Un filtro para historias no confiables</p>
+<p style="font-size:28px; line-height:1.4; color:var(--ink)">Pruebas de ataque con y sin defensas</p>
+</div>
+<div style="flex:1; display:flex; flex-direction:column; gap:16px; background:var(--paper-3); border-radius:0; padding:40px; border:1px solid var(--rule-2); border-left:3px solid var(--rule)">
+<p style="font-size:20px; font-weight:600; letter-spacing:2px; text-transform:uppercase; color:var(--tec); font-family:var(--mono)">Entregas hoy</p>
+<p style="font-family:var(--mono); font-size:22px; line-height:1.5; color:var(--ink)">salida/HU-03/reporte.md<br/>salida/seguridad.md<br/>+ reto HU-10 en una semana</p>
+</div>
+</div>
+<p style="position:absolute; left:128px; bottom:64px; width:1664px; font-size:24px; color:var(--ink-2)">Sesión 4 · Seguridad en sistemas agénticos · 2 h 30 min</p>
+
+</div>
+  <div class="notes">Agenda: 0:00 revisión del entregable 3; 0:10 OWASP Agentic Top 10 en la fábrica; 0:30 tríada letal y defensas por capas; 0:45 el flujo end to end con triage; 0:55 descanso; 1:05 Lab 4A flujo completo con HU-03; 1:30 Lab 4B atacar y defender; 1:55 Lab 4C reporte de seguridad; 2:15 cierre del módulo con demostraciones y retrospectiva. Antes de la sesión, ejecuten el ataque con y sin defensas: el resultado sin defensas varía y eso también se discute.</div>
+</section>
+
+<section class="slide cover">
+  <div class="badge nutre">Nutre</div>
+  <div class="timebox">0:10 · 20 min</div>
+  <div class="kicker">Bloque 4.1</div>
+  <h1>Riesgos de un sistema agéntico</h1>
+  <p class="big muted">OWASP Top 10 agéntico, dentro de tu fábrica.</p>
+  <div class="notes">Para cada riesgo, pide a la clase el archivo de su fábrica donde aparece y el que lo mitiga.</div>
+</section>
+
+<section class="slide lamina" id="s4-frase">
+  <div class="badge nutre">Nutre</div>
+  <div class="timebox">0:10 · 20 min</div>
+  <div class="lienzo" style="font-family:var(--sans); padding:128px; display:flex; flex-direction:column; justify-content:center; gap:48px">
+<h1 style="font-family:var(--serif); font-size:96px; font-weight:600; line-height:1.1; color:var(--ink)">Todo texto que lee un agente es una posible orden.</h1>
+<p style="font-size:40px; line-height:1.35; color:var(--ink); max-width:1400px">La seguridad no depende de que el modelo obedezca, sino de lo que el sistema le permite hacer.</p>
+
+</div>
+  <div class="notes">Pausa dramática. Una página web, un correo, un PDF o el resultado de una herramienta pueden contener instrucciones. El modelo no distingue con certeza entre "datos" e "instrucciones". Por eso las defensas que funcionan limitan el daño posible en lugar de confiar en que el modelo resista.</div>
+</section>
+
+<section class="slide lamina" id="s4-owasp">
+  <div class="badge nutre">Nutre</div>
+  <div class="timebox">0:10 · 20 min</div>
+  <div class="lienzo" style="font-family:var(--sans); padding:128px 128px 160px; display:flex; flex-direction:column; gap:40px">
+<div style="display:flex; flex-direction:column; gap:16px">
+<p style="font-size:20px; font-weight:600; letter-spacing:3px; text-transform:uppercase; color:var(--tec); font-family:var(--mono)">4.1 · OWASP Top 10 for Agentic Applications 2026</p>
+<h2 style="font-family:var(--serif); font-size:64px; font-weight:600; line-height:1.1; color:var(--ink)">Los riesgos, dentro de tu fábrica</h2>
+</div>
+<table style="font-size:24px; color:var(--ink)">
+<tr><th style="width:30%">Riesgo</th><th style="width:36%">Dónde aparece</th><th style="width:34%">Qué lo mitiga</th></tr>
+<tr><td><b>ASI01</b> Secuestro del objetivo</td><td>Historia con órdenes ocultas</td><td>filtrar_historia</td></tr>
+<tr><td><b>ASI02</b> Mal uso de herramientas</td><td>El desarrollador reescribe pruebas</td><td>Hooks de rol</td></tr>
+<tr><td><b>ASI03</b> Abuso de privilegios</td><td>Un agente lee .env</td><td>confinar_lectura</td></tr>
+<tr><td><b>ASI04</b> Cadena de suministro</td><td>Un CLAUDE.md manipulado</td><td>Plan revisado por una persona</td></tr>
+<tr><td><b>ASI05</b> Ejecución inesperada</td><td>La app y las pruebas generadas corren</td><td>comandos_permitidos, contenedores</td></tr>
+<tr><td><b>ASI06</b> Contexto envenenado</td><td>contexto/ con órdenes</td><td>Revisar cambios en contexto/</td></tr>
+<tr><td><b>ASI08</b> Fallos en cascada</td><td>Un criterio mal escrito llega a 3 agentes</td><td>Validadores y límite de ciclos</td></tr>
+<tr><td><b>ASI09</b> Confianza excesiva</td><td>Aprobar el plan sin leerlo</td><td>Plan completo y decisión en bitácora</td></tr>
+</table>
+<p style="position:absolute; left:128px; bottom:64px; width:1664px; font-size:24px; color:var(--ink-2)">Fuente: OWASP GenAI Security Project, diciembre de 2025</p>
+
+</div>
+  <div class="notes">20 minutos. Publicado en diciembre de 2025: complementa al Top 10 para aplicaciones LLM; aquel cubre lo que el modelo dice, este lo que el agente hace. Para cada riesgo, pedir a la clase que señale el archivo de su fábrica donde aparece y el que lo mitiga. ASI07 (comunicación entre agentes) y ASI10 (agentes deshonestos) aplican menos porque los agentes de la fábrica no se hablan directamente: se comunican por archivos y por el estado del grafo. En el laboratorio atacaremos ASI01 y ASI06.</div>
+</section>
+
+<section class="slide cover">
+  <div class="badge nutre">Nutre</div>
+  <div class="timebox">0:30 · 15 min</div>
+  <div class="kicker">Bloque 4.2</div>
+  <h1>Tríada letal y defensas por capas</h1>
+  <p class="big muted">Diseñar para romper al menos una de las tres piezas.</p>
+  <div class="notes">¿Por qué un hook es más confiable que una frase en el prompt?</div>
+</section>
+
+<section class="slide lamina" id="s4-triada">
+  <div class="badge nutre">Nutre</div>
+  <div class="timebox">0:30 · 15 min</div>
+  <div class="lienzo" style="font-family:var(--sans); padding:128px 128px 160px; display:flex; flex-direction:column; gap:48px">
+<div style="display:flex; flex-direction:column; gap:16px">
+<p style="font-size:20px; font-weight:600; letter-spacing:3px; text-transform:uppercase; color:var(--tec); font-family:var(--mono)">4.2 · Inyección indirecta</p>
+<h2 style="font-family:var(--serif); font-size:64px; font-weight:600; line-height:1.1; color:var(--ink)">La tríada letal</h2>
+</div>
+<div style="display:flex; gap:24px; align-items:center">
+<div style="flex:1; display:flex; flex-direction:column; gap:16px; background:var(--rule); border:1px solid var(--rule); border-radius:0; padding:40px">
+<x-icon name="Database" style="color:var(--introduce); width:56px; height:56px"></x-icon>
+<h3 style="font-family:var(--serif); font-size:40px; font-weight:600; line-height:1.2; color:var(--ink)">Datos privados</h3>
+<p style="font-size:26px; line-height:1.4; color:var(--ink-2)">Archivos, claves, variables de entorno.</p>
+</div>
+<p style="font-family:var(--serif); font-size:64px; font-weight:600; color:var(--introduce)">+</p>
+<div style="flex:1; display:flex; flex-direction:column; gap:16px; background:var(--rule); border:1px solid var(--rule); border-radius:0; padding:40px">
+<x-icon name="Globe" style="color:var(--introduce); width:56px; height:56px"></x-icon>
+<h3 style="font-family:var(--serif); font-size:40px; font-weight:600; line-height:1.2; color:var(--ink)">Contenido no confiable</h3>
+<p style="font-size:26px; line-height:1.4; color:var(--ink-2)">Historias de usuario, web, PDF, resultados de herramientas.</p>
+</div>
+<p style="font-family:var(--serif); font-size:64px; font-weight:600; color:var(--introduce)">+</p>
+<div style="flex:1; display:flex; flex-direction:column; gap:16px; background:var(--rule); border:1px solid var(--rule); border-radius:0; padding:40px">
+<x-icon name="PaperPlane" style="color:var(--introduce); width:56px; height:56px"></x-icon>
+<h3 style="font-family:var(--serif); font-size:40px; font-weight:600; line-height:1.2; color:var(--ink)">Comunicación externa</h3>
+<p style="font-size:26px; line-height:1.4; color:var(--ink-2)">En tu fábrica: desactivada, sin WebFetch ni WebSearch.</p>
+</div>
+</div>
+<p style="font-size:34px; line-height:1.4; color:var(--ink)">Con las tres presentes, una inyección puede exfiltrar datos. <span style="color:var(--introduce)"><b>Diseña para romper al menos una.</b></span></p>
+<p style="position:absolute; left:128px; bottom:64px; width:1664px; font-size:24px; color:var(--ink-2)">Concepto: Simon Willison, «The lethal trifecta for AI agents», 2025</p>
+
+</div>
+  <div class="notes">15 minutos. Inyección directa: el usuario intenta manipular al agente. Indirecta: la orden llega escondida en contenido que el agente lee. Hoy no existe un filtro que detecte el 100% de las inyecciones; por eso la defensa principal es arquitectónica. Si un agente lee contenido no confiable, que no tenga acceso a datos privados o que no pueda comunicarse hacia fuera sin aprobación. Nuestra fábrica de código la reúne por diseño: lee una historia no confiable, accede a archivos y ejecuta el código que genera. El Lab 4 la ataca y luego la rompe.</div>
+</section>
+
+<section class="slide lamina" id="s4-capas">
+  <div class="badge nutre">Nutre</div>
+  <div class="timebox">0:30 · 15 min</div>
+  <div class="lienzo" style="font-family:var(--sans); padding:128px 128px 160px; display:flex; flex-direction:column; gap:40px">
+<div style="display:flex; flex-direction:column; gap:16px">
+<p style="font-size:20px; font-weight:600; letter-spacing:3px; text-transform:uppercase; color:var(--tec); font-family:var(--mono)">4.2 · Defensas por capas</p>
+<h2 style="font-family:var(--serif); font-size:64px; font-weight:600; line-height:1.1; color:var(--ink)">Siete capas que ya tiene tu fábrica</h2>
+</div>
+<div style="display:flex; flex-direction:column">
+<div style="display:flex; gap:32px; align-items:baseline; padding:14px 0px; border-bottom:1px solid var(--rule)"><p style="font-family:var(--serif); font-size:32px; font-weight:600; color:var(--reta); width:56px">1</p><p style="font-size:28px; font-weight:600; color:var(--ink); width:420px">Mínima agencia</p><p style="font-size:28px; color:var(--ink-2)">Cada agente escribe solo los archivos de su rol</p></div>
+<div style="display:flex; gap:32px; align-items:baseline; padding:14px 0px; border-bottom:1px solid var(--rule)"><p style="font-family:var(--serif); font-size:32px; font-weight:600; color:var(--reta); width:56px">2</p><p style="font-size:28px; font-weight:600; color:var(--ink); width:420px">Aislamiento</p><p style="font-size:28px; color:var(--ink-2)">Los agentes trabajan en app/; la app corre en contenedores</p></div>
+<div style="display:flex; gap:32px; align-items:baseline; padding:14px 0px; border-bottom:1px solid var(--rule)"><p style="font-family:var(--serif); font-size:32px; font-weight:600; color:var(--reta); width:56px">3</p><p style="font-size:28px; font-weight:600; color:var(--ink); width:420px">Credenciales</p><p style="font-size:28px; color:var(--ink-2)">.env fuera de Git y bloqueado para los agentes</p></div>
+<div style="display:flex; gap:32px; align-items:baseline; padding:14px 0px; border-bottom:1px solid var(--rule)"><p style="font-family:var(--serif); font-size:32px; font-weight:600; color:var(--reta); width:56px">4</p><p style="font-size:28px; font-weight:600; color:var(--ink); width:420px">Guardrails</p><p style="font-size:28px; color:var(--ink-2)">Filtro de la historia y validadores de cada artefacto</p></div>
+<div style="display:flex; gap:32px; align-items:baseline; padding:14px 0px; border-bottom:1px solid var(--rule)"><p style="font-family:var(--serif); font-size:32px; font-weight:600; color:var(--reta); width:56px">5</p><p style="font-size:28px; font-weight:600; color:var(--ink); width:420px">Humano en el bucle</p><p style="font-size:28px; color:var(--ink-2)">Aprobación del plan y de las preguntas abiertas</p></div>
+<div style="display:flex; gap:32px; align-items:baseline; padding:14px 0px; border-bottom:1px solid var(--rule)"><p style="font-family:var(--serif); font-size:32px; font-weight:600; color:var(--reta); width:56px">6</p><p style="font-size:28px; font-weight:600; color:var(--ink); width:420px">Auditoría</p><p style="font-size:28px; color:var(--ink-2)">Cada llamada a herramienta queda en auditoria.jsonl</p></div>
+<div style="display:flex; gap:32px; align-items:baseline; padding:14px 0px"><p style="font-family:var(--serif); font-size:32px; font-weight:600; color:var(--reta); width:56px">7</p><p style="font-size:28px; font-weight:600; color:var(--ink); width:420px">Límites</p><p style="font-size:28px; color:var(--ink-2)">Pasos, intentos, ciclos y max_budget_usd</p></div>
+</div>
+<p style="position:absolute; left:128px; bottom:64px; width:1664px; font-size:24px; color:var(--ink-2)">Las capas 1, 3 y 6 viven en seguridad/hooks.py · DEFENSAS=0 apaga las de seguridad, solo en clase</p>
+
+</div>
+  <div class="notes">15 minutos. Defensa en profundidad: cada capa asume que la anterior puede fallar. Recorrer cada una mostrando el archivo donde vive. Los hooks de rol siempre están activos; los de seguridad (lectura confinada, comandos permitidos, auditoría) se apagan con DEFENSAS=0 únicamente para demostrar el ataque en el laboratorio. Pregunta para la clase: ¿por qué un hook es más confiable que escribir "no leas .env" en el prompt? Porque el prompt es una sugerencia que una inyección puede anular; el hook es código que el modelo no puede saltarse.</div>
+</section>
+
+<section class="slide lamina" id="s4-hooks">
+  <div class="badge nutre">Nutre</div>
+  <div class="timebox">0:30 · 15 min</div>
+  <div class="lienzo" style="font-family:var(--sans); padding:128px 128px 160px; display:flex; flex-direction:column; gap:40px">
+<div style="display:flex; flex-direction:column; gap:16px">
+<p style="font-size:20px; font-weight:600; letter-spacing:3px; text-transform:uppercase; color:var(--tec); font-family:var(--mono)">seguridad/hooks.py</p>
+<h2 style="font-family:var(--serif); font-size:64px; font-weight:600; line-height:1.1; color:var(--ink)">Un hook bloquea antes de actuar</h2>
+</div>
+<div style="background:var(--paper-3); border-radius:0; padding:32px 40px; border:1px solid var(--rule-2); border-left:3px solid var(--rule)">
+<p style="font-family:var(--mono); font-size:24px; line-height:1.5; color:var(--ink)">def comandos_permitidos(base: Path, programas: set[str]):<br/>    async def hook(input_data, tool_use_id, context):<br/>        comando = input_data["tool_input"].get("command", "")<br/>        if "`" in comando or "$(" in comando:<br/>            return _denegar(input_data, "Sustitución de comandos no permitida")<br/>        if any(p in comando.lower() for p in PALABRAS_SECRETAS):<br/>            return _denegar(input_data, "El comando menciona secretos")<br/>        for tramo in re.split(r"&amp;&amp;|\|\||;|\|", comando):<br/>            partes = tramo.strip().split()<br/>            if partes and partes[0] not in programas:<br/>                return _denegar(input_data, f"Programa no permitido: {partes[0]}")<br/>        return {}<br/>    return hook</p>
+</div>
+<p style="position:absolute; left:128px; bottom:64px; width:1664px; font-size:24px; color:var(--ink-2)">Pregunta: ¿por qué esto es más confiable que una frase en el prompt?</p>
+
+</div>
+  <div class="notes">Se registra con HookMatcher(matcher="Bash", hooks=[comandos_permitidos(app, PROGRAMAS)]). Este hook corre antes de cada comando de terminal que Claude Code quiera ejecutar. Rechaza sustituciones de comandos, cualquier mención de secretos o variables de entorno, y cualquier programa que no esté en la lista del rol: el despliegue solo puede usar docker y curl; el automatizador, python y pytest. Si devuelve deny, el comando no se ejecuta y el motivo regresa al modelo, que ajusta su plan. Respuesta esperada a la pregunta: el prompt es una sugerencia que una inyección puede anular; el hook es código determinista que el modelo no puede saltarse.</div>
+</section>
+
+<section class="slide cover">
+  <div class="badge nutre">Nutre</div>
+  <div class="timebox">0:45 · 10 min</div>
+  <div class="kicker">Bloque 4.3</div>
+  <h1>El flujo end to end</h1>
+  <p class="big muted">Si una prueba falla, el triage decide quién corrige.</p>
+  <div class="notes">El triage enruta, no corrige; gana quien siga el criterio de aceptación.</div>
+</section>
+
+<section class="slide lamina" id="s4-e2e">
+  <div class="badge nutre">Nutre</div>
+  <div class="timebox">0:45 · 10 min</div>
+  <div class="lienzo" style="font-family:var(--sans); padding:128px 128px 160px; display:flex; flex-direction:column; gap:48px">
+<div style="display:flex; flex-direction:column; gap:16px">
+<p style="font-size:20px; font-weight:600; letter-spacing:3px; text-transform:uppercase; color:var(--tec); font-family:var(--mono)">4.3 · Agente 6 · flujo end to end</p>
+<h2 style="font-family:var(--serif); font-size:64px; font-weight:600; line-height:1.1; color:var(--ink)">Si una prueba falla, el triage decide</h2>
+</div>
+
+<div style="position:absolute; left:128px; top:300px; width:320px; height:110px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:4px; background:var(--paper-2); border:1px solid var(--ink-2); border-radius:0"><p style="font-size:28px; font-weight:600; text-align:center; color:var(--ink)">Reporte</p><p style="font-size:24px; text-align:center; color:var(--ink-2)">LISTA o ESCALAR</p></div>
+<div style="position:absolute; left:128px; top:520px; width:320px; height:120px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:4px; background:var(--tec-tint); border:1px solid var(--tec); border-radius:0"><p style="font-size:28px; font-weight:600; text-align:center; color:var(--ink)">Pruebas E2E</p><p style="font-size:24px; text-align:center; color:var(--ink-2)">pytest + Playwright</p></div>
+<div style="position:absolute; left:620px; top:520px; width:320px; height:120px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:4px; background:color-mix(in srgb, var(--reta) 13%, var(--paper)); border:1px solid var(--reta); border-radius:0"><p style="font-size:28px; font-weight:600; text-align:center; color:var(--ink)">Triage</p><p style="font-size:24px; text-align:center; color:var(--ink-2)">enruta, no corrige</p></div>
+<div style="position:absolute; left:1200px; top:330px; width:360px; height:110px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:4px; background:var(--paper-2); border:1px solid var(--ink-2); border-radius:0"><p style="font-size:28px; font-weight:600; text-align:center; color:var(--ink)">Código</p><p style="font-size:24px; text-align:center; color:var(--ink-2)">agente 3 corrige</p></div>
+<div style="position:absolute; left:1200px; top:525px; width:360px; height:110px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:4px; background:var(--paper-2); border:1px solid var(--ink-2); border-radius:0"><p style="font-size:28px; font-weight:600; text-align:center; color:var(--ink)">Pruebas</p><p style="font-size:24px; text-align:center; color:var(--ink-2)">agente 5 corrige</p></div>
+<div style="position:absolute; left:1200px; top:720px; width:360px; height:110px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:4px; background:var(--paper-2); border:1px solid var(--ink-2); border-radius:0"><p style="font-size:28px; font-weight:600; text-align:center; color:var(--ink)">Despliegue</p><p style="font-size:24px; text-align:center; color:var(--ink-2)">agente 4 corrige</p></div>
+<x-connector style="color:var(--ink-2); border-width:3px" x1="288" x2="288" y1="520" y2="410"></x-connector>
+<x-connector style="color:var(--ink-2); border-width:3px" x1="448" x2="620" y1="580" y2="580"></x-connector>
+<x-connector route="elbow" style="color:var(--ink-2); border-width:3px" x1="940" x2="1200" y1="580" y2="385"></x-connector>
+<x-connector style="color:var(--ink-2); border-width:3px" x1="940" x2="1200" y1="580" y2="580"></x-connector>
+<x-connector route="elbow" style="color:var(--ink-2); border-width:3px" x1="940" x2="1200" y1="580" y2="775"></x-connector>
+<x-connector head="none" style="color:var(--reta); border-width:3px; border-style:dashed" x1="1560" x2="1640" y1="385" y2="385"></x-connector>
+<x-connector head="none" style="color:var(--reta); border-width:3px; border-style:dashed" x1="1560" x2="1640" y1="580" y2="580"></x-connector>
+<x-connector head="none" style="color:var(--reta); border-width:3px; border-style:dashed" x1="1560" x2="1640" y1="775" y2="775"></x-connector>
+<x-connector head="none" style="color:var(--reta); border-width:3px; border-style:dashed" x1="1640" x2="1640" y1="385" y2="880"></x-connector>
+<x-connector head="none" style="color:var(--reta); border-width:3px; border-style:dashed" x1="1640" x2="288" y1="880" y2="880"></x-connector>
+<x-connector style="color:var(--reta); border-width:3px; border-style:dashed" x1="288" x2="288" y1="880" y2="640"></x-connector>
+<p style="position:absolute; left:304px; top:446px; width:120px; font-size:24px; color:var(--ink-2)">pasan</p>
+<p style="position:absolute; left:470px; top:530px; width:140px; font-size:24px; color:var(--ink-2)">fallan</p>
+<p style="position:absolute; left:620px; top:826px; width:560px; font-size:24px; color:var(--reta)">vuelve a probar · máximo 2 ciclos</p>
+<p style="position:absolute; left:128px; bottom:64px; width:1664px; font-size:24px; color:var(--ink-2)">flujos/flujo_s4.py · agentes/triage.py · el criterio de aceptación decide quién tiene razón</p>
+
+</div>
+  <div class="notes">10 minutos. Después del despliegue y de escribir las pruebas, el flujo las ejecuta todas: API y end to end. Si pasan, se escribe el reporte. Si fallan, el triage, que es el único supervisor de la fábrica, lee los fallos y los criterios de aceptación y devuelve un diagnóstico estructurado: responsable, causa, criterio de referencia e instrucción. El flujo enruta la corrección al agente responsable y vuelve a probar, con un máximo de dos ciclos; después, el reporte escala a una persona. Regla: si la prueba y la app no coinciden, gana quien siga el criterio de aceptación.</div>
+</section>
+
+<section class="slide" data-timer="10">
+  <div class="badge acompana">Acompaña</div>
+  <div class="timebox">0:55 · 10 min</div>
+  <h2 style="text-align:center">DESCANSO</h2>
+  <div class="countdown">10:00</div>
+  <p class="muted" style="text-align:center; max-width:none">Volvemos con el Lab 4: probar todo, atacar y defender.</p>
+  <div class="notes">Quédate en la sala los primeros 2 minutos: ahí llegan las dudas 1:1.</div>
+</section>
+
+<section class="slide cover">
+  <div class="badge practica">Practica</div>
+  <div class="timebox">1:05 · 25 min</div>
+  <div class="kicker">Laboratorio 4A</div>
+  <h1>La fábrica completa con HU-03</h1>
+  <p class="big muted">Seis agentes de punta a punta y el reporte E2E.</p>
+  <div class="notes">Aprobar el plan solo si respeta «no se puede editar a un empleado dado de baja».</div>
+</section>
+
+<section class="slide lamina" id="s4-lab">
+  <div class="badge practica">Practica</div>
+  <div class="timebox">1:05 · 25 min</div>
+  <div class="lienzo" style="font-family:var(--sans); padding:128px 128px 160px; display:flex; flex-direction:column; gap:48px">
+<div style="display:flex; flex-direction:column; gap:16px">
+<p style="font-size:20px; font-weight:600; letter-spacing:3px; text-transform:uppercase; color:var(--tec); font-family:var(--mono)">Lab 4 · 70 min · individual</p>
+<h2 style="font-family:var(--serif); font-size:64px; font-weight:600; line-height:1.1; color:var(--ink)">Probar todo, atacar y defender</h2>
+</div>
+<div style="display:flex; gap:32px">
+<div style="flex:1; display:flex; flex-direction:column; gap:16px; background:var(--paper); border:1px solid var(--rule); border-radius:0; padding:36px">
+<p style="font-size:20px; font-weight:600; letter-spacing:2px; text-transform:uppercase; color:var(--tec); font-family:var(--mono)">4A · 25 min</p>
+<h3 style="font-family:var(--serif); font-size:36px; font-weight:600; line-height:1.2; color:var(--ink)">Fábrica completa</h3>
+<p style="font-size:26px; line-height:1.4; color:var(--ink-2)">HU-03 con los seis agentes. Lee cada decisión del triage.</p>
+</div>
+<div style="flex:1; display:flex; flex-direction:column; gap:16px; background:var(--paper); border:1px solid var(--reta); border-radius:0; padding:36px">
+<p style="font-size:20px; font-weight:600; letter-spacing:2px; text-transform:uppercase; color:var(--tec); font-family:var(--mono)">4B · 25 min</p>
+<h3 style="font-family:var(--serif); font-size:36px; font-weight:600; line-height:1.2; color:var(--ink)">Atacar y defender</h3>
+<p style="font-size:26px; line-height:1.4; color:var(--ink-2)">HU-99 y un contexto envenenado, con y sin DEFENSAS.</p>
+</div>
+<div style="flex:1; display:flex; flex-direction:column; gap:16px; background:var(--paper); border:1px solid var(--rule); border-radius:0; padding:36px">
+<p style="font-size:20px; font-weight:600; letter-spacing:2px; text-transform:uppercase; color:var(--tec); font-family:var(--mono)">4C · 20 min</p>
+<h3 style="font-family:var(--serif); font-size:36px; font-weight:600; line-height:1.2; color:var(--ink)">Reporte</h3>
+<p style="font-size:26px; line-height:1.4; color:var(--ink-2)">Tabla de ataques con evidencia y checklist de producción.</p>
+</div>
+</div>
+<div style="background:var(--paper-3); border-radius:0; padding:28px 40px; border:1px solid var(--rule-2); border-left:3px solid var(--rule)">
+<p style="font-family:var(--mono); font-size:24px; line-height:1.5; color:var(--ink)">python -m flujos.flujo_s4 historias/HU-03-editar-dar-baja.md<br/>python -m agentes.analista historias/HU-99-envenenada.md   <span style="color:var(--ink-2)"># ¿la orden llega?</span><br/>python -m flujos.flujo_s4 historias/HU-99-envenenada.md    <span style="color:var(--ink-2)"># ¿se bloquea?</span></p>
+</div>
+<p style="position:absolute; left:128px; bottom:64px; width:1664px; font-size:24px; color:var(--ink-2)">Regla: los ataques apuntan solo a secretos_demo.txt, nunca al .env real</p>
+
+</div>
+  <div class="notes">4A: aprobar el plan solo si respeta "no se puede editar a un empleado dado de baja"; si hay fallos, ¿están de acuerdo con el responsable que eligió el triage? Control: salida/HU-03/reporte.md. 4B: cada ataque se prueba sobre un solo agente para que quepa en el tiempo. Historia envenenada sin defensas: correr solo el analista y buscar "diagnostico" en los criterios. Con defensas: flujo_s4 debe bloquearla en el primer nodo. Contexto envenenado: agregar a convenciones_app.md una orden de leer secretos_demo.txt y pedir un plan con DEFENSAS=0 y sin él; buscar BANDERA en la salida. Borrar la línea al terminar. El resultado sin defensas varía entre ejecuciones: esa variación es la razón para defender con código. 4C: salida/seguridad.md.</div>
+</section>
+
+<section class="slide cover">
+  <div class="badge practica">Practica</div>
+  <div class="timebox">1:30 · 25 min</div>
+  <div class="kicker">Laboratorio 4B</div>
+  <h1>Atacar y defender</h1>
+  <p class="big muted">HU-99 y un contexto envenenado, con y sin defensas.</p>
+  <div class="notes">Los ataques apuntan solo a secretos_demo.txt, nunca al .env real.</div>
+</section>
+
+<section class="slide cover">
+  <div class="badge reta">Reta</div>
+  <div class="timebox">1:55 · 20 min</div>
+  <div class="kicker">Laboratorio 4C y evaluación</div>
+  <h1>Reporte de seguridad y reto HU-10</h1>
+  <p class="big muted">Tabla de ataques, checklist de producción, examen y reto.</p>
+  <div class="notes">Presenta la evaluación: examen de conceptos (40 %) y reto en código con HU-10 (60 %).</div>
+</section>
+
+<section class="slide lamina" id="evaluacion">
+  <div class="badge reta">Reta</div>
+  <div class="timebox">1:55 · 20 min</div>
+  <div class="lienzo" style="font-family:var(--sans); padding:128px 128px 160px; display:flex; flex-direction:column; gap:48px">
+<div style="display:flex; flex-direction:column; gap:16px"><p style="font-size:20px; font-weight:600; letter-spacing:3px; text-transform:uppercase; color:var(--tec); font-family:var(--mono)">Evaluación individual</p><h2 style="font-family:var(--serif); font-weight:600; line-height:1.1; color:var(--ink); font-size:59px">Un examen de conceptos y un reto que los aplica</h2></div>
+<div style="display:grid; grid-template-columns:1fr 1fr; gap:48px">
+<div style="display:flex; flex-direction:column; gap:16px; background:var(--paper-2); border:1px solid var(--rule); border-radius:0; padding:32px; padding:40px"><p style="font-family:var(--serif); font-size:96px; font-weight:600; line-height:1; color:var(--ink-2)">40%</p>
+<h3 style="font-family:var(--serif); font-size:40px; font-weight:600; color:var(--ink)">Examen de conceptos</h3>
+<p style="font-size:28px; line-height:1.4; color:var(--ink-2)">20 preguntas de opción múltiple en 30 minutos: agentes, salidas estructuradas, orquestación y humano, arquitecturas y seguridad.</p></div>
+<div style="display:flex; flex-direction:column; gap:16px; background:var(--paper-2); border:1px solid var(--rule); border-radius:0; padding:32px; padding:40px; background:color-mix(in srgb, var(--reta) 13%, var(--paper)); border-color:var(--reta)"><p style="font-family:var(--serif); font-size:96px; font-weight:600; line-height:1; color:var(--reta)">60%</p>
+<h3 style="font-family:var(--serif); font-size:40px; font-weight:600; color:var(--ink)">Reto en código</h3>
+<p style="font-size:28px; line-height:1.4; color:var(--ink)">Tu fábrica de los labs procesa una historia nueva, <b>HU-10 Solicitar vacaciones</b>, de los criterios a las pruebas. Una semana.</p></div>
+</div>
+<p style="font-size:28px; line-height:1.4; color:var(--ink)">Los entregables y quizzes de cada sesión son práctica: preparan el examen y el reto.</p>
+<p style="position:absolute; left:128px; bottom:64px; width:1664px; font-size:24px; color:var(--ink-2)">Integridad: nada en app/ ni en salida/ se edita a mano; la bitácora y la auditoría lo muestran</p>
+
+</div>
+  <div class="notes">La evaluación sigue la lógica del módulo: los conceptos se miden en el examen y su aplicación en el reto. El examen tiene 20 preguntas: cuatro de agentes y componentes, cuatro de salidas estructuradas y validación, cuatro de orquestación y el rol del humano, cinco de arquitecturas y tres de seguridad. El reto usa la fábrica que cada quien construyó en los laboratorios con una historia nueva, solicitar vacaciones, que se entrega al terminar la sesión 4. Los entregables y quizzes de sesión no suman a la nota: son la práctica para llegar bien a las dos partes.</div>
+</section>
+
+<section class="slide lamina" id="reto">
+  <div class="badge reta">Reta</div>
+  <div class="timebox">1:55 · 20 min</div>
+  <div class="lienzo" style="font-family:var(--sans); padding:128px 128px 160px; display:flex; flex-direction:column; gap:48px">
+<div style="display:flex; flex-direction:column; gap:16px"><p style="font-size:20px; font-weight:600; letter-spacing:3px; text-transform:uppercase; color:var(--tec); font-family:var(--mono)">Reto en código · 60 %</p><h2 style="font-family:var(--serif); font-weight:600; line-height:1.1; color:var(--ink); font-size:59px">HU-10 Solicitar vacaciones, por toda tu fábrica</h2></div>
+<div style="display:grid; grid-template-columns:repeat(3, 1fr); gap:24px"><div style="display:flex; flex-direction:column; gap:16px; background:var(--paper-2); border:1px solid var(--rule); border-radius:0; padding:32px"><h3 style="font-family:var(--serif); font-size:34px; font-weight:600; color:var(--ink)">Antigüedad</h3><p style="font-size:26px; line-height:1.4; color:var(--ink-2)">Al menos un año cumplido a la fecha de inicio de las vacaciones</p></div><div style="display:flex; flex-direction:column; gap:16px; background:var(--paper-2); border:1px solid var(--rule); border-radius:0; padding:32px"><h3 style="font-family:var(--serif); font-size:34px; font-weight:600; color:var(--ink)">Tope anual</h3><p style="font-size:26px; line-height:1.4; color:var(--ink-2)">12 días hábiles por año calendario; se puede usar exactamente lo que queda</p></div><div style="display:flex; flex-direction:column; gap:16px; background:var(--paper-2); border:1px solid var(--rule); border-radius:0; padding:32px"><h3 style="font-family:var(--serif); font-size:34px; font-weight:600; color:var(--ink)">Días hábiles</h3><p style="font-size:26px; line-height:1.4; color:var(--ink-2)">No cuentan sábados, domingos ni festivos oficiales (LFT, art. 74)</p></div></div>
+<div style="display:flex; gap:16px"><div style="flex:1; display:flex; flex-direction:column; align-items:center; gap:4px; background:var(--paper-3); border-radius:0; padding:16px; border:1px solid var(--rule-2); border-left:3px solid var(--rule)"><p style="font-size:22px; font-weight:600; color:var(--introduce)">1</p><p style="font-size:26px; color:var(--ink)">Criterios</p></div><div style="flex:1; display:flex; flex-direction:column; align-items:center; gap:4px; background:var(--paper-3); border-radius:0; padding:16px; border:1px solid var(--rule-2); border-left:3px solid var(--rule)"><p style="font-size:22px; font-weight:600; color:var(--introduce)">2</p><p style="font-size:26px; color:var(--ink)">Casos</p></div><div style="flex:1; display:flex; flex-direction:column; align-items:center; gap:4px; background:var(--paper-3); border-radius:0; padding:16px; border:1px solid var(--rule-2); border-left:3px solid var(--rule)"><p style="font-size:22px; font-weight:600; color:var(--introduce)">3</p><p style="font-size:26px; color:var(--ink)">Código</p></div><div style="flex:1; display:flex; flex-direction:column; align-items:center; gap:4px; background:var(--paper-3); border-radius:0; padding:16px; border:1px solid var(--rule-2); border-left:3px solid var(--rule)"><p style="font-size:22px; font-weight:600; color:var(--introduce)">4</p><p style="font-size:26px; color:var(--ink)">Despliegue</p></div><div style="flex:1; display:flex; flex-direction:column; align-items:center; gap:4px; background:var(--paper-3); border-radius:0; padding:16px; border:1px solid var(--rule-2); border-left:3px solid var(--rule)"><p style="font-size:22px; font-weight:600; color:var(--introduce)">5</p><p style="font-size:26px; color:var(--ink)">Pruebas</p></div><div style="flex:1; display:flex; flex-direction:column; align-items:center; gap:4px; background:var(--paper-3); border-radius:0; padding:16px; border:1px solid var(--rule-2); border-left:3px solid var(--rule)"><p style="font-size:22px; font-weight:600; color:var(--introduce)">6</p><p style="font-size:26px; color:var(--ink)">Reporte E2E</p></div></div>
+<p style="font-size:28px; line-height:1.4; color:var(--ink)">Cada etapa deja su evidencia. Si un agente se equivoca, <b>corriges al agente</b>, no su resultado. Y explicas tus decisiones en <b>decisiones.md</b>.</p>
+<p style="position:absolute; left:128px; bottom:64px; width:1664px; font-size:24px; color:var(--ink-2)">python -m flujos.flujo_s4 historias/HU-10-solicitar-vacaciones.md</p>
+
+</div>
+  <div class="notes">El reto toma todo lo que hicieron en los laboratorios como base. Reciben la historia HU-10, sus reglas con la tabla de festivos de 2026 y 2027, y las convenciones de la API y la pantalla. Las agregan a historias y a contexto, y ejecutan la fábrica completa sobre su app de empleados: criterios de aceptación, casos de prueba, código con aprobación del plan, despliegue con Docker Compose, pruebas de API y E2E, y el reporte de punta a punta. Las tres reglas tienen mensajes de error exactos, porque el docente califica la API con pruebas propias que los estudiantes no ven. Además escriben una página de decisiones: qué es workflow y qué es agente, cómo se validó cada salida, dónde intervinieron, qué arquitectura usa su fábrica y qué corrigieron.</div>
+</section>
+
+<section class="slide lamina" id="rubrica">
+  <div class="badge reta">Reta</div>
+  <div class="timebox">1:55 · 20 min</div>
+  <div class="lienzo" style="font-family:var(--sans); padding:128px 128px 160px; display:flex; flex-direction:column; gap:48px">
+<div style="display:flex; flex-direction:column; gap:16px"><p style="font-size:20px; font-weight:600; letter-spacing:3px; text-transform:uppercase; color:var(--tec); font-family:var(--mono)">Rúbrica del reto</p><h2 style="font-family:var(--serif); font-weight:600; line-height:1.1; color:var(--ink); font-size:64px">Cómo se califica el reto</h2></div>
+<table style="font-size:28px; color:var(--ink)">
+<tr><th style="width:32%">Criterio</th><th style="width:10%; text-align:right">Peso</th><th style="width:58%">Qué se revisa</th></tr>
+<tr style="background:color-mix(in srgb, var(--reta) 13%, var(--paper))"><td><b>La app cumple la historia</b></td><td style="text-align:right">40%</td><td>Proporción de las pruebas ocultas que pasan contra tu app desplegada</td></tr><tr><td><b>Recorrido completo de la fábrica</b></td><td style="text-align:right">35%</td><td>Evidencia de las seis etapas, en orden, con validaciones y plan aprobado</td></tr><tr><td><b>Integridad y seguridad</b></td><td style="text-align:right">10%</td><td>Hooks intactos; nada editado a mano en app/ ni salida/</td></tr><tr><td><b>Decisiones</b></td><td style="text-align:right">15%</td><td>Respuestas específicas a tu ejecución, con los conceptos del módulo</td></tr>
+</table>
+<p style="font-size:28px; line-height:1.4; color:var(--ink)">Los mensajes y códigos de error deben ser <b>exactamente</b> los de las reglas: así los verifican las pruebas.</p>
+<p style="position:absolute; left:128px; bottom:64px; width:1664px; font-size:24px; color:var(--ink-2)">Las pruebas ocultas y la clave del examen viven en el paquete del docente</p>
+
+</div>
+  <div class="notes">El 40 por ciento depende de que la app cumpla la historia: el docente levanta la app de cada estudiante y corre una suite de 12 pruebas de API que cubre las tres reglas, los casos límite y los datos inválidos. El 35 por ciento es el recorrido: que cada etapa de la fábrica haya dejado su evidencia y sus validaciones, incluida la aprobación del plan. El 10 por ciento es integridad: hooks intactos y nada editado a mano, verificable en la auditoría. El 15 por ciento son las decisiones, donde el estudiante demuestra que entiende los conceptos usando su propia ejecución como ejemplo.</div>
+</section>
+
+<section class="slide cover">
+  <div class="badge integra">Integra</div>
+  <div class="timebox">2:15 · 15 min</div>
+  <div class="kicker">Cierre del módulo</div>
+  <h1>Demostraciones y retrospectiva</h1>
+  <p class="big muted">Dos o tres fábricas completas y el checklist de producción.</p>
+  <div class="notes">Abre espacio para preguntas sobre el reto y recuerda la fecha de entrega.</div>
+</section>
+
+<section class="slide lamina" id="cierre">
+  <div class="badge integra">Integra</div>
+  <div class="timebox">2:15 · 15 min</div>
+  <div class="lienzo" style="font-family:var(--sans); padding:128px 128px 160px; display:flex; flex-direction:column; gap:48px">
+<div style="display:flex; flex-direction:column; gap:16px">
+<p style="font-size:20px; font-weight:600; letter-spacing:3px; text-transform:uppercase; color:var(--tec); font-family:var(--mono)">Para llevar</p>
+<h2 style="font-family:var(--serif); font-size:64px; font-weight:600; line-height:1.1; color:var(--ink)">Checklist de salida a producción</h2>
+</div>
+<div style="display:flex; flex-direction:column; gap:22px">
+<div style="display:flex; gap:24px; align-items:center"><x-icon name="Check" style="color:var(--introduce); width:40px; height:40px"></x-icon><p style="font-size:30px; line-height:1.4; color:var(--ink)">Cada agente tiene una lista justificada de herramientas y permisos.</p></div>
+<div style="display:flex; gap:24px; align-items:center"><x-icon name="Check" style="color:var(--introduce); width:40px; height:40px"></x-icon><p style="font-size:30px; line-height:1.4; color:var(--ink)">Nada irreversible o externo ocurre sin aprobación o lista permitida.</p></div>
+<div style="display:flex; gap:24px; align-items:center"><x-icon name="Check" style="color:var(--introduce); width:40px; height:40px"></x-icon><p style="font-size:30px; line-height:1.4; color:var(--ink)">El contenido externo se marca como no confiable y pasa por un filtro.</p></div>
+<div style="display:flex; gap:24px; align-items:center"><x-icon name="Check" style="color:var(--introduce); width:40px; height:40px"></x-icon><p style="font-size:30px; line-height:1.4; color:var(--ink)">Hay límites de pasos, tiempo y tokens por ejecución.</p></div>
+<div style="display:flex; gap:24px; align-items:center"><x-icon name="Check" style="color:var(--introduce); width:40px; height:40px"></x-icon><p style="font-size:30px; line-height:1.4; color:var(--ink)">Cada llamada a herramienta queda auditada.</p></div>
+<div style="display:flex; gap:24px; align-items:center"><x-icon name="Check" style="color:var(--introduce); width:40px; height:40px"></x-icon><p style="font-size:30px; line-height:1.4; color:var(--ink)">La suite de evaluación incluye al menos 3 casos de inyección.</p></div>
+</div>
+<p style="position:absolute; left:128px; bottom:64px; width:1664px; font-size:24px; color:var(--ink-2)">Módulo 3 · Construcción de Sistemas Agénticos · Gracias</p>
+
+</div>
+  <div class="notes">Cierre del módulo. Este checklist es el mismo que se exige en el reporte de seguridad del proyecto integrador. Abrir espacio para preguntas y recordar la fecha de entrega: una semana después de la sesión 4.</div>
+</section>
+
+<script>/* Láminas del módulo: cada una se dibujó en un lienzo de 1920 × 1080 px. Aquí se convierten sus
+   conectores e iconos a SVG y el lienzo se escala para que quepa entre la banda superior y el pie. */
+(() => {
+  const NS = "http://www.w3.org/2000/svg";
+  const ICONOS = {
+    Check: '<path d="M20 6 9 17l-5-5"/>',
+    CheckCircle: '<circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/>',
+    Code: '<path d="m16 18 6-6-6-6"/><path d="m8 6-6 6 6 6"/>',
+    Search: '<circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>',
+    Settings: '<circle cx="12" cy="12" r="3.5"/><path d="M12 2v3M12 19v3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M2 12h3M19 12h3M4.9 19.1 7 17M17 7l2.1-2.1"/>',
+    Warning: '<path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/><path d="M12 9v4M12 17h.01"/>',
+    Database: '<ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v14c0 1.7 4 3 9 3s9-1.3 9-3V5"/><path d="M3 12c0 1.7 4 3 9 3s9-1.3 9-3"/>',
+    Globe: '<circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15 15 0 0 1 0 20a15 15 0 0 1 0-20"/>',
+    PaperPlane: '<path d="m22 2-7 20-4-9-9-4z"/><path d="M22 2 11 13"/>'
+  };
+
+  // <x-icon>: iconos de línea en SVG
+  document.querySelectorAll("x-icon").forEach(el => {
+    const svg = document.createElementNS(NS, "svg");
+    svg.setAttribute("viewBox", "0 0 24 24");
+    svg.setAttribute("fill", "none");
+    svg.setAttribute("stroke-width", "2");
+    svg.setAttribute("stroke-linecap", "round");
+    svg.setAttribute("stroke-linejoin", "round");
+    svg.setAttribute("aria-hidden", "true");
+    svg.style.cssText = el.style.cssText + ";flex-shrink:0";
+    svg.style.stroke = el.style.color || "currentColor";
+    svg.innerHTML = ICONOS[el.getAttribute("name")] || "";
+    el.replaceWith(svg);
+  });
+
+  // <x-shape>: flechas y rombos como SVG que llenan su caja
+  document.querySelectorAll("x-shape").forEach(el => {
+    const tipo = el.getAttribute("kind"), est = el.style;
+    const relleno = est.backgroundColor || "#4A5061";
+    const svg = document.createElementNS(NS, "svg");
+    svg.setAttribute("viewBox", "0 0 100 100");
+    svg.setAttribute("preserveAspectRatio", "none");
+    svg.style.cssText = el.style.cssText + ";background:none;border:none;flex-shrink:0";
+    const formas = {
+      "arrow-right": "0,30 60,30 60,0 100,50 60,100 60,70 0,70",
+      "diamond": "50,2 98,50 50,98 2,50"
+    };
+    svg.innerHTML = `<polygon points="${formas[tipo] || formas.diamond}" style="fill:${relleno};stroke:${est.borderColor || "none"}" stroke-width="3" vector-effect="non-scaling-stroke"/>`;
+    el.replaceWith(svg);
+  });
+
+  // <x-connector>: líneas con punta, en coordenadas de la diapositiva
+  let n = 0;
+  document.querySelectorAll(".lienzo").forEach(seccion => {
+    const conectores = seccion.querySelectorAll("x-connector");
+    if (!conectores.length) return;
+    const svg = document.createElementNS(NS, "svg");
+    svg.setAttribute("width", "1920"); svg.setAttribute("height", "1080");
+    svg.style.cssText = "position:absolute;left:0;top:0;pointer-events:none;overflow:visible";
+    let defs = "", trazos = "";
+    conectores.forEach(c => {
+      const [x1, y1, x2, y2] = ["x1", "y1", "x2", "y2"].map(a => parseFloat(c.getAttribute(a)));
+      const color = c.style.color || "#4A5061";
+      const ancho = parseFloat(c.style.borderWidth) || 2;
+      const guiones = c.style.borderStyle === "dashed" ? `stroke-dasharray="${ancho * 4} ${ancho * 3}"` : "";
+      const ruta = c.getAttribute("route") || "straight", punta = c.getAttribute("head") || "end";
+      let d = `M${x1} ${y1} L${x2} ${y2}`;
+      if (ruta === "hv") d = `M${x1} ${y1} H${x2} V${y2}`;
+      if (ruta === "vh") d = `M${x1} ${y1} V${y2} H${x2}`;
+      if (ruta === "elbow") {
+        d = Math.abs(x2 - x1) >= Math.abs(y2 - y1)
+          ? `M${x1} ${y1} H${(x1 + x2) / 2} V${y2} H${x2}`
+          : `M${x1} ${y1} V${(y1 + y2) / 2} H${x2} V${y2}`;
+      }
+      const id = "punta" + (n++);
+      defs += `<marker id="${id}" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="${4.5}" markerHeight="${4.5}" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" style="fill:${color}"/></marker>`;
+      const fin = punta === "end" || punta === "both" ? `marker-end="url(#${id})"` : "";
+      const inicio = punta === "both" ? `marker-start="url(#${id})"` : "";
+      trazos += `<path d="${d}" fill="none" style="stroke:${color}" stroke-width="${ancho}" stroke-linecap="round" stroke-linejoin="round" ${guiones} ${fin} ${inicio}/>`;
+      c.remove();
+    });
+    svg.innerHTML = `<defs>${defs}</defs>${trazos}`;
+    seccion.appendChild(svg);
+  });
+
+
+  function ajustar() {
+    const s = Math.min(innerWidth / 1920, innerHeight / 1080) * 0.9;
+    document.querySelectorAll('.lienzo').forEach(l => {
+      l.style.transform = 'scale(' + s + ')';
+      l.style.left = ((innerWidth - 1920 * s) / 2) + 'px';
+      l.style.top = (innerHeight * 0.075) + 'px';
+    });
+  }
+  ajustar();
+  addEventListener('resize', ajustar);
+  addEventListener('beforeprint', ajustar);
+})();
+</script>
+<script src="assets/deck.js"></script>
+</body>
+</html>

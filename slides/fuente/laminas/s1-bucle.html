@@ -1,0 +1,24 @@
+<section id="s1-bucle" data-transition="fade" style="background:#F6F5F0; color:#1B1F2A; font-family:'IBM Plex Sans', Arial, sans-serif; padding:128px 128px 160px; display:flex; flex-direction:column; gap:48px">
+<div style="display:flex; flex-direction:column; gap:16px">
+<p style="font-size:24px; font-weight:600; letter-spacing:3px; text-transform:uppercase; color:#B5541C">1.1 · El bucle</p>
+<h2 style="font-family:'Space Grotesk', Arial, sans-serif; font-size:64px; font-weight:600; line-height:1.1; color:#14171F">Modelo y herramienta se alternan hasta la respuesta</h2>
+</div>
+<!-- A 128,380,300,110  B 540,380,300,110  C 952,380,300,110  D 1364,380,300,110  E 952,640,300,110 -->
+<div style="position:absolute; left:128px; top:380px; width:300px; height:110px; display:flex; align-items:center; justify-content:center; background:#FDFCF9; border:2px solid #4A5061; border-radius:16px"><p style="font-size:28px; font-weight:600; text-align:center; color:#14171F">1 · Usuario y objetivo</p></div>
+<div style="position:absolute; left:540px; top:380px; width:300px; height:110px; display:flex; align-items:center; justify-content:center; background:#FDFCF9; border:2px solid #4A5061; border-radius:16px"><p style="font-size:28px; font-weight:600; text-align:center; color:#14171F">2 · Modelo (LLM)</p></div>
+<div style="position:absolute; left:952px; top:380px; width:300px; height:110px; display:flex; align-items:center; justify-content:center; background:#FDFCF9; border:2px dashed #4A5061; border-radius:16px"><p style="font-size:28px; font-weight:600; text-align:center; color:#14171F">3 · ¿Pidió una herramienta?</p></div>
+<div style="position:absolute; left:1364px; top:380px; width:300px; height:110px; display:flex; align-items:center; justify-content:center; background:#F7D9C4; border:2px solid #B5541C; border-radius:16px"><p style="font-size:28px; font-weight:600; text-align:center; color:#14171F">No → respuesta final</p></div>
+<div style="position:absolute; left:952px; top:640px; width:300px; height:110px; display:flex; align-items:center; justify-content:center; background:#FDFCF9; border:2px solid #4A5061; border-radius:16px"><p style="font-size:28px; font-weight:600; text-align:center; color:#14171F">Sí → ejecutar herramienta</p></div>
+<x-connector x1="428" y1="435" x2="540" y2="435" style="color:#4A5061; border-width:3px"></x-connector>
+<x-connector x1="840" y1="435" x2="952" y2="435" style="color:#4A5061; border-width:3px"></x-connector>
+<x-connector x1="1252" y1="435" x2="1364" y2="435" style="color:#4A5061; border-width:3px"></x-connector>
+<x-connector x1="1102" y1="490" x2="1102" y2="640" style="color:#4A5061; border-width:3px"></x-connector>
+<x-connector x1="952" y1="695" x2="690" y2="490" route="hv" style="color:#B5541C; border-width:3px"></x-connector>
+<p style="position:absolute; left:1276px; top:382px; width:80px; font-size:24px; color:#4A5061">no</p>
+<p style="position:absolute; left:1118px; top:545px; width:80px; font-size:24px; color:#4A5061">sí</p>
+<p style="position:absolute; left:706px; top:711px; width:240px; font-size:24px; color:#B5541C">resultado o error</p>
+<p style="position:absolute; left:128px; top:640px; width:520px; font-size:26px; line-height:1.4; color:#4A5061">Cada vuelta es una llamada al modelo: costo y latencia crecen con los pasos.</p>
+<p style="position:absolute; left:1364px; top:640px; width:300px; font-size:26px; line-height:1.4; color:#4A5061">Un límite de pasos garantiza que el bucle termine.</p>
+<p style="position:absolute; left:128px; bottom:64px; width:1664px; font-size:24px; color:#6B7080">Sesión 1 · Arquitectura de agentes</p>
+<aside>Este es el corazón de cualquier agente, incluido Claude Code. El usuario da un objetivo; el modelo responde con texto o con una petición de herramienta (stop_reason = tool_use). Si pidió herramienta, el código la ejecuta y devuelve el resultado, o el error, como un nuevo mensaje. Se repite hasta que el modelo responde sin pedir herramientas o se alcanza el límite de pasos. Mostrar en vivo una sesión de Claude Code y señalar cada vuelta del bucle en su salida.</aside>
+</section>

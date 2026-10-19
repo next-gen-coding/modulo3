@@ -1,0 +1,29 @@
+<section id="p-orquestador" data-transition="fade" style="background:#F6F5F0; color:#1B1F2A; font-family:'IBM Plex Sans', Arial, sans-serif; padding:128px 128px 160px; display:flex; flex-direction:column; gap:48px">
+<div style="display:flex; flex-direction:column; gap:16px">
+<p style="font-size:24px; font-weight:600; letter-spacing:3px; text-transform:uppercase; color:#B5541C">Patrón de flujo · 4 de 5</p>
+<h2 style="font-family:'Space Grotesk', Arial, sans-serif; font-size:64px; font-weight:600; line-height:1.1; color:#14171F">Orquestador y trabajadores</h2>
+</div>
+<div style="position:absolute; left:408px; top:290px; width:320px; height:110px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:4px; background:#F7D9C4; border:2px solid #B5541C; border-radius:16px; padding:0px 12px"><p style="font-size:28px; font-weight:600; text-align:center; color:#14171F">Orquestador</p><p style="font-size:24px; text-align:center; color:#4A5061">divide la tarea</p></div>
+<p style="position:absolute; left:748px; top:316px; width:340px; font-size:24px; color:#B5541C">decide en el momento cuántos y cuáles</p>
+<div style="position:absolute; left:168px; top:560px; width:240px; height:100px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:4px; background:#FDFCF9; border:2px solid #4A5061; border-radius:16px; padding:0px 12px"><p style="font-size:28px; font-weight:600; text-align:center; color:#14171F">Trabajador</p><p style="font-size:24px; text-align:center; color:#4A5061">backend</p></div>
+<div style="position:absolute; left:448px; top:560px; width:240px; height:100px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:4px; background:#FDFCF9; border:2px solid #4A5061; border-radius:16px; padding:0px 12px"><p style="font-size:28px; font-weight:600; text-align:center; color:#14171F">Trabajador</p><p style="font-size:24px; text-align:center; color:#4A5061">frontend</p></div>
+<div style="position:absolute; left:728px; top:560px; width:240px; height:100px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:4px; background:#FDFCF9; border:2px dashed #4A5061; border-radius:16px; padding:0px 12px"><p style="font-size:28px; font-weight:600; text-align:center; color:#14171F">… N</p><p style="font-size:24px; text-align:center; color:#4A5061">los que hagan falta</p></div>
+<x-connector x1="568" y1="400" x2="568" y2="480" head="none" style="color:#4A5061; border-width:3px"></x-connector>
+<x-connector x1="288" y1="480" x2="848" y2="480" head="none" style="color:#4A5061; border-width:3px"></x-connector>
+<x-connector x1="288" y1="480" x2="288" y2="560" style="color:#4A5061; border-width:3px"></x-connector>
+<x-connector x1="568" y1="480" x2="568" y2="560" style="color:#4A5061; border-width:3px"></x-connector>
+<x-connector x1="848" y1="480" x2="848" y2="560" style="color:#4A5061; border-width:3px"></x-connector>
+<x-connector x1="288" y1="660" x2="288" y2="710" head="none" style="color:#2F5D9E; border-width:3px"></x-connector>
+<x-connector x1="568" y1="660" x2="568" y2="710" head="none" style="color:#2F5D9E; border-width:3px"></x-connector>
+<x-connector x1="848" y1="660" x2="848" y2="710" head="none" style="color:#2F5D9E; border-width:3px"></x-connector>
+<x-connector x1="288" y1="710" x2="848" y2="710" head="none" style="color:#2F5D9E; border-width:3px"></x-connector>
+<x-connector x1="568" y1="710" x2="568" y2="760" style="color:#2F5D9E; border-width:3px"></x-connector>
+<div style="position:absolute; left:408px; top:760px; width:320px; height:90px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:4px; background:#DCE6F3; border:2px solid #2F5D9E; border-radius:16px; padding:0px 12px"><p style="font-size:28px; font-weight:600; text-align:center; color:#14171F">Síntesis</p></div>
+<div style="position:absolute; left:1168px; top:300px; width:624px; display:flex; flex-direction:column; gap:28px">
+<div style="display:flex; flex-direction:column; gap:8px"><p style="font-size:24px; font-weight:600; letter-spacing:2px; text-transform:uppercase; color:#B5541C">Cómo funciona</p><p style="font-size:28px; line-height:1.4; color:#1B1F2A">Un orquestador divide la tarea en subtareas que no conoce de antemano, las delega y une los resultados.</p></div>
+<div style="display:flex; flex-direction:column; gap:8px"><p style="font-size:24px; font-weight:600; letter-spacing:2px; text-transform:uppercase; color:#B5541C">Úsalo cuando</p><p style="font-size:28px; line-height:1.4; color:#1B1F2A">No puedes predecir los pasos: dependen de la entrada.</p></div>
+<div style="display:flex; flex-direction:column; gap:8px; background:#F7D9C4; border-radius:12px; padding:24px"><p style="font-size:24px; font-weight:600; letter-spacing:2px; text-transform:uppercase; color:#A34A17">En tu fábrica</p><p style="font-size:28px; line-height:1.4; color:#1B1F2A">El triage decide a quién mandar cada falla; Claude Code lanza subagentes para explorar.</p></div>
+</div>
+<p style="position:absolute; left:128px; bottom:64px; width:1664px; font-size:24px; color:#6B7080">Sesión 2 · Patrones de flujo</p>
+<aside>Orquestador y trabajadores se parece a la paralelización, pero con una diferencia clave: las subtareas no están fijas en el código. El orquestador, que es un modelo, decide en el momento cuántas hay y a quién mandarlas, y al final sintetiza los resultados. Úsalo cuando los pasos dependen de la entrada; por ejemplo, cuántos archivos hay que tocar depende de la historia. En la fábrica aparece en dos lugares: el triage de la sesión 4 decide qué agente corrige cada falla, y Claude Code, por dentro, lanza subagentes para explorar el código. Riesgo: es más difícil predecir costo y tiempo, así que siempre van límites de turnos y de presupuesto.</aside>
+</section>

@@ -1,0 +1,24 @@
+<section id="p-reflexion" data-transition="fade" style="background:#F6F5F0; color:#1B1F2A; font-family:'IBM Plex Sans', Arial, sans-serif; padding:128px 128px 160px; display:flex; flex-direction:column; gap:48px">
+<div style="display:flex; flex-direction:column; gap:16px">
+<p style="font-size:24px; font-weight:600; letter-spacing:3px; text-transform:uppercase; color:#B5541C">Patrón de razonamiento · 3 de 3</p>
+<h2 style="font-family:'Space Grotesk', Arial, sans-serif; font-size:64px; font-weight:600; line-height:1.1; color:#14171F">Reflexión: revisar y corregir</h2>
+</div>
+<div style="position:absolute; left:128px; top:420px; width:240px; height:110px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:4px; background:#F7D9C4; border:2px solid #B5541C; border-radius:16px"><p style="font-size:28px; font-weight:600; text-align:center; color:#14171F">Generar</p><p style="font-size:24px; text-align:center; color:#4A5061">el agente</p></div>
+<div style="position:absolute; left:448px; top:420px; width:240px; height:110px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:4px; background:#DCE6F3; border:2px solid #2F5D9E; border-radius:16px"><p style="font-size:28px; font-weight:600; text-align:center; color:#14171F">Revisar</p><p style="font-size:24px; text-align:center; color:#4A5061">reglas en código</p></div>
+<div style="position:absolute; left:768px; top:420px; width:240px; height:110px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:4px; background:#FDFCF9; border:2px solid #4A5061; border-radius:16px"><p style="font-size:28px; font-weight:600; text-align:center; color:#14171F">Entregar</p><p style="font-size:24px; text-align:center; color:#4A5061">artefacto válido</p></div>
+<x-connector x1="368" y1="475" x2="448" y2="475" style="color:#4A5061; border-width:3px"></x-connector>
+<x-connector x1="688" y1="475" x2="768" y2="475" style="color:#2F5D9E; border-width:3px"></x-connector>
+<x-connector x1="568" y1="530" x2="568" y2="620" head="none" style="color:#B5541C; border-width:3px"></x-connector>
+<x-connector x1="568" y1="620" x2="248" y2="620" head="none" style="color:#B5541C; border-width:3px"></x-connector>
+<x-connector x1="248" y1="620" x2="248" y2="530" style="color:#B5541C; border-width:3px"></x-connector>
+<p style="position:absolute; left:700px; top:425px; width:60px; font-size:24px; text-align:center; color:#2F5D9E">ok</p>
+<p style="position:absolute; left:264px; top:640px; width:600px; font-size:24px; color:#B5541C">los problemas regresan · máximo 2 intentos</p>
+<p style="position:absolute; left:128px; top:720px; width:880px; font-size:24px; line-height:1.4; color:#1B1F2A; background:#ECEAE2; border-radius:12px; padding:16px 24px; font-family:'JetBrains Mono', monospace">«El escenario 2 no tiene 'Entonces'.» → el agente corrige</p>
+<div style="position:absolute; left:1168px; top:300px; width:624px; display:flex; flex-direction:column; gap:28px">
+<div style="display:flex; flex-direction:column; gap:8px"><p style="font-size:24px; font-weight:600; letter-spacing:2px; text-transform:uppercase; color:#B5541C">Cómo funciona</p><p style="font-size:28px; line-height:1.4; color:#1B1F2A">Se revisa el resultado contra criterios; los problemas regresan al agente para que corrija.</p></div>
+<div style="display:flex; flex-direction:column; gap:8px"><p style="font-size:24px; font-weight:600; letter-spacing:2px; text-transform:uppercase; color:#B5541C">Úsalo cuando</p><p style="font-size:28px; line-height:1.4; color:#1B1F2A">Hay criterios verificables y un error cuesta más que una llamada extra.</p></div>
+<div style="display:flex; flex-direction:column; gap:8px; background:#F7D9C4; border-radius:12px; padding:24px"><p style="font-size:24px; font-weight:600; letter-spacing:2px; text-transform:uppercase; color:#A34A17">En tu fábrica</p><p style="font-size:28px; line-height:1.4; color:#1B1F2A">validar_gherkin y validar_plan revisan al analista y al diseñador.</p></div>
+</div>
+<p style="position:absolute; left:128px; bottom:64px; width:1664px; font-size:24px; color:#6B7080">Sesión 1 · Patrones de razonamiento</p>
+<aside>Reflexión: el resultado se revisa contra criterios y, si hay problemas, regresa al agente para que corrija, con un límite de intentos. El revisor puede ser el mismo modelo, otro modelo o código. En la fábrica preferimos código siempre que las reglas sean verificables: validar_gherkin comprueba que cada escenario tenga Dado, Cuando y Entonces, y validar_plan que cada escenario tenga al menos un caso de prueba. El mensaje del validador se agrega a la tarea y el agente lo corrige en el siguiente intento.</aside>
+</section>

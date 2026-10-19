@@ -1,0 +1,28 @@
+<section id="s2-pasos" data-transition="fade" style="background:#ECEAE2; color:#1B1F2A; font-family:'IBM Plex Sans', Arial, sans-serif; padding:128px 128px 160px; display:flex; flex-direction:column; gap:48px">
+<div style="display:flex; flex-direction:column; gap:16px">
+<p style="font-size:24px; font-weight:600; letter-spacing:3px; text-transform:uppercase; color:#A34A17">Lab 2 · 55 min · individual</p>
+<h2 style="font-family:'Space Grotesk', Arial, sans-serif; font-size:64px; font-weight:600; line-height:1.1; color:#14171F">Tu fábrica genera su primera app</h2>
+</div>
+<div style="display:flex; gap:32px">
+<div style="flex:1; display:flex; flex-direction:column; gap:16px; background:#F6F5F0; border:1px solid #C9C5B8; border-radius:16px; padding:36px">
+<p style="font-size:24px; font-weight:600; letter-spacing:2px; text-transform:uppercase; color:#A34A17">2A · 10 min</p>
+<h3 style="font-family:'Space Grotesk', Arial, sans-serif; font-size:36px; font-weight:600; line-height:1.2; color:#14171F">Leer el grafo</h3>
+<p style="font-size:26px; line-height:1.4; color:#4A5061">Dibújalo en papel y compáralo con draw_mermaid().</p>
+</div>
+<div style="flex:1; display:flex; flex-direction:column; gap:16px; background:#F6F5F0; border:2px solid #A34A17; border-radius:16px; padding:36px">
+<p style="font-size:24px; font-weight:600; letter-spacing:2px; text-transform:uppercase; color:#A34A17">2B · 25 min</p>
+<h3 style="font-family:'Space Grotesk', Arial, sans-serif; font-size:36px; font-weight:600; line-height:1.2; color:#14171F">Ejecutar HU-01</h3>
+<p style="font-size:26px; line-height:1.4; color:#4A5061">Rechaza el primer plan con un comentario concreto; aprueba el segundo.</p>
+</div>
+<div style="flex:1; display:flex; flex-direction:column; gap:16px; background:#F6F5F0; border:1px solid #C9C5B8; border-radius:16px; padding:36px">
+<p style="font-size:24px; font-weight:600; letter-spacing:2px; text-transform:uppercase; color:#A34A17">2C · 20 min</p>
+<h3 style="font-family:'Space Grotesk', Arial, sans-serif; font-size:36px; font-weight:600; line-height:1.2; color:#14171F">Revisar la app</h3>
+<p style="font-size:26px; line-height:1.4; color:#4A5061">Levántala a mano y marca qué criterios cumple.</p>
+</div>
+</div>
+<div style="background:#14171F; border-radius:16px; padding:28px 40px">
+<p style="font-family:'JetBrains Mono', monospace; font-size:24px; line-height:1.5; color:#E6E3D8">cd app/backend &amp;&amp; python -m uvicorn main:app --reload --port 8000<br>cd app/frontend &amp;&amp; npm run dev&#160;&#160;&#160;&#160;&#160;&#160;&#160;<span style="color:#9AA0AE"># http://localhost:5173</span></p>
+</div>
+<p style="position:absolute; left:128px; bottom:64px; width:1664px; font-size:24px; color:#5E6372">Regla: si la app tiene un error, se corrige al agente y se vuelve a ejecutar · nunca a mano</p>
+<aside>2A: imprimir el grafo con construir_grafo().get_graph().draw_mermaid(). 2B: un buen comentario de rechazo es concreto, por ejemplo "guarda el correo en minúsculas y valida el formato en el backend"; comprobar que el segundo plan lo incorpora. Mientras Claude Code construye, leer flujos/verificacion.py. Punto de control: la bitácora dice app LISTA. 2C: registrar un empleado, repetir el correo en mayúsculas, probar un correo que no sea @empresa.com, revisar /docs e inspeccionar los data-testid. Entregable: app/ y notas_s2.md con el comentario de rechazo, la tabla de criterios cumplidos y el costo. Errores frecuentes: Claude Code no encontrado en el PATH, tope de presupuesto alcanzado, puerto 8000 ocupado.</aside>
+</section>

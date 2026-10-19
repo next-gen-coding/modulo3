@@ -1,0 +1,24 @@
+<section id="reflexion-idea" data-transition="fade" style="background:#F6F5F0; color:#1B1F2A; font-family:'IBM Plex Sans', Arial, sans-serif; padding:128px 128px 160px; display:flex; flex-direction:column; gap:48px">
+<div style="display:flex; flex-direction:column; gap:16px">
+<p style="font-size:24px; font-weight:600; letter-spacing:3px; text-transform:uppercase; color:#B5541C">Patrón de razonamiento · la idea</p>
+<h2 style="font-family:'Space Grotesk', Arial, sans-serif; font-size:64px; font-weight:600; line-height:1.1; color:#14171F">Reflexión: revisar y corregir el propio trabajo</h2>
+</div>
+<div style="position:absolute; left:128px; top:300px; width:760px; display:flex; flex-direction:column; gap:24px">
+<div style="display:flex; flex-direction:column; gap:8px; background:#FDFCF9; border:2px dashed #4A5061; border-radius:16px; padding:20px 40px"><p style="font-size:28px; font-weight:600; color:#14171F">Una sola pasada</p><p style="font-size:26px; line-height:1.4; color:#4A5061">Entrega el primer borrador aunque tenga errores que el propio modelo podría detectar.</p></div>
+<div style="display:flex; flex-direction:column; gap:8px; background:#FDFCF9; border:2px dashed #4A5061; border-radius:16px; padding:20px 40px"><p style="font-size:28px; font-weight:600; color:#14171F">Reintentar a ciegas</p><p style="font-size:26px; line-height:1.4; color:#4A5061">Si falla, lo intenta otra vez sin saber qué estuvo mal, y repite el error.</p></div>
+<div style="display:flex; flex-direction:column; gap:8px; background:#F7D9C4; border:2px solid #B5541C; border-radius:16px; padding:20px 40px"><p style="font-size:28px; font-weight:600; color:#14171F">Reflexión</p><p style="font-size:26px; line-height:1.4; color:#1B1F2A">Genera, critica contra criterios explícitos y usa esa crítica como contexto del siguiente intento, con un tope.</p></div>
+</div>
+<div style="position:absolute; left:960px; top:300px; width:832px; display:flex; flex-direction:column; gap:28px">
+<div style="display:flex; flex-direction:column; gap:14px; background:#14171F; border-radius:16px; padding:28px 32px">
+<p style="font-size:24px; line-height:1.4; color:#9AA0AE">Tarea: criterios de aceptación en Gherkin para HU-01</p>
+<p style="font-size:24px; line-height:1.4; color:#E6E3D8"><span style="font-weight:600; color:#8DB7F0">Intento 1 ·</span> dos escenarios: alta exitosa y correo duplicado</p>
+<p style="font-size:24px; line-height:1.4; color:#E6E3D8"><span style="font-weight:600; color:#F0935A">Crítica ·</span> se necesitan 3 escenarios; falta el del correo no corporativo</p>
+<p style="font-size:24px; line-height:1.4; color:#E6E3D8"><span style="font-weight:600; color:#8DB7F0">Intento 2 ·</span> agrega el escenario «Usa el correo corporativo @empresa.com»</p>
+<p style="font-size:24px; line-height:1.4; color:#E6E3D8"><span style="font-weight:600; color:#F0935A">Crítica ·</span> sin problemas</p>
+<p style="font-size:24px; line-height:1.4; color:#E6E3D8"><span style="font-weight:600; color:#E6E3D8">Resultado ·</span> criterios aprobados en 2 de 3 intentos posibles</p>
+</div>
+<p style="font-size:24px; line-height:1.4; color:#4A5061">La crítica es más confiable cuando la hace código o un criterio verificable que cuando la hace el mismo modelo opinando.</p>
+</div>
+<p style="position:absolute; left:128px; bottom:64px; width:1664px; font-size:24px; color:#6B7080">Sesión 1 · Patrones de razonamiento · Shinn et al., «Reflexion» (2023) · Madaan et al., «Self-Refine» (2023)</p>
+<aside>3 minutos, antes del diagrama. La reflexión agrega memoria de los errores: el agente genera, una crítica revisa el resultado contra criterios explícitos, y esa crítica se agrega al siguiente intento. La diferencia con reintentar es justamente esa: el segundo intento sabe qué estuvo mal. El artículo original, Reflexion de Shinn y colegas, guarda las lecciones en lenguaje natural; Self-Refine hace lo mismo dentro de una sola tarea. Dos reglas prácticas: la crítica debe ser lo más objetiva posible, idealmente código, como validar_gherkin, y siempre hay un tope de intentos; si se agota, decide una persona. Pregunta para el grupo: si el mismo modelo genera y se critica, ¿qué riesgo hay? Que apruebe su propio trabajo; por eso, en la sesión 2, veremos el evaluador independiente.</aside>
+</section>

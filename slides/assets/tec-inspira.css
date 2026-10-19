@@ -1,0 +1,566 @@
+/* ============================================================
+   TEC EDITORIAL · Sistema de diseño para decks INSPIRA
+   Tecnológico de Monterrey · Educación Continua
+   ------------------------------------------------------------
+   Reutilizable en cualquier módulo. Para crear un deck nuevo,
+   parte de _template.html y consulta GUIA_DISENO.md.
+   ============================================================ */
+
+:root {
+  /* --- Papel e ink ---
+     El papel es deliberadamente apagado (85% de la luz de un blanco casi
+     puro): en sesiones de 3 horas por pantalla compartida, el fondo muy
+     claro provoca halación —el brillo invade los trazos oscuros— y fatiga
+     la vista. Todos los colores siguen cumpliendo WCAG AA sobre este tono. */
+  --paper:    #EDE8DC;   /* fondo */
+  --paper-2:  #E3DCCB;   /* relleno de paneles y tarjetas */
+  --paper-3:  #E8E2D5;   /* fondo de código */
+  --ink:      #16181D;   /* texto principal */
+  --ink-2:    #585E6F;   /* texto secundario */
+  --rule:     #C6BFAE;   /* filetes */
+  --rule-2:   #DBD4C4;   /* filetes muy tenues */
+
+  /* --- Azul institucional (muestreado del logotipo) --- */
+  --tec:      #0033A0;
+  --tec-deep: #001F63;
+  --tec-tint: #DCE3F2;
+
+  /* --- Momentos INSPIRA: paleta editorial, legible sobre papel --- */
+  --introduce: #AC321E;  /* terracota  · el enganche */
+  --nutre:     #0033A0;  /* azul Tec   · el contenido */
+  --significa: #6B3FA0;  /* violeta    · el sentido */
+  --practica:  #1B6A43;  /* verde      · las manos */
+  --integra:   #7C560C;  /* ocre       · la consolidación */
+  --reta:      #984514;  /* naranja    · el desafío */
+  --acompana:  #0E6871;  /* verde azul · el respaldo */
+
+  /* Peso del texto de cuerpo. 500 en vez de 400: en proyección y pantalla
+     compartida el trazo delgado se "adelgaza" aún más y cuesta leerlo. */
+  --peso-texto: 500;
+
+  /* --- Alias de compatibilidad (no borrar: los decks los usan) --- */
+  --bg: var(--paper);
+  --bg-alt: var(--paper-2);
+  --text: var(--ink);
+  --muted: var(--ink-2);
+  --accent: var(--tec);
+  --code-bg: var(--paper-3);
+
+  /* --- Tipografía --- */
+  --serif: Charter, "Bitstream Charter", "Iowan Old Style", "Palatino Linotype",
+           Palatino, "Book Antiqua", Georgia, serif;
+  --sans: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --mono: "SF Mono", "JetBrains Mono", "Cascadia Code", "Fira Code", Consolas, monospace;
+
+  font-size: clamp(14px, 1.95vh, 23px);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--sans);
+  /* Sin -webkit-font-smoothing: antialiased. En macOS ese ajuste adelgaza
+     los trazos; el suavizado por defecto rinde un texto más sólido. */
+}
+
+/* ============================================================
+   MODO OSCURO (tecla D)
+   Para aulas a oscuras o monitores con brillo alto. Solo remapea
+   las variables: toda la composición funciona igual.
+   ============================================================ */
+
+body.oscuro {
+  --paper:    #12151C;
+  --paper-2:  #1A1F2A;
+  --paper-3:  #171B24;
+  --ink:      #E9ECF2;
+  --ink-2:    #A2ABBF;
+  --rule:     #2E3644;
+  --rule-2:   #232A36;
+
+  --tec:      #4C85FF;
+  --tec-deep: #A8C4FF;
+  --tec-tint: #1B2436;
+
+  --introduce: #E0624E;
+  --nutre:     #4C85FF;
+  --significa: #9F7ACB;
+  --practica:  #289D63;
+  --integra:   #B98012;
+  --reta:      #E1651E;
+  --acompana:  #1598A5;
+}
+body.oscuro .kw  { color: #DB5AA2; }
+body.oscuro .fn  { color: #158CEF; }
+body.oscuro .str { color: #289D63; }
+body.oscuro .com { color: #838999; }
+body.oscuro pre  { color: var(--ink); }
+body.oscuro .bar { color: #0A0D13; }
+body.oscuro .notes { background: #1A1F2A; color: #D3D9E4; }
+body.oscuro .notes strong { color: #A8C4FF; }
+/* El logotipo del pie va en blanco cuando el fondo es oscuro */
+body.oscuro #deck-chrome img { filter: brightness(0) invert(1); opacity: .85; }
+
+/* ============================================================
+   ESTRUCTURA DE SLIDE
+   Banda superior (momento + tiempo) y banda inferior (logo +
+   folio) delimitadas por filetes. El contenido vive en medio.
+   ============================================================ */
+
+.slide {
+  display: none;
+  width: 100vw; height: 100vh;
+  padding: 11vh 7vw 10vh;
+  flex-direction: column; justify-content: center;
+  position: relative; overflow: hidden;
+}
+.slide.active { display: flex; }
+
+/* Filete bajo la banda superior */
+.slide::before {
+  content: ''; position: absolute;
+  left: 7vw; right: 7vw; top: 7.6vh;
+  height: 1px; background: var(--rule);
+}
+/* Filete sobre la banda inferior */
+.slide::after {
+  content: ''; position: absolute;
+  left: 7vw; right: 7vw; bottom: 6.4vh;
+  height: 1px; background: var(--rule-2);
+}
+
+/* ============================================================
+   TIPOGRAFÍA
+   ============================================================ */
+
+h1, h2, h3 { font-family: var(--serif); font-weight: 600; letter-spacing: -0.015em; }
+
+h1 { font-size: 3.5rem; line-height: 1.08; margin-bottom: 1.1rem; color: var(--ink); }
+h2 { font-size: 2.45rem; line-height: 1.14; margin-bottom: 1.3rem; color: var(--ink); }
+h3 {
+  font-family: var(--mono); font-size: .82rem; font-weight: 700;
+  text-transform: uppercase; letter-spacing: .16em;
+  color: var(--tec); margin-bottom: .7rem;
+}
+
+/* Filete corto de acento sobre los títulos de contenido */
+.slide > h2:first-of-type::before {
+  content: ''; display: block;
+  width: 3.2rem; height: 3px; background: var(--tec);
+  margin-bottom: 1rem;
+}
+/* …y que siga la alineación del título cuando está centrado */
+.slide > h2[style*="center"]::before { margin-left: auto; margin-right: auto; }
+
+p, li { font-size: 1.2rem; line-height: 1.6; font-weight: var(--peso-texto); }
+p { max-width: 62ch; }
+strong { color: var(--tec); font-weight: 700; }
+em { font-style: italic; }
+.muted { color: var(--ink-2); }
+.big { font-size: 1.62rem; line-height: 1.45; }
+.huge { font-family: var(--serif); font-size: 2.7rem; line-height: 1.25; font-weight: 600; }
+
+/* Listas: marcador tipográfico en vez de viñeta genérica */
+ul { list-style: none; }
+ul > li {
+  position: relative; padding-left: 1.5rem; margin: .55rem 0;
+}
+ul > li::before {
+  content: ''; position: absolute; left: 0; top: .72em;
+  width: .55rem; height: 1px; background: var(--tec);
+}
+ol { list-style: none; counter-reset: n; }
+ol > li {
+  position: relative; padding-left: 2.6rem; margin: .55rem 0;
+  counter-increment: n;
+}
+ol > li::before {
+  content: counter(n, decimal-leading-zero);
+  position: absolute; left: 0; top: .12em;
+  font-family: var(--mono); font-size: .95rem; font-weight: 700;
+  color: var(--tec);
+}
+
+/* ============================================================
+   BANDA SUPERIOR · momento INSPIRA y tiempo
+   ============================================================ */
+
+.badge {
+  position: absolute; top: 4.6vh; left: 7vw;
+  display: flex; align-items: center; gap: .55rem;
+  font-family: var(--mono); font-size: .78rem; font-weight: 700;
+  letter-spacing: .19em; text-transform: uppercase;
+  background: none; padding: 0; border-radius: 0;
+  color: var(--ink-2);
+}
+.badge::before {
+  content: ''; width: .62rem; height: .62rem; border-radius: 50%;
+  background: currentColor; flex: none;
+}
+.badge.introduce { color: var(--introduce); }
+.badge.nutre     { color: var(--nutre); }
+.badge.significa { color: var(--significa); }
+.badge.practica  { color: var(--practica); }
+.badge.integra   { color: var(--integra); }
+.badge.reta      { color: var(--reta); }
+.badge.acompana  { color: var(--acompana); }
+
+.timebox {
+  position: absolute; top: 4.6vh; right: 7vw;
+  font-family: var(--mono); font-size: .78rem; letter-spacing: .1em;
+  color: var(--ink-2);
+}
+
+/* ============================================================
+   PANELES, TARJETAS Y TABLAS
+   Filetes y reglas laterales; nada de cajas redondeadas.
+   ============================================================ */
+
+.panel {
+  background: var(--paper-2);
+  border: none; border-left: 3px solid var(--tec);
+  border-radius: 0; padding: 1.15rem 1.5rem; margin: .9rem 0;
+}
+.panel p { max-width: none; }
+.panel.q {
+  border-left-color: var(--significa);
+  background: transparent;
+  border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule);
+  padding: 1.3rem 1.5rem;
+}
+.panel.q p { font-family: var(--serif); font-size: 1.55rem; line-height: 1.35; }
+.panel.q strong { color: var(--significa); }
+
+.cols  { display: grid; grid-template-columns: 1fr 1fr; gap: 2.4rem; align-items: start; }
+.cols3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.6rem; align-items: stretch; }
+
+.card {
+  background: transparent;
+  border: 1px solid var(--rule);
+  border-radius: 0; padding: 1.15rem 1.3rem;
+}
+.card h3 { margin-bottom: .55rem; }
+
+table { border-collapse: collapse; width: 100%; margin-top: .7rem; }
+th, td {
+  padding: .62rem .9rem; text-align: left; font-size: 1.06rem;
+  font-weight: var(--peso-texto);
+  border-bottom: 1px solid var(--rule-2);
+}
+thead th, th {
+  font-family: var(--mono); font-size: .74rem; font-weight: 700;
+  text-transform: uppercase; letter-spacing: .13em;
+  color: var(--tec); border-bottom: 1.5px solid var(--tec);
+}
+tbody tr:last-child td { border-bottom: none; }
+
+/* ============================================================
+   CÓDIGO
+   ============================================================ */
+
+code, pre { font-family: var(--mono); }
+pre {
+  background: var(--paper-3);
+  border: 1px solid var(--rule-2); border-left: 3px solid var(--rule);
+  border-radius: 0; padding: 1.1rem 1.35rem;
+  font-size: 1rem; line-height: 1.55; overflow-x: auto;
+  color: #24272E;
+}
+.kw  { color: #A3246B; }   /* palabras clave  */
+.fn  { color: #0B5FA5; }   /* funciones       */
+.str { color: #1F7A4D; }   /* cadenas         */
+.com { color: #656A7A; font-style: italic; }  /* comentarios */
+
+/* ============================================================
+   PORTADA Y APERTURAS DE BLOQUE
+   ============================================================ */
+
+.cover { justify-content: center; }
+.cover::before, .cover::after { display: none; }
+.cover .kicker {
+  font-family: var(--mono); color: var(--tec);
+  text-transform: uppercase; letter-spacing: .24em;
+  font-weight: 700; font-size: .84rem; margin-bottom: 1.4rem;
+}
+.cover h1 { font-size: 4.1rem; max-width: 20ch; }
+.cover h1::after {
+  content: ''; display: block;
+  width: 5.5rem; height: 4px; background: var(--tec);
+  margin-top: 1.5rem;
+}
+.kicker {
+  font-family: var(--mono); color: var(--tec);
+  text-transform: uppercase; letter-spacing: .2em;
+  font-weight: 700; font-size: .8rem;
+}
+
+/* ============================================================
+   PORTADA DE MARCA (.slide.cover.hero)
+   Retoma el lenguaje del banner del certificado: fondo oscuro,
+   descriptor "Certificado" sobre el título y logotipo en blanco.
+   Se usa solo en la slide 1 de cada sesión.
+   ============================================================ */
+
+.slide.hero {
+  background:
+    radial-gradient(120% 90% at 78% 12%, rgba(0,51,160,.42) 0%, rgba(0,51,160,0) 60%),
+    linear-gradient(155deg, #0B1220 0%, #101A2E 45%, #0A0F1A 100%);
+  color: #fff;
+}
+.slide.hero::before, .slide.hero::after { display: none; }
+
+.slide.hero .eyebrow {
+  font-family: var(--sans); font-size: 1.5rem; font-weight: 300;
+  color: #DDE4F2; letter-spacing: .01em; margin-bottom: .35rem;
+}
+/* Nombre oficial del programa: el titular, como en el banner */
+.slide.hero h1.programa {
+  font-family: var(--sans);
+  font-size: 2.5rem; font-weight: 700; letter-spacing: -0.02em;
+  line-height: 1.15; color: #fff; max-width: 32ch;
+  margin-bottom: 0;
+}
+.slide.hero h1.programa::after {
+  content: ''; display: block;
+  width: 3.4rem; height: 3px; background: #fff;
+  margin: 1.5rem 0 1.4rem; opacity: .9;
+}
+/* Título de la sesión: segunda línea de la jerarquía */
+.slide.hero h2.sesion {
+  font-family: var(--serif); font-weight: 600;
+  font-size: 2.15rem; line-height: 1.2; color: #fff;
+  margin-bottom: .55rem;
+}
+.slide.hero h2.sesion::before { display: none; }
+.slide.hero .kicker { margin-bottom: .9rem; }
+.slide.hero .kicker { color: #7FA8F0; }
+.slide.hero p { color: #C6D0E4; }
+.slide.hero .big { color: #DDE4F2; }
+.slide.hero .muted { color: #96A2B8; }
+.slide.hero strong { color: #fff; }
+
+/* El badge y la marca de tiempo se aclaran sobre el fondo oscuro */
+.slide.hero .badge { color: #E8ECF5; }
+.slide.hero .timebox { color: #96A2B8; }
+
+/* Cromo inferior en versión clara mientras la portada está activa */
+body.hero-activo #deck-chrome .deck-label { color: #96A2B8; border-left-color: #2A3550; }
+body.hero-activo #counter { color: #96A2B8; }
+body.hero-activo #progress { background: #7FA8F0; }
+
+/* ============================================================
+   DIAGRAMAS (compartidos por todos los módulos)
+   ============================================================ */
+
+/* Cadena horizontal de cajas */
+.flow { display: flex; align-items: center; justify-content: center; gap: .7rem; flex-wrap: wrap; margin: 1.1rem 0; }
+/* Pila vertical de filas */
+.flowv { display: flex; flex-direction: column; gap: .6rem; margin-top: .5rem; }
+.frow  { display: grid; grid-template-columns: 1fr 3.2rem 1fr; gap: .9rem; align-items: center; }
+
+.fbox {
+  background: var(--paper-2); border: 1px solid var(--rule);
+  border-top: 3px solid var(--tec); border-radius: 0;
+  padding: .8rem 1.1rem; text-align: center;
+  font-size: 1.02rem; line-height: 1.38;
+}
+.fbox small { display: block; color: var(--ink-2); font-size: .84rem; margin-top: .25rem; }
+.fbox code  { font-size: .93rem; color: var(--tec-deep); }
+.fbox .tag {
+  display: inline-block; font-family: var(--mono);
+  font-size: .68rem; font-weight: 700; letter-spacing: .12em;
+  text-transform: uppercase; padding: 0; border-radius: 0;
+  background: none; color: var(--tec); margin-bottom: .35rem;
+}
+.fbox.env { border-top-color: var(--practica); }
+.fbox.env .tag { color: var(--practica); }
+.fbox.api { border-top-color: var(--significa); }
+.fbox.api .tag { color: var(--significa); }
+
+.farrow { text-align: center; color: var(--tec); font-size: 1.6rem; font-weight: 400; }
+.fhead {
+  text-align: center; font-family: var(--mono); font-weight: 700;
+  color: var(--tec); text-transform: uppercase;
+  letter-spacing: .14em; font-size: .78rem;
+}
+
+/* Ciclo de nodos */
+.cycle { display: grid; grid-template-columns: 1fr auto 1fr auto 1fr; gap: .7rem; align-items: center; margin: 1.1rem 0; }
+.cnode {
+  background: transparent; border: 1px solid var(--tec);
+  border-radius: 0; padding: 1rem 1.2rem; text-align: center;
+  font-family: var(--serif); font-size: 1.3rem; font-weight: 600; color: var(--tec-deep);
+}
+
+/* Capas apiladas */
+.layers { display: flex; flex-direction: column; gap: .55rem; }
+.layer {
+  border-radius: 0; padding: .75rem 1.2rem; font-size: 1.12rem; font-weight: 600;
+  background: var(--paper-2); border-left: 4px solid var(--tec);
+}
+.layer small { display: block; font-weight: 400; color: var(--ink-2); font-size: .93rem; margin-top: .15rem; }
+.arrowdown { text-align: center; color: var(--ink-2); font-size: 1.1rem; margin: .1rem 0; }
+
+/* Escalera de decisión */
+.stairs { display: flex; align-items: flex-end; gap: .55rem; margin-top: 1.1rem; }
+.stair {
+  flex: 1; background: var(--paper-2); border-radius: 0;
+  border-top: 4px solid var(--tec); padding: .65rem .75rem; text-align: center;
+}
+.stair b { display: block; font-size: .98rem; }
+.stair small { color: var(--ink-2); font-size: .8rem; line-height: 1.35; display: block; margin-top: .3rem; }
+
+/* Fichas de token */
+.tokchip {
+  display: inline-block; background: var(--paper-3);
+  border: 1px solid var(--rule); border-radius: 0;
+  padding: .25rem .6rem; margin: .16rem;
+  font-family: var(--mono); font-size: .95rem;
+}
+
+/* Barras comparativas */
+.barwrap { background: var(--paper-2); border-radius: 0; overflow: hidden; margin: .32rem 0; }
+.bar {
+  height: 1.5rem; background: var(--tec); border-radius: 0;
+  display: flex; align-items: center; padding: 0 .65rem;
+  font-family: var(--mono); font-size: .84rem; color: #fff; font-weight: 600; white-space: nowrap;
+  /* Nunca más angosta que su etiqueta: si el valor es diminuto, la barra
+     crece lo justo para que el texto siga siendo legible. */
+  min-width: max-content;
+}
+
+/* Cuenta regresiva de descanso */
+.countdown {
+  font-family: var(--mono); font-size: 5.5rem; font-weight: 700;
+  color: var(--acompana); text-align: center; margin: 1.4rem 0;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ============================================================
+   CROMO FIJO · lo inyecta deck.js
+   ============================================================ */
+
+#progress {
+  position: fixed; top: 0; left: 0; height: 3px;
+  background: var(--tec); width: 0; z-index: 60; transition: width .25s ease;
+}
+#deck-chrome {
+  position: fixed; left: 7vw; right: 7vw; bottom: 2.6vh;
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 1rem; z-index: 55; pointer-events: none;
+}
+#deck-chrome .brand { display: flex; align-items: center; gap: .9rem; }
+#deck-chrome img { height: 3.1vh; width: auto; display: block; }
+#deck-chrome .deck-label {
+  font-family: var(--mono); font-size: .68rem; letter-spacing: .13em;
+  text-transform: uppercase; color: var(--ink-2);
+  border-left: 1px solid var(--rule); padding-left: .9rem;
+}
+#counter {
+  font-family: var(--mono); font-size: .72rem; letter-spacing: .1em;
+  color: var(--ink-2); font-variant-numeric: tabular-nums;
+}
+/* En portadas se oculta el filete pero el cromo permanece */
+.slide.cover ~ #deck-chrome { opacity: 1; }
+
+/* ============================================================
+   NOTAS DEL ORADOR (tecla N)
+   ============================================================ */
+
+.notes { display: none; }
+body.show-notes .slide.active .notes {
+  display: block;
+  position: fixed; bottom: 0; left: 0; right: 0;
+  background: #FFFDF8; border-top: 2px solid var(--tec);
+  padding: 1.1rem 7vw 1.4rem;
+  font-size: .98rem; line-height: 1.55; color: #2C303A;
+  max-height: 34vh; overflow-y: auto; z-index: 70;
+  box-shadow: 0 -8px 24px rgba(0,0,0,.07);
+}
+body.show-notes .slide.active .notes strong { color: var(--tec-deep); }
+
+/* ============================================================
+   IMPRESIÓN → PDF
+   ============================================================ */
+
+@media print {
+  @page { size: landscape; margin: 0; }
+  body { background: #fff; }
+
+  /* Imprimir siempre en claro, aunque la sesión esté en modo oscuro */
+  body.oscuro {
+    --paper: #fff; --paper-2: #F1EFE9; --paper-3: #F5F3ED;
+    --ink: #16181D; --ink-2: #585E6F;
+    --rule: #C6BFAE; --rule-2: #DBD4C4;
+    --tec: #0033A0; --tec-deep: #001F63;
+    --introduce: #AC321E; --nutre: #0033A0; --significa: #6B3FA0;
+    --practica: #1B6A43; --integra: #7C560C; --reta: #984514; --acompana: #0E6871;
+  }
+  body.oscuro .kw { color: #A3246B; } body.oscuro .fn { color: #0B5FA5; }
+  body.oscuro .str { color: #1B6A43; } body.oscuro .com { color: #595E6C; }
+  body.oscuro pre { color: #24272E; }
+  body.oscuro #deck-chrome img { filter: none; opacity: 1; }
+  .slide {
+    display: flex !important;
+    height: 100vh; page-break-after: always;
+    padding: 9vh 7vw 8vh;
+  }
+  /* Sin página en blanco al final */
+  .slide:last-of-type { page-break-after: auto; }
+  #progress, #counter, .notes { display: none !important; }
+  #deck-chrome { position: absolute; }
+}
+
+/* ============================================================
+   PANTALLAS ANGOSTAS (revisión en laptop pequeña)
+   ============================================================ */
+
+@media (max-width: 900px) {
+  .cols, .cols3, .cycle, .frow { grid-template-columns: 1fr; display: grid; }
+  .stairs { flex-direction: column; align-items: stretch; }
+}
+
+/* ============================================================
+   PASOS DE ANIMACIÓN · los controla deck.js
+   → avanza un paso; al terminar los pasos, avanza de slide.
+   A reproduce los pasos solos, en bucle.
+   ============================================================ */
+
+/* Revelado: oculto hasta su paso */
+.slide [data-step] {
+  transition: opacity .55s ease, transform .55s cubic-bezier(.2,.7,.2,1), clip-path .9s cubic-bezier(.3,.7,.2,1);
+}
+.slide [data-step]:not(.on) { opacity: 0; transform: translateY(10px); pointer-events: none; }
+/* Variantes: sin desplazamiento, emergente y barra que crece */
+.slide [data-step][data-fx="fade"]:not(.on) { transform: none; }
+.slide [data-step][data-fx="pop"]:not(.on) { transform: scale(.6); }
+.slide [data-step][data-fx="grow"] { clip-path: inset(0 0 0 0); }
+.slide [data-step][data-fx="grow"]:not(.on) { opacity: 1; transform: none; clip-path: inset(0 100% 0 0); }
+
+/* Marcado: siempre visible, se enciende en su paso */
+.slide [data-mark] { transition: all .5s ease; }
+
+/* Indicador de pasos junto al folio */
+#pasos { display: flex; gap: .3rem; align-items: center; margin-left: auto; margin-right: .9rem; }
+#pasos i { width: .42rem; height: .42rem; border: 1px solid var(--ink-2); display: block; opacity: .7; }
+#pasos i.lleno { background: var(--tec); border-color: var(--tec); opacity: 1; }
+#pasos b { font-family: var(--mono); font-size: .64rem; letter-spacing: .1em; color: var(--tec); margin-right: .4rem; font-weight: 700; }
+
+@keyframes pulso {
+  0%, 100% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--tec) 45%, transparent); }
+  50%      { box-shadow: 0 0 0 .6rem color-mix(in srgb, var(--tec) 0%, transparent); }
+}
+@keyframes aparece {
+  from { opacity: 0; transform: translateY(-14px) scale(.85); }
+  to   { opacity: 1; transform: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .slide [data-step], .slide [data-mark], .slide [data-mark] * { transition-duration: .01s !important; animation: none !important; }
+}
+@media print {
+  .slide [data-step] { opacity: 1 !important; transform: none !important; clip-path: none !important; }
+  #pasos { display: none !important; }
+}

@@ -1,0 +1,18 @@
+<section id="s1-retos" data-transition="fade" style="background:#ECEAE2; color:#1B1F2A; font-family:'IBM Plex Sans', Arial, sans-serif; padding:128px 128px 160px; display:flex; flex-direction:column; gap:48px">
+<div style="display:flex; flex-direction:column; gap:16px">
+<p style="font-size:24px; font-weight:600; letter-spacing:3px; text-transform:uppercase; color:#A34A17">Lab 1B · Lo que debe salir</p>
+<h2 style="font-family:'Space Grotesk', Arial, sans-serif; font-size:64px; font-weight:600; line-height:1.1; color:#14171F">De la historia a criterios verificables</h2>
+</div>
+<div style="display:grid; grid-template-columns:520px 1fr; gap:48px; align-items:center">
+<div style="display:flex; flex-direction:column; gap:16px; background:#F6F5F0; border:1px solid #C9C5B8; border-radius:16px; padding:36px">
+<p style="font-size:24px; font-weight:600; letter-spacing:2px; text-transform:uppercase; color:#A34A17">HU-01</p>
+<p style="font-size:28px; line-height:1.45; color:#1B1F2A">Como Recursos Humanos, quiero registrar a un empleado con nombre, correo, puesto, departamento y fecha de ingreso.</p>
+<p style="font-size:24px; line-height:1.4; color:#4A5061">Notas: el número de empleado lo asigna el sistema y se muestra al guardar.</p>
+</div>
+<div style="background:#14171F; border-radius:16px; padding:36px 40px">
+<p style="font-family:'JetBrains Mono', monospace; font-size:24px; line-height:1.5; color:#E6E3D8"><span style="color:#9AA0AE"># language: es</span><br><span style="color:#F0935A">Característica:</span> Registrar empleado<br>&#160;&#160;<span style="color:#F0935A">Escenario:</span> Alta con número asignado<br>&#160;&#160;&#160;&#160;Dado que estoy en el alta de empleados<br>&#160;&#160;&#160;&#160;Cuando registro a "Ana López" en Tecnología<br>&#160;&#160;&#160;&#160;Entonces veo su número, como "EMP-0001"<br>&#160;&#160;<span style="color:#F0935A">Escenario:</span> Correo no corporativo<br>&#160;&#160;&#160;&#160;Dado que estoy en el alta de empleados<br>&#160;&#160;&#160;&#160;Cuando uso el correo "ana@gmail.com"<br>&#160;&#160;&#160;&#160;Entonces veo "Usa el correo corporativo<br>&#160;&#160;&#160;&#160;&#160;&#160;@empresa.com"</p>
+</div>
+</div>
+<p style="position:absolute; left:128px; bottom:64px; width:1664px; font-size:24px; color:#5E6372">La regla del correo corporativo viene de contexto/reglas_negocio.md, no de la historia</p>
+<aside>Mostrar este ejemplo antes de que los estudiantes ejecuten el analista. Dos detalles para señalar. Primero, los datos son concretos: un nombre, un departamento, un correo, no "un empleado válido". Segundo, el escenario del correo no corporativo no está en la historia: el analista lo agrega porque leyó las reglas de negocio. Lo mismo debería pasar con el correo duplicado y la fecha de ingreso futura. Eso es lo que pide su prompt: un escenario de error por cada regla que aplique. Si el analista inventa reglas que no están en ningún lado, el estudiante debe ajustar sus instrucciones.</aside>
+</section>

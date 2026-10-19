@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Plantilla — Next-Gen Coding</title>
+
+<!-- Sistema de diseño compartido. No copies el CSS dentro del archivo:
+     si lo enlazas, todos los módulos heredan cualquier mejora. -->
+<link rel="stylesheet" href="assets/tec-inspira.css">
+</head>
+
+<!-- data-deck aparece en el pie, junto al logotipo. Cámbialo por tu módulo/clase. -->
+<body data-deck="Módulo X · Clase N — Título corto">
+
+<!-- ============================================================
+     CATÁLOGO DE SLIDES
+     Copia el bloque que necesites y sustituye el contenido.
+     Cada slide lleva: badge del momento INSPIRA + timebox + notas.
+     ============================================================ -->
+
+
+<!-- ── 1. PORTADA DE MARCA ──────────────────────────────────────
+     Añade la clase "hero": fondo oscuro y logotipo blanco, con la
+     misma jerarquía del banner del certificado (Certificado →
+     nombre del programa → filete → sesión). El cambio de logotipo
+     lo hace deck.js solo. -->
+<section class="slide cover hero">
+  <div class="badge introduce">Introduce</div>
+  <div class="timebox">0:00 · Apertura</div>
+  <p class="eyebrow">Certificado</p>
+  <h1 class="programa">Next-Gen Coding: Desarrollo de Software con IA Generativa (Virtual)</h1>
+  <h2 class="sesion">Título de la sesión</h2>
+  <div class="kicker">Módulo X · Nombre del módulo</div>
+  <p class="big muted">Clase N · Sesión de N horas · Nivel profesional</p>
+  <p class="muted">Subtítulo o promesa de la sesión.</p>
+  <div class="notes">Bienvenida, verificación de audio y pantalla, y qué se llevan hoy.</div>
+</section>
+
+
+<!-- ── 2. APERTURA DE BLOQUE ────────────────────────────────────
+     Reutiliza .cover: sin filetes, título grande. Da ritmo entre bloques. -->
+<section class="slide cover">
+  <div class="badge nutre">Nutre</div>
+  <div class="timebox">0:15 · 20 min</div>
+  <div class="kicker">Bloque X.1</div>
+  <h1>Título del bloque</h1>
+  <p class="big muted">Mini-panorámica: qué se va a ver y por qué importa.</p>
+  <div class="notes">Reparto minuto a minuto del bloque y qué recortar si vas tarde.</div>
+</section>
+
+
+<!-- ── 3. CONTENIDO CON LISTA ───────────────────────────────── -->
+<section class="slide">
+  <div class="badge nutre">Nutre</div>
+  <div class="timebox">0:15 · 20 min</div>
+  <h2>Título del contenido</h2>
+  <ul>
+    <li>Idea principal, en una línea.</li>
+    <li>Segunda idea, sin párrafos largos.</li>
+    <li>Máximo cinco viñetas por slide.</li>
+  </ul>
+  <div class="notes">Qué decir, qué preguntar, cuánto tarda.</div>
+</section>
+
+
+<!-- ── 4. LISTA NUMERADA (temario, pasos) ───────────────────── -->
+<section class="slide">
+  <div class="badge practica">Practica</div>
+  <div class="timebox">1:00 · 15 min</div>
+  <h2>Pasos del laboratorio</h2>
+  <ol>
+    <li>Primer paso, con el tiempo entre paréntesis (3 min).</li>
+    <li>Segundo paso (7 min).</li>
+    <li>Tercer paso (5 min).</li>
+  </ol>
+  <div class="notes">Riesgos del laboratorio y plan B si el grupo se atora.</div>
+</section>
+
+
+<!-- ── 5. DOS COLUMNAS ──────────────────────────────────────── -->
+<section class="slide">
+  <div class="badge nutre">Nutre</div>
+  <div class="timebox">0:35 · 25 min</div>
+  <h2>Antes y después</h2>
+  <div class="cols">
+    <div>
+      <h3>Antes</h3>
+      <pre><span class="com"># prompt vago</span>
+mejora este código</pre>
+    </div>
+    <div>
+      <h3>Después</h3>
+      <pre><span class="com"># prompt estructurado</span>
+<span class="kw">Contexto:</span> API en Flask…
+<span class="kw">Tarea:</span> extrae la validación…</pre>
+    </div>
+  </div>
+  <div class="notes">Contrasta en voz alta el efecto de cada componente.</div>
+</section>
+
+
+<!-- ── 6. TRES TARJETAS ─────────────────────────────────────── -->
+<section class="slide">
+  <div class="badge nutre">Nutre</div>
+  <div class="timebox">0:35 · 25 min</div>
+  <h2>Tres criterios de decisión</h2>
+  <div class="cols3">
+    <div class="card"><h3>Capacidad</h3><p>Qué tan difícil es la tarea.</p></div>
+    <div class="card"><h3>Latencia</h3><p>Cuánto puede esperar el usuario.</p></div>
+    <div class="card"><h3>Costo</h3><p>Tokens por tarea × volumen real.</p></div>
+  </div>
+  <div class="notes">Pide un ejemplo de su trabajo para cada eje.</div>
+</section>
+
+
+<!-- ── 7. TABLA ─────────────────────────────────────────────── -->
+<section class="slide">
+  <div class="badge nutre">Nutre</div>
+  <div class="timebox">1:50 · 15 min</div>
+  <h2>Comparativa</h2>
+  <table>
+    <tr><th>Opción</th><th>Cuándo usarla</th><th>Costo</th></tr>
+    <tr><td><strong>A</strong></td><td>Tareas frecuentes y simples</td><td>Bajo</td></tr>
+    <tr><td><strong>B</strong></td><td>Razonamiento complejo</td><td>Alto</td></tr>
+  </table>
+  <p class="muted">Nota al pie o matiz importante.</p>
+  <div class="notes">No leas la tabla: señala solo la fila que decide.</div>
+</section>
+
+
+<!-- ── 8. CÓDIGO ────────────────────────────────────────────── -->
+<section class="slide">
+  <div class="badge nutre">Nutre</div>
+  <div class="timebox">2:15 · 10 min</div>
+  <h2>Primera llamada a la API</h2>
+<pre><span class="kw">import</span> anthropic
+
+cliente = anthropic.<span class="fn">Anthropic</span>()
+r = cliente.messages.<span class="fn">create</span>(
+    model=<span class="str">"claude-sonnet-5"</span>,
+    max_tokens=<span class="str">1024</span>,
+    messages=[{<span class="str">"role"</span>: <span class="str">"user"</span>, <span class="str">"content"</span>: <span class="str">"Hola"</span>}]
+)  <span class="com"># stateless: el historial lo mandas tú</span></pre>
+  <p class="muted">Idea que el código debe dejar clara.</p>
+  <div class="notes">Marca la línea que importa; el resto es andamiaje.</div>
+</section>
+
+
+<!-- ── 9. SIGNIFICA · PREGUNTA PODEROSA ─────────────────────── -->
+<section class="slide">
+  <div class="badge significa">Significa</div>
+  <div class="timebox">0:35 · 25 min</div>
+  <h2>Aterricemos</h2>
+  <div class="panel q">
+    <p><strong>Pregunta poderosa:</strong> ¿…?</p>
+  </div>
+  <p class="muted">Consigna concreta: 2 minutos, respuesta al chat.</p>
+  <div class="notes">
+    AULA VIRTUAL: respuesta al chat o nube de palabras; salas de 3 si hay tiempo.
+    No respondas tú primero: deja el silencio.
+  </div>
+</section>
+
+
+<!-- ── 10. DIAGRAMA DE FLUJO HORIZONTAL ─────────────────────── -->
+<section class="slide">
+  <div class="badge nutre">Nutre</div>
+  <div class="timebox">0:30 · 30 min</div>
+  <h2>El pipeline</h2>
+  <div class="flow">
+    <div class="fbox">Entrada</div>
+    <span class="farrow">→</span>
+    <div class="fbox">Proceso<small>detalle</small></div>
+    <span class="farrow">→</span>
+    <div class="fbox">Salida</div>
+  </div>
+  <div class="notes">Recorre el diagrama de izquierda a derecha, una parada a la vez.</div>
+</section>
+
+
+<!-- ── 11. DIAGRAMA VERTICAL (protocolo, intercambio) ───────── -->
+<section class="slide">
+  <div class="badge nutre">Nutre</div>
+  <div class="timebox">0:30 · 30 min</div>
+  <h2>El intercambio, mensaje a mensaje</h2>
+  <div class="flowv">
+    <div class="frow">
+      <div class="fbox api"><span class="tag">Modelo</span>Pide usar una herramienta</div>
+      <span class="farrow">→</span>
+      <div class="fbox env"><span class="tag">Entorno</span>La ejecuta y devuelve el resultado</div>
+    </div>
+  </div>
+  <div class="notes">Insiste en quién hace qué: el modelo propone, el entorno ejecuta.</div>
+</section>
+
+
+<!-- ── 12. CAPAS APILADAS ───────────────────────────────────── -->
+<section class="slide">
+  <div class="badge integra">Integra</div>
+  <div class="timebox">2:50 · 5 min</div>
+  <h2>Las capas de la sesión</h2>
+  <div class="layers">
+    <div class="layer">Capa 1 <small>qué resolvió</small></div>
+    <div class="arrowdown">↓</div>
+    <div class="layer">Capa 2 <small>qué resolvió</small></div>
+  </div>
+  <div class="notes">Cierra el arco: qué pueden hacer hoy que no podían al empezar.</div>
+</section>
+
+
+<!-- ── 13. DESCANSO (el reloj corre solo) ───────────────────────
+     data-timer en minutos, en la <section>. -->
+<section class="slide" data-timer="10">
+  <div class="badge acompana">Acompaña</div>
+  <div class="timebox">1:15 · 10 min</div>
+  <h2 style="text-align:center">DESCANSO</h2>
+  <div class="countdown">10:00</div>
+  <p class="muted" style="text-align:center">Con qué volvemos.</p>
+  <div class="notes">Quédate en la sala los primeros 2 minutos: ahí llegan las dudas 1:1.</div>
+</section>
+
+
+<!-- ── 14. RETA (cierre con tarea) ──────────────────────────── -->
+<section class="slide">
+  <div class="badge reta">Reta</div>
+  <div class="timebox">2:55 · 5 min</div>
+  <h2>Tu reto para esta semana</h2>
+  <div class="panel">
+    <p>Enunciado breve del reto, con fecha de entrega y criterio de éxito.</p>
+  </div>
+  <div class="notes">Di la fecha en voz alta y confirma que está en la plataforma.</div>
+</section>
+
+
+<!-- ── 15. ACOMPAÑA (cierre de sesión) ──────────────────────── -->
+<section class="slide">
+  <div class="badge acompana">Acompaña</div>
+  <div class="timebox">3:00 · Cierre</div>
+  <h2>No van solos</h2>
+  <ul>
+    <li>Canal del curso: dudas respondidas en menos de 24 h.</li>
+    <li>Asesoría: viernes 18:00–21:00 y sábado 9:00–11:00.</li>
+  </ul>
+  <div class="notes">Nombra el canal y confirma que todos tienen acceso.</div>
+</section>
+
+
+<!-- El motor de navegación inyecta el logotipo, el folio y la barra
+     de progreso: no hace falta declararlos aquí. -->
+<script src="assets/deck.js"></script>
+</body>
+</html>

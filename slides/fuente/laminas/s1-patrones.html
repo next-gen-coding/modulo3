@@ -1,0 +1,25 @@
+<section id="s1-patrones" data-transition="fade" style="background:#F6F5F0; color:#1B1F2A; font-family:'IBM Plex Sans', Arial, sans-serif; padding:128px 128px 160px; display:flex; flex-direction:column; gap:48px">
+<div style="display:flex; flex-direction:column; gap:16px">
+<p style="font-size:24px; font-weight:600; letter-spacing:3px; text-transform:uppercase; color:#B5541C">1.3 · Salidas estructuradas y verificación</p>
+<h2 style="font-family:'Space Grotesk', Arial, sans-serif; font-size:64px; font-weight:600; line-height:1.1; color:#14171F">El agente propone; el validador decide</h2>
+</div>
+<div style="display:flex; gap:32px">
+<div style="flex:1; display:flex; flex-direction:column; gap:16px; background:#FDFCF9; border:1px solid #DEDBD0; border-radius:16px; padding:40px">
+<h3 style="font-family:'Space Grotesk', Arial, sans-serif; font-size:40px; font-weight:600; line-height:1.2; color:#14171F">Contrato</h3>
+<p style="font-size:26px; line-height:1.4; color:#4A5061">Gherkin para los criterios; JSON con esquema Pydantic para los casos.</p>
+</div>
+<div style="flex:1; display:flex; flex-direction:column; gap:16px; background:#FDFCF9; border:1px solid #DEDBD0; border-radius:16px; padding:40px">
+<h3 style="font-family:'Space Grotesk', Arial, sans-serif; font-size:40px; font-weight:600; line-height:1.2; color:#14171F">Evaluador determinista</h3>
+<p style="font-size:26px; line-height:1.4; color:#4A5061">validar_gherkin y validar_plan: reglas en código, no otro LLM opinando.</p>
+</div>
+<div style="flex:1; display:flex; flex-direction:column; gap:16px; background:#FDFCF9; border:1px solid #DEDBD0; border-radius:16px; padding:40px">
+<h3 style="font-family:'Space Grotesk', Arial, sans-serif; font-size:40px; font-weight:600; line-height:1.2; color:#14171F">Reflexión guiada</h3>
+<p style="font-size:26px; line-height:1.4; color:#4A5061">Los problemas regresan al agente para corregir; máximo 2 intentos.</p>
+</div>
+</div>
+<div style="background:#14171F; border-radius:16px; padding:32px 40px">
+<p style="font-family:'JetBrains Mono', monospace; font-size:24px; line-height:1.5; color:#E6E3D8">problemas = validar_gherkin(destino.read_text())<br>if not problemas:<br>&#160;&#160;&#160;&#160;return destino<br>tarea += "Tu versión anterior tiene estos problemas; corrígelos: ..."</p>
+</div>
+<p style="position:absolute; left:128px; bottom:64px; width:1664px; font-size:24px; color:#6B7080">Sesión 1 · Patrones: ReAct en el bucle, reflexión aquí y Plan-and-Execute en la sesión 2</p>
+<aside>15 minutos. Este es el principio que guía todo el módulo: cada agente termina en una verificación hecha por código. Los artefactos tienen formato fijo porque son el contrato entre agentes: el diseñador lee el Gherkin del analista, y el automatizador de la sesión 3 leerá el JSON del diseñador. El validador no es otro modelo: son reglas verificables, como que cada escenario tenga Dado, Cuando y Entonces, o que cada escenario tenga al menos un caso. Si falla, los problemas regresan al agente; eso es el patrón de reflexión, con un límite de intentos.</aside>
+</section>

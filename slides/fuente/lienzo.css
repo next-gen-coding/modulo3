@@ -1,0 +1,19 @@
+
+/* ── Láminas del módulo sobre el sistema Tec Editorial ── */
+.slide.lamina { padding: 0; }
+.lienzo { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; transform-origin: 0 0;
+          box-sizing: border-box; overflow: hidden; color: var(--ink); font-family: var(--sans); font-weight: var(--peso-texto); line-height: normal; }
+.lienzo * { margin: 0; box-sizing: border-box; }
+.lienzo p, .lienzo li { font-size: inherit; line-height: inherit; font-weight: inherit; max-width: none; }
+.lienzo p[style*="line-height"] { }
+.lienzo h2, .lienzo h3 { margin: 0; letter-spacing: -0.01em; }
+.lienzo b, .lienzo strong { color: var(--tec); font-weight: 700; }
+.lienzo ul, .lienzo ol { padding-left: 0; }
+.lienzo ul > li { padding-left: 1.4em; margin: .35em 0; }
+.lienzo ul > li::before { top: .62em; width: .6em; }
+.lienzo ol > li { padding-left: 2.4em; margin: .35em 0; }
+.lienzo table { width: 100%; border-collapse: collapse; margin-top: 0; }
+.lienzo th, .lienzo td { padding: .45em .7em; vertical-align: top; text-align: left; }
+.lienzo td { font-size: inherit; }
+.lienzo th { font-size: 19px; }
+.lienzo x-connector { position: absolute; left: 0; top: 0; width: 0; height: 0; }

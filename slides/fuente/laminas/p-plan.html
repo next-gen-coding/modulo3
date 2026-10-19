@@ -1,0 +1,25 @@
+<section id="p-plan" data-transition="fade" style="background:#F6F5F0; color:#1B1F2A; font-family:'IBM Plex Sans', Arial, sans-serif; padding:128px 128px 160px; display:flex; flex-direction:column; gap:48px">
+<div style="display:flex; flex-direction:column; gap:16px">
+<p style="font-size:24px; font-weight:600; letter-spacing:3px; text-transform:uppercase; color:#B5541C">Patrón de razonamiento · 2 de 3</p>
+<h2 style="font-family:'Space Grotesk', Arial, sans-serif; font-size:64px; font-weight:600; line-height:1.1; color:#14171F">Plan-and-Execute: primero el plan</h2>
+</div>
+<div style="position:absolute; left:128px; top:420px; width:240px; height:110px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:4px; background:#F7D9C4; border:2px solid #B5541C; border-radius:16px"><p style="font-size:28px; font-weight:600; text-align:center; color:#14171F">Planificador</p><p style="font-size:24px; text-align:center; color:#4A5061">escribe el plan</p></div>
+<div style="position:absolute; left:448px; top:370px; width:240px; height:210px; display:flex; flex-direction:column; justify-content:center; gap:8px; background:#FDFCF9; border:2px dashed #4A5061; border-radius:16px; padding:0px 24px"><p style="font-size:28px; font-weight:600; color:#14171F">Plan</p><p style="font-size:24px; color:#4A5061">1 · Modelo de datos</p><p style="font-size:24px; color:#4A5061">2 · Endpoints</p><p style="font-size:24px; color:#4A5061">3 · Pantallas</p></div>
+<div style="position:absolute; left:768px; top:420px; width:240px; height:110px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:4px; background:#FDFCF9; border:2px solid #4A5061; border-radius:16px"><p style="font-size:28px; font-weight:600; text-align:center; color:#14171F">Ejecutor</p><p style="font-size:24px; text-align:center; color:#4A5061">paso a paso</p></div>
+<div style="position:absolute; left:768px; top:640px; width:240px; height:100px; display:flex; flex-direction:column; align-items:center; justify-content:center; background:#DCE6F3; border:2px solid #2F5D9E; border-radius:16px"><p style="font-size:28px; font-weight:600; text-align:center; color:#14171F">Resultado</p></div>
+<x-connector x1="368" y1="475" x2="448" y2="475" style="color:#4A5061; border-width:3px"></x-connector>
+<x-connector x1="688" y1="475" x2="768" y2="475" style="color:#4A5061; border-width:3px"></x-connector>
+<x-connector x1="888" y1="420" x2="888" y2="330" head="none" style="color:#B5541C; border-width:3px"></x-connector>
+<x-connector x1="888" y1="330" x2="248" y2="330" head="none" style="color:#B5541C; border-width:3px"></x-connector>
+<x-connector x1="248" y1="330" x2="248" y2="420" style="color:#B5541C; border-width:3px"></x-connector>
+<x-connector x1="888" y1="530" x2="888" y2="640" style="color:#2F5D9E; border-width:3px"></x-connector>
+<p style="position:absolute; left:368px; top:282px; width:400px; font-size:24px; text-align:center; color:#B5541C">si algo falla, se re-planifica</p>
+<p style="position:absolute; left:128px; top:650px; width:560px; font-size:24px; line-height:1.4; color:#1B1F2A; background:#ECEAE2; border-radius:12px; padding:16px 24px">Una persona puede aprobar el plan antes de ejecutarlo</p>
+<div style="position:absolute; left:1168px; top:300px; width:624px; display:flex; flex-direction:column; gap:28px">
+<div style="display:flex; flex-direction:column; gap:8px"><p style="font-size:24px; font-weight:600; letter-spacing:2px; text-transform:uppercase; color:#B5541C">Cómo funciona</p><p style="font-size:28px; line-height:1.4; color:#1B1F2A">Se escribe un plan completo; un ejecutor lo cumple paso a paso y re-planifica si algo falla.</p></div>
+<div style="display:flex; flex-direction:column; gap:8px"><p style="font-size:24px; font-weight:600; letter-spacing:2px; text-transform:uppercase; color:#B5541C">Úsalo cuando</p><p style="font-size:28px; line-height:1.4; color:#1B1F2A">La tarea es larga y conviene revisar el enfoque antes de gastar en ejecutarlo.</p></div>
+<div style="display:flex; flex-direction:column; gap:8px; background:#F7D9C4; border-radius:12px; padding:24px"><p style="font-size:24px; font-weight:600; letter-spacing:2px; text-transform:uppercase; color:#A34A17">En tu fábrica</p><p style="font-size:28px; line-height:1.4; color:#1B1F2A">Agente 3: planificar, aprobar y construir. Es el modo plan de Claude Code.</p></div>
+</div>
+<p style="position:absolute; left:128px; bottom:64px; width:1664px; font-size:24px; color:#6B7080">Sesión 1 · Patrones de razonamiento · lo usarás en la sesión 2</p>
+<aside>Plan-and-Execute separa pensar el qué de hacerlo. Un planificador escribe el plan completo, por ejemplo modelo de datos, endpoints y pantallas; un ejecutor lo cumple paso a paso. Si un paso falla, se vuelve a planificar con lo aprendido. La ventaja principal es que el plan se puede revisar antes de gastar en ejecutarlo. En la sesión 2, el agente desarrollador primero planifica con herramientas de solo lectura, una persona aprueba o comenta el plan, y solo entonces construye. Es lo mismo que hace el modo plan de Claude Code.</aside>
+</section>

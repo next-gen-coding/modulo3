@@ -1,0 +1,39 @@
+<!doctype html><meta charset="utf-8"><title>Grafo · flujo_s2</title>
+    <body style="font-family:sans-serif;display:flex;justify-content:center;padding:2rem">
+    <pre class="mermaid">---
+config:
+  flowchart:
+    curve: linear
+---
+graph TD;
+	__start__([&lt;p&gt;__start__&lt;/p&gt;]):::first
+	analizar(analizar)
+	pedir_aclaracion(pedir_aclaracion)
+	disenar_casos(disenar_casos)
+	planificar(planificar)
+	aprobar_plan(aprobar_plan)
+	construir(construir)
+	verificar(verificar)
+	fin(fin)
+	__end__([&lt;p&gt;__end__&lt;/p&gt;]):::last
+	__start__ --&gt; analizar;
+	analizar -.-&gt; disenar_casos;
+	analizar -.-&gt; pedir_aclaracion;
+	aprobar_plan -.-&gt; construir;
+	aprobar_plan -.-&gt; planificar;
+	construir --&gt; verificar;
+	disenar_casos --&gt; planificar;
+	pedir_aclaracion -.-&gt; __end__;
+	pedir_aclaracion -.-&gt; disenar_casos;
+	planificar --&gt; aprobar_plan;
+	verificar -.-&gt; construir;
+	verificar -.-&gt; fin;
+	fin --&gt; __end__;
+	classDef default fill:#f2f0ff,line-height:1.2
+	classDef first fill-opacity:0
+	classDef last fill:#bfb6fc
+</pre>
+    <script type="module">
+    import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs";
+    mermaid.initialize({ startOnLoad: true });
+    </script>

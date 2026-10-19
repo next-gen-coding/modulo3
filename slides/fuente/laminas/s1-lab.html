@@ -1,0 +1,31 @@
+<section id="s1-lab" data-transition="fade" style="background:#ECEAE2; color:#1B1F2A; font-family:'IBM Plex Sans', Arial, sans-serif; padding:128px 128px 160px; display:flex; flex-direction:column; gap:48px">
+<div style="display:flex; flex-direction:column; gap:16px">
+<p style="font-size:24px; font-weight:600; letter-spacing:3px; text-transform:uppercase; color:#A34A17">Lab 1 · 55 min · individual</p>
+<h2 style="font-family:'Space Grotesk', Arial, sans-serif; font-size:64px; font-weight:600; line-height:1.1; color:#14171F">Tus dos primeros agentes</h2>
+</div>
+<div style="display:flex; gap:32px">
+<div style="flex:1; display:flex; flex-direction:column; gap:16px; background:#F6F5F0; border:1px solid #C9C5B8; border-radius:16px; padding:36px">
+<p style="font-size:24px; font-weight:600; letter-spacing:2px; text-transform:uppercase; color:#A34A17">1A · 20 min</p>
+<h3 style="font-family:'Space Grotesk', Arial, sans-serif; font-size:36px; font-weight:600; line-height:1.2; color:#14171F">El bucle</h3>
+<p style="font-size:26px; line-height:1.4; color:#4A5061">Completa ejecutar_agente y prueba que leer secretos_demo.txt falla.</p>
+<p style="font-size:24px; line-height:1.4; color:#1B1F2A; background:#ECEAE2; border-radius:12px; padding:12px 20px"><b>Control:</b> explicas qué pasa con un PermissionError</p>
+</div>
+<div style="flex:1; display:flex; flex-direction:column; gap:16px; background:#F6F5F0; border:1px solid #C9C5B8; border-radius:16px; padding:36px">
+<p style="font-size:24px; font-weight:600; letter-spacing:2px; text-transform:uppercase; color:#A34A17">1B · 20 min</p>
+<h3 style="font-family:'Space Grotesk', Arial, sans-serif; font-size:36px; font-weight:600; line-height:1.2; color:#14171F">Agente 1 · Analista</h3>
+<p style="font-size:26px; line-height:1.4; color:#4A5061">HU-01 → criterios.feature, con reflexión si el validador falla.</p>
+<p style="font-size:24px; line-height:1.4; color:#1B1F2A; background:#ECEAE2; border-radius:12px; padding:12px 20px"><b>Control:</b> un escenario de error por regla</p>
+</div>
+<div style="flex:1; display:flex; flex-direction:column; gap:16px; background:#F6F5F0; border:1px solid #C9C5B8; border-radius:16px; padding:36px">
+<p style="font-size:24px; font-weight:600; letter-spacing:2px; text-transform:uppercase; color:#A34A17">1C · 15 min</p>
+<h3 style="font-family:'Space Grotesk', Arial, sans-serif; font-size:36px; font-weight:600; line-height:1.2; color:#14171F">Agente 2 · Diseñador</h3>
+<p style="font-size:26px; line-height:1.4; color:#4A5061">Criterios → casos_prueba.json con niveles api y e2e.</p>
+<p style="font-size:24px; line-height:1.4; color:#1B1F2A; background:#ECEAE2; border-radius:12px; padding:12px 20px"><b>Control:</b> cada escenario tiene un caso</p>
+</div>
+</div>
+<div style="background:#14171F; border-radius:16px; padding:28px 40px">
+<p style="font-family:'JetBrains Mono', monospace; font-size:24px; line-height:1.5; color:#E6E3D8">python -m agentes.analista historias/HU-01-registrar-empleado.md<br>python -m agentes.disenador_pruebas salida/HU-01/criterios.feature</p>
+</div>
+<p style="position:absolute; left:128px; bottom:64px; width:1664px; font-size:24px; color:#5E6372">Cierre 15 min: dos estudiantes muestran su salida · quiz de 5 preguntas · commit del entregable</p>
+<aside>Lab individual. 1A: en la rama del estudiante el cuerpo de ejecutar_agente está vacío; lo escriben siguiendo el diagrama del bucle. Luego, en una consola de Python, comprueban que herramientas_archivos permite leer la historia y rechaza secretos_demo.txt. 1B: leen SISTEMA y validar_gherkin y ejecutan el analista. Reto: borrar las notas de la historia y ver si aparecen preguntas abiertas en vez de reglas inventadas. 1C: el contrato es el modelo Pydantic CasoPrueba; los casos e2e deben mencionar los data-testid de las convenciones. Errores frecuentes: falta .env (KeyError MODEL), ejecutar el archivo en vez del módulo (ModuleNotFoundError), clave sin créditos.</aside>
+</section>

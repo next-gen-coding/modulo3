@@ -1,0 +1,19 @@
+<section id="s3-sdk" data-transition="fade" style="background:#ECEAE2; color:#1B1F2A; font-family:'IBM Plex Sans', Arial, sans-serif; padding:128px 128px 160px; display:flex; flex-direction:column; gap:48px">
+<div style="display:flex; flex-direction:column; gap:16px">
+<p style="font-size:24px; font-weight:600; letter-spacing:3px; text-transform:uppercase; color:#A34A17">Lab 3 · 65 min · individual</p>
+<h2 style="font-family:'Space Grotesk', Arial, sans-serif; font-size:64px; font-weight:600; line-height:1.1; color:#14171F">Desplegar, probar e inspeccionar</h2>
+</div>
+<div style="display:grid; grid-template-columns:1000px 1fr; gap:48px">
+<div style="background:#14171F; border-radius:16px; padding:40px">
+<p style="font-family:'JetBrains Mono', monospace; font-size:24px; line-height:1.5; color:#E6E3D8"><span style="color:#9AA0AE"># 3B · ejecutar con HU-02 (30 min)</span><br>python -m flujos.flujo_s3 \<br>&#160;&#160;historias/HU-02-consultar-directorio.md<br><br><span style="color:#9AA0AE"># 3C · inspeccionar (25 min)</span><br>cd app<br>docker compose ps<br>python -m pytest tests/api -q<br>python -m pytest tests/e2e -q --headed</p>
+</div>
+<div style="display:flex; flex-direction:column; gap:24px">
+<p style="font-size:28px; line-height:1.4; color:#1B1F2A"><b>3A · 10 min:</b> lee los agentes 4 y 5 y la rama paralela.</p>
+<p style="font-size:28px; line-height:1.4; color:#1B1F2A"><b>Control:</b> bitácora con «Despliegue: OK» y «Pruebas: OK».</p>
+<p style="font-size:28px; line-height:1.4; color:#1B1F2A"><b>Compara</b> las pruebas con tu tabla manual de la sesión 2.</p>
+<p style="font-size:28px; line-height:1.4; color:#A34A17"><b>Busca</b> en auditoria.jsonl un intento fuera de rol.</p>
+</div>
+</div>
+<p style="position:absolute; left:128px; bottom:64px; width:1664px; font-size:24px; color:#5E6372">Cierre 15 min: quiz · commit con Docker, tests/, salida/HU-02/ y notas_s3.md</p>
+<aside>3A: leer agentes/despliegue.py y agentes/automatizador.py, sus listas ESCRITURA y PROGRAMAS, y la función despues_de_verificar de flujo_s3. Pregunta: ¿por qué el automatizador puede trabajar al mismo tiempo que el despliegue? Porque solo necesita los casos y los data-testid. 3B: aprobar el plan solo si dice que extiende el código de HU-01 sin romperlo. 3C: comprobar contenedores, correr las pruebas de API y las E2E viendo el navegador, y comparar con la tabla manual. Errores frecuentes: Docker cerrado, puerto ocupado, 502 por nginx mal configurado (el agente 4 lo corrige), falta el navegador de Playwright.</aside>
+</section>

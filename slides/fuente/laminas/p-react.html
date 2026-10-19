@@ -1,0 +1,26 @@
+<section id="p-react" data-transition="fade" style="background:#F6F5F0; color:#1B1F2A; font-family:'IBM Plex Sans', Arial, sans-serif; padding:128px 128px 160px; display:flex; flex-direction:column; gap:48px">
+<div style="display:flex; flex-direction:column; gap:16px">
+<p style="font-size:24px; font-weight:600; letter-spacing:3px; text-transform:uppercase; color:#B5541C">Patrón de razonamiento · 1 de 3</p>
+<h2 style="font-family:'Space Grotesk', Arial, sans-serif; font-size:64px; font-weight:600; line-height:1.1; color:#14171F">ReAct: razonar, actuar, observar</h2>
+</div>
+<div style="position:absolute; left:128px; top:420px; width:240px; height:110px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:4px; background:#F7D9C4; border:2px solid #B5541C; border-radius:16px"><p style="font-size:28px; font-weight:600; text-align:center; color:#14171F">Razonar</p><p style="font-size:24px; text-align:center; color:#4A5061">¿qué hago?</p></div>
+<div style="position:absolute; left:448px; top:420px; width:240px; height:110px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:4px; background:#FDFCF9; border:2px solid #4A5061; border-radius:16px"><p style="font-size:28px; font-weight:600; text-align:center; color:#14171F">Actuar</p><p style="font-size:24px; text-align:center; color:#4A5061">usa una herramienta</p></div>
+<div style="position:absolute; left:768px; top:420px; width:240px; height:110px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:4px; background:#FDFCF9; border:2px solid #4A5061; border-radius:16px"><p style="font-size:28px; font-weight:600; text-align:center; color:#14171F">Observar</p><p style="font-size:24px; text-align:center; color:#4A5061">lee el resultado</p></div>
+<div style="position:absolute; left:128px; top:640px; width:240px; height:100px; display:flex; flex-direction:column; align-items:center; justify-content:center; background:#DCE6F3; border:2px solid #2F5D9E; border-radius:16px"><p style="font-size:28px; font-weight:600; text-align:center; color:#14171F">Respuesta</p></div>
+<x-connector x1="368" y1="475" x2="448" y2="475" style="color:#4A5061; border-width:3px"></x-connector>
+<x-connector x1="688" y1="475" x2="768" y2="475" style="color:#4A5061; border-width:3px"></x-connector>
+<x-connector x1="888" y1="420" x2="888" y2="350" head="none" style="color:#B5541C; border-width:3px"></x-connector>
+<x-connector x1="888" y1="350" x2="248" y2="350" head="none" style="color:#B5541C; border-width:3px"></x-connector>
+<x-connector x1="248" y1="350" x2="248" y2="420" style="color:#B5541C; border-width:3px"></x-connector>
+<x-connector x1="248" y1="530" x2="248" y2="640" style="color:#2F5D9E; border-width:3px"></x-connector>
+<p style="position:absolute; left:420px; top:302px; width:420px; font-size:24px; text-align:center; color:#B5541C">otra vuelta con lo observado</p>
+<p style="position:absolute; left:264px; top:568px; width:300px; font-size:24px; color:#2F5D9E">ya puedo responder</p>
+<p style="position:absolute; left:448px; top:650px; width:560px; font-size:24px; line-height:1.4; color:#1B1F2A; background:#ECEAE2; border-radius:12px; padding:16px 24px">Cada vuelta es una llamada al modelo</p>
+<div style="position:absolute; left:1168px; top:300px; width:624px; display:flex; flex-direction:column; gap:28px">
+<div style="display:flex; flex-direction:column; gap:8px"><p style="font-size:24px; font-weight:600; letter-spacing:2px; text-transform:uppercase; color:#B5541C">Cómo funciona</p><p style="font-size:28px; line-height:1.4; color:#1B1F2A">El modelo razona, usa una herramienta, lee el resultado y vuelve a razonar hasta poder responder.</p></div>
+<div style="display:flex; flex-direction:column; gap:8px"><p style="font-size:24px; font-weight:600; letter-spacing:2px; text-transform:uppercase; color:#B5541C">Úsalo cuando</p><p style="font-size:28px; line-height:1.4; color:#1B1F2A">La información necesaria solo se obtiene actuando: leer archivos o consultar datos.</p></div>
+<div style="display:flex; flex-direction:column; gap:8px; background:#F7D9C4; border-radius:12px; padding:24px"><p style="font-size:24px; font-weight:600; letter-spacing:2px; text-transform:uppercase; color:#A34A17">En tu fábrica</p><p style="font-size:28px; line-height:1.4; color:#1B1F2A">Es el bucle de agentes/base.py: lo usan el analista y el diseñador.</p></div>
+</div>
+<p style="position:absolute; left:128px; bottom:64px; width:1664px; font-size:24px; color:#6B7080">Sesión 1 · Patrones de razonamiento</p>
+<aside>ReAct es el patrón por defecto de un agente con herramientas: razonar qué hacer, actuar con una herramienta, observar el resultado y volver a razonar con esa información. Termina cuando el modelo decide que ya puede responder, o cuando se alcanza el límite de pasos. Es exactamente el bucle que los estudiantes escriben en el Lab 1A. Ejemplo en la fábrica: el analista razona que necesita las reglas de negocio, actúa leyendo contexto/reglas_negocio.md, observa el contenido y entonces escribe los criterios.</aside>
+</section>
