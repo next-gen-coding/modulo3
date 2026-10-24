@@ -125,7 +125,9 @@ Un commit con `salida/HU-01/criterios.feature`, `salida/HU-01/casos_prueba.json`
 
 ### 2A · Leer el grafo (10 min)
 
-Abre `flujos/flujo_s2.py` y dibuja el grafo en papel. Luego imprímelo para comparar con tu dibujo:
+Abre `flujos/flujo_s2.py` y dibuja el grafo en papel. Luego imprímelo para comparar con tu dibujo. 
+
+El siguiente comando ya dubuja el grafo y ejecuta el flujo. 
 
 ```bash
 python -m flujos.flujo_s2 historias/HU-01-registrar-empleado.md

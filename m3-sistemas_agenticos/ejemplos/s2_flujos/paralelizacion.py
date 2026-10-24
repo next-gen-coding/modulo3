@@ -59,7 +59,7 @@ app = grafo.compile()
 if __name__ == "__main__":
     import sys
 
-    titulo("Enrutamiento con Command · el grafo")
+    titulo("Paralelizacion · el grafo")
     guardar_grafo(app, "paralelizacion", abrir="--abrir" in sys.argv)
     if "--grafo" in sys.argv:          # solo el dibujo, sin llamar al modelo
         sys.exit()

@@ -119,6 +119,7 @@ def construir_grafo():
     g.add_conditional_edges("verificar", despues_de_verificar)
     g.add_edge("fin", END)
     app = g.compile(checkpointer=InMemorySaver())
+    #YA DIBUJA EL GRAFO ! 
     dibuja_grafo(app,"flujo_s2")
     return app
 
@@ -137,4 +138,5 @@ def ejecutar(app, historia: str) -> dict:
 
 
 if __name__ == "__main__":
+    #NO NECESITA COLOCAR --grafo, ya lo hace
     ejecutar(construir_grafo(), sys.argv[1])
