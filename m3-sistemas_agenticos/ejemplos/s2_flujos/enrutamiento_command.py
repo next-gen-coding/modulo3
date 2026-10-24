@@ -53,7 +53,7 @@ def disenar_casos(s: Estado) -> Estado:
 
 
 def pedir_aclaracion(s: Estado) -> Estado:
-    preguntas = modelo().invoke("Escribe 2 preguntas concretas al dueño del producto sobre:\n" + s["historia"]).text
+    preguntas = modelo().invoke("Escribe 2 preguntas concretas al product owner sobre:\n" + s["historia"]).text
     paso("rama · pedir aclaración", preguntas)
     return {"resultado": "preguntas"}
 
