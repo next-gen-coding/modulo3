@@ -16,7 +16,7 @@ from langgraph.graph import START, StateGraph
 from langgraph.graph.message import add_messages
 from langgraph.types import Command
 
-from ejemplos.comun import EMPLEADOS, modelo, paso, titulo
+from ejemplos.comun import EMPLEADOS, modelo, paso, titulo, guardar_grafo
 
 MAX_TRASPASOS = 4
 
@@ -54,23 +54,35 @@ class Estado(TypedDict, total=False):
     mensajes: Annotated[list, add_messages]   # ← una sola conversación para todos
     traspasos: int
 
-
-def agente(nombre: str):
+     
+def agente(nombre: str): #nombre: recepcion, alta , directorio
+    """
+    Ejemplo, si llega a la recepción:
+    sistema      = "Eres recepción de RR. HH. No resuelves nada: transfiere al agente correcto."
+    herramientas = [transferir_a_altas, transferir_a_directorio]
+    """   
+    #Que agente te está atendiendo y cuales son las herramientas para utilizar (a donde envio mi respuesta)
     sistema, herramientas = AGENTES[nombre]
+    #Son las opciones para el cliente: o me atiende recepción, altas o directorio
     destinos = Literal["recepcion", "altas", "directorio", "__end__"]
-
     def nodo(s: Estado) -> Command[destinos]:
+        # 1. Le das al agente su formulario y le muestras toda la conversación
+        # Cada herramienta dada en bind_tools es una casilla, para que sea solo esa! 
         resp: AIMessage = modelo().bind_tools(herramientas).invoke([SystemMessage(sistema), *s["mensajes"]])
+         # 2. ¿Llenó el formulario? (y no se ha rebotado demasiadas veces)
         if resp.tool_calls and s.get("traspasos", 0) < MAX_TRASPASOS:        # ← el traspaso
+           # 3. tomas el formulario 
             llamada = resp.tool_calls[0]
+            # 4. lees la casilla, ejemplo: "altas"
             destino = llamada["name"].removeprefix("transferir_a_")
             paso(nombre, f"traspasa a {destino}: {llamada['args'].get('motivo', '')}")
-            # La nota del traspaso entra a la conversación compartida; va como turno de usuario
-            # para que la conversación nunca termine en un mensaje del asistente.
+            # 5. engrapas una nota al expediente
             nota = HumanMessage(f"[Traspaso: {nombre} pasa la conversación a {destino}. "
                                 f"Motivo: {llamada['args'].get('motivo', '')}]")
+            # 6. lo llevas con el destino que le corresponde, ejemplo: "altas"
             return Command(goto=destino, update={"mensajes": [nota], "traspasos": s.get("traspasos", 0) + 1})
         paso(nombre, resp.text)
+        # 7. No llenó el formulario: contestó él mismo, y se acabó. Es decir llegó al agente destino
         return Command(goto="__end__", update={"mensajes": [AIMessage(resp.text)]})  # responde y termina
     return nodo
 
@@ -82,7 +94,15 @@ grafo.add_edge(START, "recepcion")
 app = grafo.compile()
 
 if __name__ == "__main__":
-    for pregunta in ["Quiero dar de alta a una nueva analista en Finanzas, ¿qué necesito?",
+    import sys
+
+    titulo("Traspasos · el grafo")
+    guardar_grafo(app, "traspasos", abrir="--abrir" in sys.argv, xray=True)   # xray: dibuja cada equipo por dentro
+    if "--grafo" in sys.argv:          # solo el dibujo, sin llamar al modelo
+        sys.exit()
+
+
+    for pregunta in ["Quiero dar de alta a Ana López como analista en Finanzas, ¿qué necesito?",
                      "¿Quién es el empleado más antiguo de Tecnología que sigue activo?"]:
         titulo(f"Traspasos · «{pregunta}»")
         app.invoke({"mensajes": [HumanMessage(pregunta)]})

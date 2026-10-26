@@ -1,5 +1,8 @@
 """MCP · cliente: el bucle ReAct de react.py, pero las herramientas llegan de un servidor MCP.
 
+Este archivo es un agente ReAct cuyas herramientas no están escritas en su código: 
+las descubre de un servidor MCP (mcp_directorio.py) y, cuando el modelo pide una, se la pasa al servidor para que la ejecute
+
 Lo que distingue a MCP en el código: el agente no tiene ni un esquema escrito a mano.
   1. Arranca el servidor y abre una sesión            → stdio_client(...) y ClientSession(...)
   2. Descubre las herramientas                         → await sesion.list_tools()

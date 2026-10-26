@@ -12,7 +12,7 @@ from typing import TypedDict
 
 from langgraph.graph import END, START, StateGraph
 
-from ejemplos.comun import historia, modelo, paso, titulo
+from ejemplos.comun import historia, modelo, paso, titulo, guardar_grafo
 
 
 class Pizarra(TypedDict, total=False):
@@ -68,5 +68,12 @@ grafo.add_conditional_edges("controlador", elegir, [*AGENTES, END])
 app = grafo.compile()
 
 if __name__ == "__main__":
+    import sys
+    #Guarda el grafo 
+    titulo("Pizarra · el grafo")
+    guardar_grafo(app, "pizarra", abrir="--abrir" in sys.argv)
+    if "--grafo" in sys.argv:          # solo el dibujo, sin llamar al modelo
+        sys.exit()
+
     titulo("Pizarra")
     app.invoke({"historia": historia("HU-01")})

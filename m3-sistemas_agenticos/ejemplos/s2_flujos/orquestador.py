@@ -69,6 +69,8 @@ grafo = StateGraph(Estado)
 grafo.add_node("orquestador", orquestador)
 grafo.add_node("trabajador", trabajador)
 grafo.add_node("sintetizar", sintetizar)
+
+
 grafo.add_edge(START, "orquestador")
 #Cuando termine el nodo orquestador, llama a la función repartir para saber qué sigue. 
 # Lo que siga solo puede ser el nodo trabajador

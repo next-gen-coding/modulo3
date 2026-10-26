@@ -71,3 +71,28 @@ def guardar_grafo(app, nombre: str, abrir: bool = False) -> Path:
     if abrir:
         webbrowser.open(ruta.as_uri())
     return ruta    
+
+def guardar_grafo(app, nombre: str, abrir: bool = False, xray: bool = False) -> Path:
+    """Guarda el grafo de LangGraph como página HTML (Mermaid) en ejemplos/salidas/grafo_<nombre>.html.
+
+    Las aristas sólidas son add_edge; las punteadas, add_conditional_edges.
+    Con abrir=True además lo muestra en el navegador.
+    Con xray=True dibuja por dentro los subgrafos (los equipos de la topología jerárquica).
+    """
+    texto = app.get_graph(xray=xray).draw_mermaid()
+    pagina = f"""<!doctype html><meta charset="utf-8"><title>Grafo · {nombre}</title>
+<body style="font-family:sans-serif;display:flex;justify-content:center;padding:2rem">
+<pre class="mermaid">{html.escape(texto)}</pre>
+<script type="module">
+  import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs";
+  mermaid.initialize({{ startOnLoad: true }});
+</script>"""
+    carpeta = RAIZ / "ejemplos" / "salidas"
+    carpeta.mkdir(exist_ok=True)
+    ruta = carpeta / f"grafo_{nombre}.html"
+    ruta.write_text(pagina, encoding="utf-8")
+    paso("grafo", f"guardado en {ruta.relative_to(RAIZ)}")
+    if abrir:
+        webbrowser.open(ruta.as_uri())
+    return ruta
+
