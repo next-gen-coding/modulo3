@@ -44,8 +44,10 @@ def escribir_casos(s: Estado) -> Estado:
 
 
 grafo = StateGraph(Estado)
+#Creando los nodos sueltos, pero no estoy armando 
 grafo.add_node("escribir_criterios", escribir_criterios)
 grafo.add_node("escribir_casos", escribir_casos)
+
 grafo.add_edge(START, "escribir_criterios")                       # ← una línea recta…
 grafo.add_conditional_edges("escribir_criterios", compuerta)     # ← …con una compuerta en medio
 grafo.add_edge("escribir_casos", END)

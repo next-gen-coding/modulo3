@@ -139,4 +139,4 @@ def ejecutar(app, historia: str) -> dict:
 
 if __name__ == "__main__":
     #NO NECESITA COLOCAR --grafo, ya lo hace
-    ejecutar(construir_grafo(), sys.argv[1])
+    ejecutar(construir_grafo())

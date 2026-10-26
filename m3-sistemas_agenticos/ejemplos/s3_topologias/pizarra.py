@@ -24,6 +24,7 @@ class Pizarra(TypedDict, total=False):
 
 
 # agente: (lo que necesita leer, el campo que escribe, su tarea) — el orden NO importa
+# Cada agente es una fila con tres cosas: qué lee de la pizarra, qué casilla escribe y su tarea.
 AGENTES = {
     "pantalla": (["criterios", "endpoint"], "pantalla", "Describe el formulario React en 6 líneas."),
     "disenador": (["criterios"], "casos", "Escribe un caso de prueba por criterio."),
@@ -32,11 +33,22 @@ AGENTES = {
 }
 
 
+"""
+Es el corazón del patrón. Recorre la tabla y se queda con los agentes que cumplen dos condiciones:
+all(p.get(c) for c in lee): todo lo que necesita leer ya está en la pizarra.
+not p.get(escribe): su casilla sigue vacía, es decir, todavía no ha trabajado.
+Si existe un empate, el primero en la lista se ejecuta primero
+"""
 def listo_para(p: Pizarra) -> list[str]:
     """Agentes cuyos insumos ya están en la pizarra y cuyo campo sigue vacío."""
     return [a for a, (lee, escribe, _) in AGENTES.items() if all(p.get(c) for c in lee) and not p.get(escribe)]
 
-
+"""
+El controlados imprime la pizarra y dice quien puede trabajar. No decide nada. 
+Solo imprime qué casillas están llenas y quién puede trabajar, y devuelve {}, 
+es decir, no cambia la pizarra. Pizarra.__annotations__ es la lista de campos de la clase.
+Existe para ser el punto central del grafo al que todos regresan, y para que en la traza se vea el estado del tablero después de cada paso.
+"""
 def controlador(p: Pizarra) -> Pizarra:
     paso("pizarra", f"tiene {[c for c in Pizarra.__annotations__ if p.get(c)]} · pueden trabajar: {listo_para(p)}")
     return {}
@@ -46,7 +58,7 @@ def elegir(p: Pizarra) -> str:
     candidatos = listo_para(p)
     return candidatos[0] if candidatos else END        # ← el controlador decide mirando la pizarra
 
-
+#Ejecuta su tarea y escribe lo que hizo en la pizarra
 def agente(nombre: str):
     lee, escribe, tarea = AGENTES[nombre]
 
@@ -64,6 +76,7 @@ for nombre in AGENTES:
     grafo.add_node(nombre, agente(nombre))
     grafo.add_edge(nombre, "controlador")               # todos regresan a la pizarra
 grafo.add_edge(START, "controlador")
+#Esta línea le dice a LangGraph: «cuando termine el nodo controlador, llama tú a elegir y ve al nodo cuyo nombre te devuelva».
 grafo.add_conditional_edges("controlador", elegir, [*AGENTES, END])
 app = grafo.compile()
 
