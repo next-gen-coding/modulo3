@@ -30,6 +30,7 @@ Reglas:
 Responde con la lista de archivos y cuántos tests escribiste."""
 
 
+
 def automatizar(hu: str, errores: str = "") -> tuple[str, float]:
     casos = (SALIDA / hu / "casos_prueba.json").read_text(encoding="utf-8")
     prompt = TAREA.format(hu=hu, casos=casos, hu_min=hu.lower().replace("-", "_"))

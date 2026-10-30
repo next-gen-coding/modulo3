@@ -15,6 +15,7 @@ from agentes.disenador_pruebas import PlanPruebas
 from flujos import flujo_s2 as s2
 from flujos.verificacion import verificar_despliegue, verificar_pruebas_escritas
 from pathlib import Path
+from flujos.util import dibuja_grafo
 
 
 class Estado(s2.Estado, total=False):
@@ -78,8 +79,10 @@ def construir_grafo():
     g.add_edge(["desplegar", "automatizar"], "listo")                  # espera a que terminen ambas ramas
     g.add_edge("listo", "fin")
     g.add_edge("fin", END)
-    return g.compile(checkpointer=InMemorySaver())
-
+    app = g.compile(checkpointer=InMemorySaver())
+    #YA DIBUJA EL GRAFO ! 
+    dibuja_grafo(app,"flujo_s3")
+    return app
 
 if __name__ == "__main__":
     s2.ejecutar(construir_grafo(), sys.argv[1])

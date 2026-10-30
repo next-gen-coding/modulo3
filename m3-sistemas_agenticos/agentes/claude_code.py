@@ -25,7 +25,44 @@ async def _consultar(prompt: str, opciones: ClaudeAgentOptions) -> ResultMessage
         raise RuntimeError("Claude Code terminó sin resultado")
     return resultado
 
+"""
+Parámetro	   Tipo	     Qué es	                                      A dónde va
+prompt         str        La tarea: qué tiene que hacer esta vez,      Es el mensaje que recibe Claude Code
+                         con los requisitos, el plan aprobado 
+                         o los errores a corregir
 
+agente         str        El nombre del agente, por ejemplo            Las líneas que imprime en la terminal 
+                         desarrollador", "desarrollador-plan"         y el campo agente de auditoria.jsonl
+                         o "automatizador"
+                                                              
+cwd            Path       La carpeta de trabajo, siempre APP (app/).   ClaudeAgentOptions(cwd=...), y es la base que usan 
+                                                                      los hooks para confinar lectura, escritura y cd        
+
+herramientas  list[str]  Qué herramientas puede usar:                 allowed_tools
+                         SOLO_LECTURA o EDICION                                   
+
+
+estrictura    list[str]  Qué archivos puede escribir, como patrones:  El hook de rol confinar_escritura
+                         ["tests/*"], ["backend/*", "frontend/*"]                     
+
+programas     set[str]  Qué programas puede usar en la terminal:      El hook de rol confinar_escritura
+                        {"python", "pytest", ...}
+
+instrucciones str       El rol del agente: quién es y qué              Se agrega al prompt del sistema de Claude Code 
+                        no debe hacer                                  (system_prompt con append)               
+
+"""
+"""
+# planificar: solo quiero leer
+ejecutar_claude_code(prompt, agente="desarrollador-plan", cwd=APP,
+                     herramientas=SOLO_LECTURA, escritura=[], programas=set(),
+                     instrucciones=INSTRUCCIONES)
+
+# construir: mirar y modificar
+ejecutar_claude_code(prompt, agente="desarrollador", cwd=APP,
+                     herramientas=EDICION, escritura=ESCRITURA, programas=PROGRAMAS,
+                     instrucciones=INSTRUCCIONES)
+"""
 def ejecutar_claude_code(prompt: str, *, agente: str, cwd: Path, herramientas: list[str],
                          escritura: list[str], programas: set[str], instrucciones: str) -> tuple[str, float]:
     """Ejecuta Claude Code sin interacción y devuelve (respuesta final, costo en USD)."""

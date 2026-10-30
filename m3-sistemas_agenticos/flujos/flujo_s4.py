@@ -21,6 +21,7 @@ from agentes.triage import diagnosticar
 from flujos import flujo_s2 as s2
 from flujos import flujo_s3 as s3
 from flujos.verificacion import ejecutar_pruebas, redesplegar
+from flujos.util import dibuja_grafo
 
 MAX_CICLOS = 2
 
@@ -42,7 +43,11 @@ class Veredicto(BaseModel):
 
 
 def filtrar_historia(s: Estado) -> Estado:
+    #Lee la variable DEFENSAS; si no existe, usa "1"
+    #¿Por que? Es para efectos didácticos, si DEFENSAS=0 entonces depende si el modelo se resiste
     if os.environ.get("DEFENSAS", "1") == "0":
+        #Si se desactivan las defensas, se guarda en la bitacora, pero se deja al agente
+        #analista lidiar con esta historia
         return {"historia_sospechosa": False, "bitacora": ["Filtro de historia DESACTIVADO"]}
     texto = Path(s["historia"]).read_text(encoding="utf-8")
     llm = ChatAnthropic(model=os.environ["MODEL"], max_tokens=1000)
@@ -138,8 +143,11 @@ def construir_grafo():
     for correccion in ("corregir_codigo", "corregir_pruebas", "corregir_despliegue"):
         g.add_edge(correccion, "pruebas_e2e")                          # el ciclo: corregir y volver a probar
     g.add_edge("fin", END)
-    return g.compile(checkpointer=InMemorySaver())
-
+    app = g.compile(checkpointer=InMemorySaver())
+    #YA DIBUJA EL GRAFO ! 
+    dibuja_grafo(app,"flujo_s4")
+    return app
+    
 
 if __name__ == "__main__":
     s2.ejecutar(construir_grafo(), sys.argv[1])

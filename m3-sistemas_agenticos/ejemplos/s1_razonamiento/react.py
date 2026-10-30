@@ -45,6 +45,7 @@ def react(pregunta: str, max_pasos: int = 5) -> str:
                                       #Y que hacen y que devuelven, el LLM decide que herramienta usar y cuando
                                        tools=ESQUEMAS, messages=mensajes)
         mensajes.append({"role": "assistant", "content": resp.content})
+        print(f"  [{"ReAct Agent"}] stop_reason={resp.stop_reason} · bloques={[b.type for b in resp.content]}")   # ← diagnóstico
         for b in resp.content:
             if b.type == "text" and b.text.strip():
                 paso(f"razona · vuelta {n}", b.text)
