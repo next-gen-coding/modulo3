@@ -40,6 +40,7 @@ from langgraph.checkpoint.postgres import PostgresSaver
 from langgraph.graph import END, START, StateGraph
 from langgraph.types import Command, interrupt
 from pydantic import BaseModel
+from psycopg import Connection
 
 from ejemplos.comun import EMPLEADOS, RAIZ, paso, titulo, modelo, guardar_grafo
 
@@ -105,12 +106,19 @@ grafo.add_edge("interpretar", "ejecutar_automaticas")
 grafo.add_conditional_edges("ejecutar_automaticas", hay_riesgo)
 grafo.add_edge("aprobar", END)
 (RAIZ / "ejemplos" / "salidas").mkdir(parents=True, exist_ok=True)
-#with PostgresSaver.from_conn_string(os.environ["POSTGRES_URI"]) as checkpointer:
-# checkpointer.setup()                                  # crea las tablas la primera vez
-# app = grafo.compile(checkpointer=checkpointer)
-conexion = sqlite3.connect(RAIZ / "ejemplos" / "salidas" / "humano.sqlite", check_same_thread=False)
-app = grafo.compile(checkpointer=SqliteSaver(conexion))   # ← ahora cada thread_id se guarda en SQLite
-#app = grafo.compile(checkpointer=checkpointer)
+#conexion = sqlite3.connect(RAIZ / "ejemplos" / "salidas" / "humano.sqlite", check_same_thread=False)
+"""
+Postgres DB
+"""
+conexion = Connection.connect(os.environ["POSTGRES_URI"], autocommit=True, prepare_threshold=0)
+checkpointer = PostgresSaver(conexion)
+checkpointer.setup()
+app = grafo.compile(checkpointer=checkpointer)
+"""
+SQLITE
+"""
+#app = grafo.compile(checkpointer=SqliteSaver(conexion))   # ← ahora cada thread_id se guarda en SQLite
+app = grafo.compile(checkpointer=checkpointer)
 if __name__ == "__main__":
      #Dibujar el grafo
     import sys
