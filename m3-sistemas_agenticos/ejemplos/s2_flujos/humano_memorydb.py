@@ -106,6 +106,7 @@ grafo.add_edge("interpretar", "ejecutar_automaticas")
 grafo.add_conditional_edges("ejecutar_automaticas", hay_riesgo)
 grafo.add_edge("aprobar", END)
 (RAIZ / "ejemplos" / "salidas").mkdir(parents=True, exist_ok=True)
+#SQL Lite
 #conexion = sqlite3.connect(RAIZ / "ejemplos" / "salidas" / "humano.sqlite", check_same_thread=False)
 """
 Postgres DB
