@@ -11,17 +11,39 @@ Uso:  python -m ejemplos.s2_flujos.humano_sqlite
 Requiere:  uv pip install langgraph-checkpoint-sqlite
 El estado de cada thread_id queda en ejemplos/salidas/humano.sqlite.
 En tu fábrica:  flujos/flujo_s2.py → aprobar_plan y pedir_aclaracion
-"""
-import sqlite3
-from typing import Literal, TypedDict
 
+Instrucciones para postgress: 
+Installar:
+langgraph-checkpoint-postgres
+psycopg[binary]
+
+Antes de correrlo:
+  1. Postgres:  docker run -d --name hitl-postgres -e POSTGRES_PASSWORD=clase -p 5432:5432 postgres:16
+  2. En .env:   POSTGRES_URI=postgresql://postgres:clase@localhost:5432/postgres?sslmode=disable
+  3. Paquetes:  pip install langgraph-checkpoint-postgres "psycopg[binary]"
+ 
+Uso:  python -m ejemplos.s2_flujos.humano_postgres "Dar de baja a Ana López" sol-1
+      python -m ejemplos.s2_flujos.humano_postgres --continuar sol-1     (retoma una solicitud en pausa)
+      python -m ejemplos.s2_flujos.humano_postgres --grafo               (solo guarda el grafo)
+Para ver lo guardado:
+      docker exec -it hitl-postgres psql -U postgres -c "select thread_id, checkpoint_id from checkpoints;"
+"""
+import os
+import sys
+from typing import Literal, TypedDict
+import sqlite3
+
+
+from dotenv import load_dotenv
 from langgraph.checkpoint.sqlite import SqliteSaver
+from langgraph.checkpoint.postgres import PostgresSaver
 from langgraph.graph import END, START, StateGraph
 from langgraph.types import Command, interrupt
 from pydantic import BaseModel
 
 from ejemplos.comun import EMPLEADOS, RAIZ, paso, titulo, modelo, guardar_grafo
 
+load_dotenv()
 
 class Accion(BaseModel):
     tipo: Literal["cambiar_puesto", "dar_de_baja", "otra"]
@@ -83,9 +105,12 @@ grafo.add_edge("interpretar", "ejecutar_automaticas")
 grafo.add_conditional_edges("ejecutar_automaticas", hay_riesgo)
 grafo.add_edge("aprobar", END)
 (RAIZ / "ejemplos" / "salidas").mkdir(parents=True, exist_ok=True)
+#with PostgresSaver.from_conn_string(os.environ["POSTGRES_URI"]) as checkpointer:
+# checkpointer.setup()                                  # crea las tablas la primera vez
+# app = grafo.compile(checkpointer=checkpointer)
 conexion = sqlite3.connect(RAIZ / "ejemplos" / "salidas" / "humano.sqlite", check_same_thread=False)
 app = grafo.compile(checkpointer=SqliteSaver(conexion))   # ← ahora cada thread_id se guarda en SQLite
-
+#app = grafo.compile(checkpointer=checkpointer)
 if __name__ == "__main__":
      #Dibujar el grafo
     import sys
