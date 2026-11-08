@@ -3,6 +3,7 @@
 Cada función devuelve (ok, log). El log regresa al agente responsable cuando algo falla.
 """
 import os
+import shutil
 import subprocess
 import sys
 import time
@@ -13,8 +14,11 @@ import httpx
 
 from agentes.base import APP, SALIDA
 
+NPM = shutil.which("npm") or "npm"   # en Windows npm es npm.cmd: subprocess necesita la ruta completa
+
 
 def _responde(url: str, intentos: int = 30) -> tuple[bool, str]:
+    """Consulta una URL hasta que responda con código < 400 o se agoten los intentos."""
     for _ in range(intentos):
         try:
             r = httpx.get(url, timeout=2)
@@ -27,6 +31,7 @@ def _responde(url: str, intentos: int = 30) -> tuple[bool, str]:
 
 
 def _correr(comando: list[str], cwd: Path, timeout: int = 600) -> tuple[bool, str]:
+    """Ejecuta un comando y devuelve (ok, últimas líneas de salida)."""
     r = subprocess.run(comando, cwd=cwd, capture_output=True, text=True, timeout=timeout)
     return r.returncode == 0, (r.stdout + r.stderr)[-4000:]
 
@@ -51,13 +56,14 @@ def verificar_frontend() -> tuple[bool, str]:
     if not (carpeta / "package.json").exists():
         return False, "No existe app/frontend/package.json"
     if not (carpeta / "node_modules").exists():
-        ok, log = _correr(["npm", "install"], carpeta)
+        ok, log = _correr([NPM, "install"], carpeta)
         if not ok:
             return False, log
-    return _correr(["npm", "run", "build"], carpeta)
+    return _correr([NPM, "run", "build"], carpeta)
 
 
 def verificar_app() -> tuple[bool, str]:
+    """Verifica backend y frontend; devuelve (ok, log combinado)."""
     ok_b, log_b = verificar_backend()
     ok_f, log_f = verificar_frontend()
     return ok_b and ok_f, f"## Backend\n{log_b}\n\n## Frontend\n{log_f}"
@@ -70,6 +76,7 @@ def redesplegar() -> tuple[bool, str]:
 
 
 def verificar_despliegue() -> tuple[bool, str]:
+    """Comprueba que la API (8000) y la web (8080) respondan."""
     resultados = [_responde(u, intentos=60) for u in
                   ("http://localhost:8000/api/salud", "http://localhost:8080", "http://localhost:8080/api/salud")]
     return all(ok for ok, _ in resultados), "\n".join(log for _, log in resultados)

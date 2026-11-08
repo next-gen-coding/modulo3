@@ -26,6 +26,7 @@ class Estado(s2.Estado, total=False):
 
 
 def desplegar(s: Estado) -> Estado:
+    """Nodo: agente de despliegue + verificación determinista, hasta 2 intentos."""
     errores = ""
     for intento in (1, 2):                                             # Agente 4 + verificación determinista
         _, costo = agente_despliegue(errores)
@@ -38,6 +39,7 @@ def desplegar(s: Estado) -> Estado:
 
 
 def automatizar(s: Estado) -> Estado:
+    """Nodo: automatizador + verificación de trazabilidad caso -> test, hasta 2 intentos."""
     ids = [c.id for c in PlanPruebas.model_validate_json(Path(s["casos"]).read_text(encoding="utf-8")).casos]
     errores = ""
     for intento in (1, 2):                                             # Agente 5 + verificación determinista
@@ -51,16 +53,19 @@ def automatizar(s: Estado) -> Estado:
 
 
 def despues_de_verificar(s: Estado) -> list[str] | Literal["construir", "fin"]:
+    """Paralelización: si la app está bien, despliegue y automatización corren a la vez."""
     if s["app_ok"]:
         return ["desplegar", "automatizar"]                            # dos ramas en paralelo
     return "construir" if s["intentos"] < s2.MAX_INTENTOS else "fin"
 
 
 def listo(s: Estado) -> Estado:
+    """Punto de unión de las dos ramas paralelas."""
     return {"bitacora": ["Despliegue y pruebas listos"]}               # punto de unión de las ramas
 
 
 def construir_grafo():
+    """Arma y compila el grafo de la sesión 3."""
     g = StateGraph(Estado)
     for nombre, fn in [("analizar", s2.analizar), ("pedir_aclaracion", s2.pedir_aclaracion),
                        ("disenar_casos", s2.disenar), ("planificar", s2.planificar),

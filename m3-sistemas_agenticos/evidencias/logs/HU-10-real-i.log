@@ -1,0 +1,66 @@
+Traceback (most recent call last):
+  File "D:\agentic-course\modulo3\m3-sistemas_agenticos\.venv\Lib\site-packages\claude_agent_sdk\_internal\query.py", line 420, in _read_messages
+    async for message in self.transport.read_messages():
+  File "D:\agentic-course\modulo3\m3-sistemas_agenticos\.venv\Lib\site-packages\claude_agent_sdk\_internal\transport\subprocess_cli.py", line 1162, in _read_messages_impl
+    raise self._exit_error
+claude_agent_sdk._errors.ProcessError: Command failed with exit code 1 (exit code: 1)
+Error output: Check stderr output for details
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "D:\agentic-course\modulo3\m3-sistemas_agenticos\flujos\flujo_s4.py", line 220, in <module>
+    ejecutar_por_pasos(grafo, sys.argv[1], "--reintentar")
+  File "D:\agentic-course\modulo3\m3-sistemas_agenticos\flujos\flujo_s4.py", line 198, in ejecutar_por_pasos
+    out = app.invoke(None, cfg)                                    # retoma tras un error: repite el nodo fallido
+          ^^^^^^^^^^^^^^^^^^^^^
+  File "D:\agentic-course\modulo3\m3-sistemas_agenticos\.venv\Lib\site-packages\langgraph\pregel\main.py", line 4000, in invoke
+    for chunk in self.stream(
+                 ^^^^^^^^^^^^
+  File "D:\agentic-course\modulo3\m3-sistemas_agenticos\.venv\Lib\site-packages\langgraph\pregel\main.py", line 3060, in stream
+    for _ in runner.tick(
+             ^^^^^^^^^^^^
+  File "D:\agentic-course\modulo3\m3-sistemas_agenticos\.venv\Lib\site-packages\langgraph\pregel\_runner.py", line 204, in tick
+    run_with_retry(
+  File "D:\agentic-course\modulo3\m3-sistemas_agenticos\.venv\Lib\site-packages\langgraph\pregel\_retry.py", line 637, in run_with_retry
+    return task.proc.invoke(task.input, config)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\agentic-course\modulo3\m3-sistemas_agenticos\.venv\Lib\site-packages\langgraph\_internal\_runnable.py", line 794, in invoke
+    input = context.run(step.invoke, input, config, **kwargs)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\agentic-course\modulo3\m3-sistemas_agenticos\.venv\Lib\site-packages\langgraph\_internal\_runnable.py", line 479, in invoke
+    ret = self.func(*args, **kwargs)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\agentic-course\modulo3\m3-sistemas_agenticos\flujos\flujo_s2.py", line 94, in construir
+    resumen, costo = desarrollador.construir(s["hu"], s["plan"], errores)      # Agente 3, edición
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\agentic-course\modulo3\m3-sistemas_agenticos\agentes\desarrollador.py", line 66, in construir
+    return ejecutar_claude_code(prompt, agente="desarrollador", cwd=APP, herramientas=EDICION,
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\agentic-course\modulo3\m3-sistemas_agenticos\agentes\claude_code.py", line 100, in ejecutar_claude_code
+    resultado = asyncio.run(_consultar(prompt, opciones))
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\jjmm_\AppData\Local\Programs\Python\Python312\Lib\asyncio\runners.py", line 195, in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+  File "C:\Users\jjmm_\AppData\Local\Programs\Python\Python312\Lib\asyncio\runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\jjmm_\AppData\Local\Programs\Python\Python312\Lib\asyncio\base_events.py", line 691, in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+  File "D:\agentic-course\modulo3\m3-sistemas_agenticos\agentes\claude_code.py", line 33, in _consultar
+    async for mensaje in query(prompt=prompt, options=opciones):
+  File "D:\agentic-course\modulo3\m3-sistemas_agenticos\.venv\Lib\site-packages\claude_agent_sdk\query.py", line 129, in query
+    async for message in client.process_query(
+  File "D:\agentic-course\modulo3\m3-sistemas_agenticos\.venv\Lib\site-packages\claude_agent_sdk\_internal\client.py", line 56, in process_query
+    async for msg in inner:
+  File "D:\agentic-course\modulo3\m3-sistemas_agenticos\.venv\Lib\site-packages\claude_agent_sdk\_internal\client.py", line 204, in _process_query_inner
+    async for data in query.receive_messages():
+  File "D:\agentic-course\modulo3\m3-sistemas_agenticos\.venv\Lib\site-packages\claude_agent_sdk\_internal\query.py", line 1173, in receive_messages
+    raise exc
+claude_agent_sdk._errors.ResultError: Claude Code returned an error result: Reached maximum budget ($0.5) (exit code: 1)
+During task with name 'construir' and id 'b7e18d24-533a-43c6-d819-f8fbda0c770b'
+  [desarrollador] trabajando en app/ con Claude Code...

@@ -1,0 +1,46 @@
+# Reporte · HU-10
+
+**Estado:** ESCALAR A UNA PERSONA
+**Costo de agentes:** 0.95 USD
+**Ciclos de corrección:** 1
+
+## Bitácora
+- Filtro de historia: OK
+- Criterios escritos en criterios.feature
+- Casos de prueba escritos en casos_prueba.json
+- Plan rechazado: Rechazado: 1) la implementación NO está completa: POST /api/empleados/{id}/vacaciones responde 500 porque la suma de días usados filtra con Vacacion.fecha_inicio.year; las fechas son texto, filtra el año con like('AAAA-%'). Revisa también el GET. 2) No siembres datos ni dependas de ids fijos: cada prueba crea su propio empleado. 3) Verifica con curl un 201 y un 422 de vacaciones antes de terminar.
+- Plan aprobado por una persona
+- Construcción 3: el agente agotó su presupuesto con el código ya corregido; una persona lo comprobó con comprobar_hu10 (0 fallas) y dio la etapa por completada
+- Verificación: OK
+- Pruebas automatizadas: OK (23 casos)
+- Despliegue: OK
+- Despliegue y pruebas listos
+- Pruebas E2E: 7 failed, 16 passed, 1 warning in 38.34s
+- Triage → desarrollador: El cálculo de días disponibles es incorrecto. El API retorna 201 cuando debería retornar 422 (test_cp_hu10_14), y los días disponibles en la respuesta no coinciden con el criterio: debería ser 8 pero retorna 9 (test_cp_hu10_15). Además, hay un error en el cálculo de días hábiles (assert 1 == 0 en test_cp_hu10_02).
+- Código corregido; redespliegue OK
+- Pruebas E2E: 5 failed, 18 passed, 1 warning in 38.03s
+- Escalado a una persona: Revisado por una persona: los 5 fallos son de datos de las pruebas, no de la app. Ejemplo: CP-02 consume del 2 al 6 de feb de 2026 suponiendo 5 días, pero el 2 de feb es festivo (4 días), así que el saldo esperado es 1, no 0. La app pasa la comprobación independiente contra las tablas de la Guía (comprobar_hu10: 0 fallas). El triage eligió al desarrollador; el responsable era el automatizador (y el diseñador, por los datos de los casos). Se cierra sin otro ciclo por presupuesto.
+
+## Última ejecución de pruebas
+```
+5 failed, 18 passed, 1 warning in 38.03s
+- tests.api.test_hu_10::test_cp_hu10_02
+  assert 1 == 0
+- tests.api.test_hu_10::test_cp_hu10_14
+  assert 201 == 422
+ +  where 201 = <Response [201 Created]>.status_code
+- tests.api.test_hu_10::test_cp_hu10_15
+  AssertionError: assert 'La solicitud...: te quedan 9' == 'La solicitud...: te quedan 8'
+  
+  Skipping 42 identical leading characters in diff, use -v to show
+  - te quedan 8
+  ?           ^
+  + te quedan 9
+  ?           ^
+- tests.e2e.test_hu_10_e2e::test_cp_hu10_21[chromium]
+  AssertionError: assert '7' in '8'
+- tests.e2e.test_hu_10_e2e::test_cp_hu10_22[chromium]
+  playwright._impl._errors.TimeoutError: Locator.text_content: Timeout 30000ms exceeded.
+Call log:
+  - waiting for get_by_test_id("mensaje-error")
+```

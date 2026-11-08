@@ -1,0 +1,32 @@
+Propongo este plan para completar HU-10:
+
+## Plan de corrección e implementación de HU-10
+
+### Backend: Corregir bug de filtrado por año (crítico)
+
+**Archivo:** `backend/main.py`
+
+- **Línea 235:** Reemplazar `Vacacion.fecha_inicio.year == fecha_inicio.year` por query que use `.like()` en formato texto AAAA-MM-DD
+- **Línea 286:** Idem para el GET de resumen anual; pasar `anio` como string al `.like()`
+- **Motivo:** SQLite no soporta `.year` en columnas Date; las fechas se comparan como texto
+
+### Frontend: Ya implementado ✓
+
+- `VacacionesModal.jsx` completo con formulario, validación, mensajes y tabla
+- `DirectorioEmpleados.jsx` tiene botón `vacaciones-empleado-{id}` y data-testid
+
+### Validaciones: Verificar orden
+
+Líneas 194-245 siguen el orden correcto CLAUDE.md:
+1. Empleado existe (404)
+2. Fin ≥ inicio (422)
+3. Mismo año (422)
+4. Antigüedad (422)
+5. Días hábiles > 0 (422)
+6. Tope anual (422)
+
+### Verificación con curl
+
+Después de fix:
+- **201:** `curl -X POST http://localhost:8000/api/empleados/1/vacaciones -H "Content-Type: application/json" -d '{"fecha_inicio":"2026-07-06","fecha_fin":"2026-07-10"}'`
+- **422:** `curl -X POST http://localhost:8000/api/empleados/1/vacaciones -H "Content-Type: application/json" -d '{"fecha_inicio":"2026-04-04","fecha_fin":"2026-04-05"}'` (solo fin de semana)

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="5" skipped="0" tests="23" time="37.991" timestamp="2026-11-08T13:01:20.224847-06:00" hostname="Jose-Tower"><testcase classname="tests.api.test_hu_10" name="test_cp_hu10_01" time="0.308" /><testcase classname="tests.api.test_hu_10" name="test_cp_hu10_02" time="0.334"><failure message="assert 1 == 0">tests\api\test_hu_10.py:68: in test_cp_hu10_02
+    assert data["dias_disponibles"] == 0
+E   assert 1 == 0</failure></testcase><testcase classname="tests.api.test_hu_10" name="test_cp_hu10_03" time="0.262" /><testcase classname="tests.api.test_hu_10" name="test_cp_hu10_04" time="0.289" /><testcase classname="tests.api.test_hu_10" name="test_cp_hu10_05" time="0.275" /><testcase classname="tests.api.test_hu_10" name="test_cp_hu10_06" time="0.259" /><testcase classname="tests.api.test_hu_10" name="test_cp_hu10_07" time="0.262" /><testcase classname="tests.api.test_hu_10" name="test_cp_hu10_08" time="0.249" /><testcase classname="tests.api.test_hu_10" name="test_cp_hu10_09" time="0.235" /><testcase classname="tests.api.test_hu_10" name="test_cp_hu10_10" time="0.262" /><testcase classname="tests.api.test_hu_10" name="test_cp_hu10_11" time="0.238" /><testcase classname="tests.api.test_hu_10" name="test_cp_hu10_12" time="0.236" /><testcase classname="tests.api.test_hu_10" name="test_cp_hu10_13" time="0.258" /><testcase classname="tests.api.test_hu_10" name="test_cp_hu10_14" time="0.311"><failure message="assert 201 == 422&#10; +  where 201 = &lt;Response [201 Created]&gt;.status_code">tests\api\test_hu_10.py:243: in test_cp_hu10_14
+    assert resp.status_code == 422
+E   assert 201 == 422
+E    +  where 201 = &lt;Response [201 Created]&gt;.status_code</failure></testcase><testcase classname="tests.api.test_hu_10" name="test_cp_hu10_15" time="0.326"><failure message="AssertionError: assert 'La solicitud...: te quedan 9' == 'La solicitud...: te quedan 8'&#10;  &#10;  Skipping 42 identical leading characters in diff, use -v to show&#10;  - te quedan 8&#10;  ?           ^&#10;  + te quedan 9&#10;  ?           ^">tests\api\test_hu_10.py:265: in test_cp_hu10_15
+    assert resp.json()["detail"] == "La solicitud excede tus días disponibles: te quedan 8"
+E   AssertionError: assert 'La solicitud...: te quedan 9' == 'La solicitud...: te quedan 8'
+E     
+E     Skipping 42 identical leading characters in diff, use -v to show
+E     - te quedan 8
+E     ?           ^
+E     + te quedan 9
+E     ?           ^</failure></testcase><testcase classname="tests.api.test_hu_10" name="test_cp_hu10_16" time="0.215" /><testcase classname="tests.api.test_hu_10" name="test_cp_hu10_17" time="0.189" /><testcase classname="tests.api.test_hu_10" name="test_cp_hu10_18" time="0.234" /><testcase classname="tests.api.test_hu_10" name="test_cp_hu10_19" time="0.251" /><testcase classname="tests.e2e.test_hu_10_e2e" name="test_cp_hu10_20[chromium]" time="1.023" /><testcase classname="tests.e2e.test_hu_10_e2e" name="test_cp_hu10_21[chromium]" time="0.485"><failure message="AssertionError: assert '7' in '8'">tests\e2e\test_hu_10_e2e.py:68: in test_cp_hu10_21
+    assert "7" in disponibles
+E   AssertionError: assert '7' in '8'</failure></testcase><testcase classname="tests.e2e.test_hu_10_e2e" name="test_cp_hu10_22[chromium]" time="30.494"><failure message="playwright._impl._errors.TimeoutError: Locator.text_content: Timeout 30000ms exceeded.&#10;Call log:&#10;  - waiting for get_by_test_id(&quot;mensaje-error&quot;)">tests\e2e\test_hu_10_e2e.py:86: in test_cp_hu10_22
+    mensaje = page.get_by_test_id("mensaje-error").text_content()
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\.venv\Lib\site-packages\playwright\sync_api\_generated.py:13453: in text_content
+    self._sync(self._impl_obj.text_content(timeout=to_milliseconds(timeout)))
+..\.venv\Lib\site-packages\playwright\_impl\_locator.py:703: in text_content
+    return await self._frame.text_content(
+..\.venv\Lib\site-packages\playwright\_impl\_frame.py:741: in text_content
+    return await self._channel.send(
+..\.venv\Lib\site-packages\playwright\_impl\_connection.py:78: in send
+    return await self._connection.wrap_api_call(
+..\.venv\Lib\site-packages\playwright\_impl\_connection.py:636: in wrap_api_call
+    raise rewrite_error(error, f"{parsed_st['apiName']}: {error}") from None
+E   playwright._impl._errors.TimeoutError: Locator.text_content: Timeout 30000ms exceeded.
+E   Call log:
+E     - waiting for get_by_test_id("mensaje-error")</failure></testcase><testcase classname="tests.e2e.test_hu_10_e2e" name="test_cp_hu10_23[chromium]" time="0.582" /></testsuite></testsuites>

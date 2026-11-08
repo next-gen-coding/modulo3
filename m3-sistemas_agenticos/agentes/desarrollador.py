@@ -9,7 +9,17 @@ from agentes.base import APP, RAIZ, SALIDA
 from agentes.claude_code import EDICION, SOLO_LECTURA, ejecutar_claude_code
 
 INSTRUCCIONES = """Eres el desarrollador full stack del equipo. Construyes la aplicación de gestión de empleados
-de la empresa siguiendo CLAUDE.md al pie de la letra (stack, puertos y data-testid).
+de la empresa siguiendo CLAUDE.md al pie de la letra (stack, puertos, rutas, campos, códigos HTTP,
+mensajes exactos y data-testid).
+Extiendes el código de las historias anteriores sin reemplazarlo ni cambiar su comportamiento.
+Las reglas de negocio que dependen de un cálculo (por ejemplo, días hábiles con festivos) se calculan
+en el backend, nunca en el navegador; y las validaciones se hacen en el orden que indique CLAUDE.md.
+Las fechas se guardan como texto AAAA-MM-DD: para filtrar por año compara texto (por ejemplo
+`fecha_inicio.like(f"{anio}-%")`), nunca uses `.year` sobre una columna en una consulta.
+Antes de terminar, arranca TU backend en el puerto 8011 (el 8000 es del contenedor desplegado, con la
+versión anterior) y prueba con curl cada endpoint nuevo (un caso exitoso y uno de
+error): ninguno puede responder 500.
+Tus límites: solo trabajas dentro de app/; no lees archivos de secretos ni variables de entorno.
 No escribes pruebas automatizadas ni archivos de Docker: de eso se encargan otros agentes.
 Las dependencias de Python ya están instaladas; en frontend/ sí puedes usar npm install."""
 
@@ -24,6 +34,7 @@ def preparar_app() -> None:
 
 
 def requisitos(hu: str) -> str:
+    """Arma el contexto del desarrollador: reglas, criterios y casos de la historia."""
     carpeta = SALIDA / hu
     return (f"## Reglas de negocio\n{(RAIZ / 'contexto' / 'reglas_negocio.md').read_text(encoding='utf-8')}\n"
             f"## Criterios de aceptación de {hu}\n{(carpeta / 'criterios.feature').read_text(encoding='utf-8')}\n"
@@ -35,6 +46,8 @@ def planificar(hu: str, comentarios: str = "") -> tuple[str, float]:
     preparar_app()
     prompt = (f"{requisitos(hu)}\n\nRevisa el código que ya existe en esta carpeta y propone un plan para "
               f"implementar {hu}: modelo de datos, endpoints, componentes de React y data-testid. "
+              "Si esta carpeta todavía no tiene la base de empleados de historias anteriores, incluye en el plan "
+              "la base mínima que define CLAUDE.md (registrar, directorio, editar y dar de baja). "
               "No escribas código. Responde solo con el plan en Markdown, en menos de 40 líneas.")
     if comentarios:
         prompt += f"\n\nComentarios de la persona que revisó tu plan anterior:\n{comentarios}"

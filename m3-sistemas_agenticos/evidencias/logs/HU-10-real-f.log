@@ -1,0 +1,61 @@
+Analista · intento 1
+  [analista] stop_reason=tool_use · bloques=['text', 'tool_use', 'tool_use']
+  [analista · paso 0] leer_archivo(ruta)
+  [analista · paso 0] leer_archivo(ruta)
+  [analista] stop_reason=tool_use · bloques=['text', 'tool_use']
+  [analista · paso 1] escribir_archivo(ruta, contenido)
+  [analista] stop_reason=end_turn · bloques=['text']
+  [analista] respondió sin herramientas:
+42 escenarios.
+Analista · intento 2
+  [analista] stop_reason=tool_use · bloques=['text', 'tool_use', 'tool_use']
+  [analista · paso 0] leer_archivo(ruta)
+  [analista · paso 0] leer_archivo(ruta)
+  [analista] stop_reason=tool_use · bloques=['text', 'tool_use']
+  [analista · paso 1] escribir_archivo(ruta, contenido)
+  [analista] stop_reason=end_turn · bloques=['text']
+  [analista] respondió sin herramientas:
+24 escenarios.
+Diseñador de pruebas · intento 1
+  [disenador] stop_reason=tool_use · bloques=['text', 'tool_use', 'tool_use', 'tool_use']
+  [disenador · paso 0] leer_archivo(ruta)
+  [disenador · paso 0] leer_archivo(ruta)
+  [disenador · paso 0] leer_archivo(ruta)
+  [disenador] stop_reason=tool_use · bloques=['text', 'tool_use']
+  [disenador · paso 1] guardar_casos(historia, casos)
+  [disenador] stop_reason=end_turn · bloques=['text']
+  [disenador] respondió sin herramientas:
+23 casos de prueba
+  [desarrollador-plan] trabajando en app/ con Claude Code...
+  [desarrollador-plan] terminó en 11 turnos · 0.11 USD
+
+=== EN PAUSA (thread_id=HU-10-solicitar-vacaciones) · ver HU-10/pausa.md ===
+## plan
+## Plan de HU-10: Solicitar Vacaciones
+
+**Estado**: ✅ Implementación completa existente. Solo requiere verificación y testing.
+
+### Backend
+- ✅ Modelo `Vacacion` en `models.py` con relación a `Empleado`
+- ✅ Endpoints:
+  - `POST /api/empleados/{id}/vacaciones` → 201 con `dias_habiles` y `dias_disponibles`
+  - `GET /api/empleados/{id}/vacaciones?anio=AAAA` → resumen con solicitudes
+- ✅ Validaciones en orden: empleado (404) → orden fechas → año → antigüedad → días hábiles → tope anual
+- ✅ Funciones en `utils.py`: `calcular_dias_habiles()`, `obtener_festivos()`, `calcular_proxima_fecha_aniversario()`
+
+### Frontend
+- ✅ `VacacionesModal.jsx`: formulario (fecha-inicio, fecha-fin), resumen (días disponibles), tabla de solicitudes
+- ✅ `DirectorioEmpleados.jsx`: botón `vacaciones-empleado-{id}` para empleados activos
+- ✅ `Empleados.jsx`: integración del modal al hacer clic
+- ✅ Todos los `data-testid` del CLAUDE.md: campos, botones, tabla, mensajes
+
+### Tareas pendientes
+1. **Seed datos**: insertar empleados de test (IDs 1–23) con correos y fechas según casos de prueba
+2. **Verificar curl**: probar 2 endpoints exitosos (CP-HU10-01, CP-HU10-14) y 2 errores (CP-HU10-06, CP-HU10-16)
+3. **Probar UI**: acceder al directorio, abrir vacaciones, registrar solicitud, ver resumen y tabla
+
+**Resultado**: Backend responde 201/422/404, frontend muestra mensajes exactos de CLAUDE.md, `npm run build` sin errores.
+
+## pregunta
+¿Aprobar el plan? Escribe 'si' o tus comentarios
+Retoma con: python -m flujos.flujo_s4 historias/HU-10-solicitar-vacaciones.md --respuesta "si"

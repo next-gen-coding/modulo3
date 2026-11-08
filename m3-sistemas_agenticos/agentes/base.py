@@ -36,6 +36,7 @@ class Herramienta:
     funcion: Callable[..., str]
 
     def esquema(self) -> dict:
+        """Esquema de la herramienta en el formato que espera la API de Anthropic."""
         return {"name": self.nombre, "description": self.descripcion,
                 "input_schema": {"type": "object", "properties": self.parametros,
                                  "required": list(self.parametros)}}
@@ -53,13 +54,16 @@ def _dentro_de(ruta: str, bases: list[Path]) -> Path:
 def herramientas_archivos(lectura: list[Path], escritura: Path) -> list[Herramienta]:
     """Herramientas de archivos con permisos mínimos: leer en `lectura`, escribir solo en `escritura`."""
     def leer_archivo(ruta: str) -> str:
+        """Lee un archivo dentro de las carpetas permitidas."""
         return _dentro_de(ruta, lectura + [escritura]).read_text(encoding="utf-8")
 
     def listar_archivos(carpeta: str) -> str:
+        """Lista los archivos de una carpeta permitida."""
         base = _dentro_de(carpeta, lectura + [escritura])
         return "\n".join(rel(p) for p in sorted(base.rglob("*")) if p.is_file()) or "(vacía)"
 
     def escribir_archivo(ruta: str, contenido: str) -> str:
+        """Escribe un archivo solo dentro de la carpeta de escritura del agente."""
         destino = _dentro_de(ruta, [escritura])
         destino.parent.mkdir(parents=True, exist_ok=True)
         destino.write_text(contenido, encoding="utf-8")

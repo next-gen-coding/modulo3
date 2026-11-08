@@ -13,10 +13,22 @@ from claude_agent_sdk import ClaudeAgentOptions, ResultMessage, query
 from seguridad.hooks import hooks_para
 
 SOLO_LECTURA = ["Read", "Glob", "Grep"]
+COSTO = Path(__file__).resolve().parent.parent / "costo_acumulado.txt"
+
+
+def _costo_acumulado() -> float:
+    """USD gastados por Claude Code en todas las ejecuciones (persiste entre procesos)."""
+    return float(COSTO.read_text()) if COSTO.exists() else 0.0
+
+
+def _sumar_costo(costo: float) -> None:
+    """Suma el costo de una llamada al acumulado en disco."""
+    COSTO.write_text(f"{_costo_acumulado() + costo:.4f}")
 EDICION = ["Read", "Glob", "Grep", "Write", "Edit", "Bash"]
 
 
 async def _consultar(prompt: str, opciones: ClaudeAgentOptions) -> ResultMessage:
+    """Recorre los mensajes de Claude Code y devuelve el ResultMessage final."""
     resultado = None
     async for mensaje in query(prompt=prompt, options=opciones):
         if isinstance(mensaje, ResultMessage):
@@ -66,6 +78,9 @@ ejecutar_claude_code(prompt, agente="desarrollador", cwd=APP,
 def ejecutar_claude_code(prompt: str, *, agente: str, cwd: Path, herramientas: list[str],
                          escritura: list[str], programas: set[str], instrucciones: str) -> tuple[str, float]:
     """Ejecuta Claude Code sin interacción y devuelve (respuesta final, costo en USD)."""
+    gastado = _costo_acumulado()
+    if gastado >= float(os.environ.get("TOPE_TOTAL_USD", "4.5")):     # tope global entre ejecuciones
+        raise RuntimeError(f"{agente}: tope global alcanzado ({gastado:.2f} USD en costo_acumulado.txt)")
     opciones = ClaudeAgentOptions(
         cwd=str(cwd),
         model=os.environ["MODEL"],
@@ -75,12 +90,13 @@ def ejecutar_claude_code(prompt: str, *, agente: str, cwd: Path, herramientas: l
         allowed_tools=herramientas,
         disallowed_tools=["WebFetch", "WebSearch"],  # sin salida a internet: rompe la tríada letal
         hooks=hooks_para(agente, cwd, escritura, programas),
-        max_turns=80,
+        max_turns=60,                             # costo: menos vueltas por llamada
         max_budget_usd=float(os.environ.get("PRESUPUESTO_USD", "2")),
     )
     print(f"  [{agente}] trabajando en {cwd.name}/ con Claude Code...")
     resultado = asyncio.run(_consultar(prompt, opciones))
     costo = resultado.total_cost_usd or 0.0
+    _sumar_costo(costo)
     print(f"  [{agente}] terminó en {resultado.num_turns} turnos · {costo:.2f} USD")
     if resultado.is_error:
         raise RuntimeError(f"{agente}: {resultado.subtype} · {resultado.result}")

@@ -38,6 +38,7 @@ class Estado(TypedDict, total=False):
 
 # --- Nodos -----------------------------------------------------------------
 def analizar(s: Estado) -> Estado:
+    """Nodo: el analista escribe y valida criterios.feature."""
     ruta = generar_criterios(Path(s["historia"]))                      # Agente 1
     return {"hu": hu_de(Path(s["historia"])), "criterios": str(ruta), "intentos": 0, "costo_usd": 0.0,
             "preguntas": preguntas_abiertas(ruta.read_text(encoding="utf-8")),
@@ -45,10 +46,12 @@ def analizar(s: Estado) -> Estado:
 
 
 def despues_de_analizar(s: Estado) -> Literal["pedir_aclaracion", "disenar_casos"]:
+    """Enrutamiento: si hay preguntas abiertas, pausa para una persona."""
     return "pedir_aclaracion" if s["preguntas"] else "disenar_casos"
 
 
 def pedir_aclaracion(s: Estado) -> Estado:
+    """HITL: pausa con las preguntas abiertas del analista."""
     respuesta = interrupt({"preguntas": s["preguntas"],
                            "pregunta": "Hay preguntas abiertas. ¿Continuar de todos modos? (si/no)"})
     return {"bitacora": [f"Preguntas abiertas: la persona respondió '{respuesta}'"],
@@ -56,20 +59,24 @@ def pedir_aclaracion(s: Estado) -> Estado:
 
 
 def despues_de_aclarar(s: Estado) -> Literal["disenar_casos", "__end__"]:
+    """Enrutamiento: termina si la persona decide detener."""
     return END if s.get("comentarios") == "detener" else "disenar_casos"
 
 
 def disenar(s: Estado) -> Estado:
+    """Nodo: el diseñador escribe y valida casos_prueba.json."""
     ruta = disenar_casos(Path(s["criterios"]))                         # Agente 2
     return {"casos": str(ruta), "bitacora": [f"Casos de prueba escritos en {ruta.name}"]}
 
 
 def planificar(s: Estado) -> Estado:
+    """Nodo: el desarrollador propone un plan en modo solo lectura."""
     plan, costo = desarrollador.planificar(s["hu"], s.get("comentarios", ""))   # Agente 3, solo lectura
     return {"plan": plan, "costo_usd": costo}
 
 
 def aprobar_plan(s: Estado) -> Estado:
+    """HITL: interrupt para que una persona apruebe o rechace el plan."""
     decision = interrupt({"plan": s["plan"], "pregunta": "¿Aprobar el plan? Escribe 'si' o tus comentarios"})
     if decision.strip().lower() == "si":
         return {"plan_aprobado": True, "bitacora": ["Plan aprobado por una persona"]}
@@ -77,25 +84,30 @@ def aprobar_plan(s: Estado) -> Estado:
 
 
 def despues_de_aprobar(s: Estado) -> Literal["construir", "planificar"]:
+    """Enrutamiento: plan aprobado -> construir; rechazado -> replanificar."""
     return "construir" if s["plan_aprobado"] else "planificar"
 
 
 def construir(s: Estado) -> Estado:
+    """Nodo: el desarrollador implementa el plan aprobado."""
     errores = "" if s.get("app_ok", True) else s.get("log_verificacion", "")
     resumen, costo = desarrollador.construir(s["hu"], s["plan"], errores)      # Agente 3, edición
     return {"intentos": s["intentos"] + 1, "costo_usd": costo, "bitacora": [f"Construcción {s['intentos'] + 1}"]}
 
 
 def verificar(s: Estado) -> Estado:
+    """Nodo determinista: arranca el backend y compila el frontend."""
     ok, log = verificar_app()                                          # determinista, sin LLM
     return {"app_ok": ok, "log_verificacion": log, "bitacora": [f"Verificación: {'OK' if ok else 'FALLA'}"]}
 
 
 def despues_de_verificar(s: Estado) -> Literal["construir", "fin"]:
+    """Evaluador-optimizador: reconstruye hasta MAX_INTENTOS si la verificación falla."""
     return "construir" if not s["app_ok"] and s["intentos"] < MAX_INTENTOS else "fin"
 
 
 def fin(s: Estado) -> Estado:
+    """Nodo final: imprime estado, costo y bitácora."""
     print(f"\n=== {s['hu']} · app {'LISTA' if s.get('app_ok') else 'ESCALAR A UNA PERSONA'} "
           f"· {s.get('costo_usd', 0):.2f} USD ===")
     for linea in s.get("bitacora", []):
@@ -104,6 +116,7 @@ def fin(s: Estado) -> Estado:
 
 
 def construir_grafo():
+    """Arma y compila el grafo de la sesión 2."""
     g = StateGraph(Estado)
     for nombre, fn in [("analizar", analizar), ("pedir_aclaracion", pedir_aclaracion),
                        ("disenar_casos", disenar), ("planificar", planificar), ("aprobar_plan", aprobar_plan),

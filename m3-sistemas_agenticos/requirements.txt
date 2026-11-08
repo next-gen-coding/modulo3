@@ -16,3 +16,4 @@ mcp>=1.23,<2
 chromium
 langgraph-checkpoint-postgres
 psycopg[binary]
+langgraph-checkpoint-sqlite
