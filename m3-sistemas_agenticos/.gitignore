@@ -2,7 +2,7 @@
 __pycache__/
 *.pyc
 .env
-auditoria.jsonl
+checkpoints.sqlite*
 .DS_Store
 app/frontend/node_modules/
 app/frontend/dist/
@@ -11,3 +11,4 @@ app/test-results/
 ejemplos/salidas/
 lab_agents
 .pytest_cache/
+costo_acumulado.txt

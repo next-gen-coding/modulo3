@@ -26,12 +26,19 @@ Reglas:
   usando page.get_by_test_id(...) con los data-testid de CLAUDE.md.
 - Un test por caso; su docstring empieza con el id del caso (por ejemplo "CP-03: ...").
 - Cada test crea sus propios datos con correos únicos (uuid) para poder repetirse sin choques.
+- Si un caso depende de datos acumulados (por ejemplo, vacaciones), cada test crea su PROPIO empleado
+  con correo único (uuid) y la fecha_ingreso que pide el caso; nunca compartas empleados entre tests.
+- Compara códigos HTTP y mensajes `detail` con igualdad exacta (==), copiados de CLAUDE.md.
+- En E2E espera a que el mensaje de resultado sea visible antes de comparar su texto.
+- Si ya existen pruebas de otras historias en tests/, consérvalas sin cambios.
+- Las pruebas son síncronas: E2E con la fixture `page` de pytest-playwright en funciones `def`, nunca `async def`.
 - Comprueba la sintaxis con `python -m pytest tests --collect-only -q`. No ejecutes las pruebas completas.
 Responde con la lista de archivos y cuántos tests escribiste."""
 
 
 
 def automatizar(hu: str, errores: str = "") -> tuple[str, float]:
+    """Agente 5: convierte casos_prueba.json en pruebas pytest/Playwright dentro de app/tests."""
     casos = (SALIDA / hu / "casos_prueba.json").read_text(encoding="utf-8")
     prompt = TAREA.format(hu=hu, casos=casos, hu_min=hu.lower().replace("-", "_"))
     if errores:

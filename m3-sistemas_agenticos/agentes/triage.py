@@ -32,6 +32,7 @@ El criterio de aceptación manda: si la prueba y la aplicación no coinciden, ga
 
 
 def diagnosticar(hu: str, fallos: str) -> Diagnostico:
+    """Supervisor: lee los fallos y decide qué agente corrige (salida estructurada Diagnostico)."""
     llm = ChatAnthropic(model=os.environ["MODEL"], max_tokens=2000)
     criterios = (SALIDA / hu / "criterios.feature").read_text(encoding="utf-8")
     return llm.with_structured_output(Diagnostico).invoke(PROMPT.format(criterios=criterios, fallos=fallos[:6000]))

@@ -1,0 +1,32 @@
+La carpeta `app/` solo contiene `CLAUDE.md`. No hay código de historias anteriores. Propongo el plan completo incluyendo la base mínima:
+
+## Plan de implementación HU-10: Solicitar vacaciones
+
+**Backend (FastAPI + SQLite)**
+1. Modelo `Empleado` con campos: id, numero_empleado, nombre, correo, puesto, departamento, fecha_ingreso, estado, fecha_baja, creado_en
+2. Modelo `Vacacion` con: id, empleado_id, fecha_inicio, fecha_fin, dias_habiles
+3. Función `calcular_dias_habiles()` que aplica la regla del art. 74 (festivos dinámicos: 1 ene, 1º lun feb, 3º lun mar, 1 may, 16 sep, 3º lun nov, 25 dic; +1 oct en 2024/2030) y resta fines de semana
+4. Endpoints empleados:
+   - `POST /api/empleados` (crear, valida correo @empresa.com, único, fecha_ingreso ≤ hoy)
+   - `GET /api/empleados` (directorio con estado «activo» o «baja»)
+   - `PUT /api/empleados/{id}` (editar: solo si activo)
+   - `POST /api/empleados/{id}/baja` (cambiar estado a «baja», guardar fecha_baja)
+   - `GET /api/departamentos` (catálogo)
+5. Endpoints vacaciones:
+   - `POST /api/empleados/{id}/vacaciones` (validar en orden: empleado existe → fin≥inicio → mismo año → antigüedad≥1 año → días_habiles>0 → días≤disponibles; respuesta 201 con dias_disponibles restantes)
+   - `GET /api/empleados/{id}/vacaciones?anio=AAAA` (resumen anual con dias_por_anio=12, dias_usados, dias_disponibles, lista solicitudes)
+6. Mensajes de error exactos de reglas_vacaciones.md; códigos 404, 409, 422
+
+**Frontend (React + Vite)**
+1. Componentes: `Empleados.jsx` (directorio), `FormEmpleado.jsx` (crear/editar), `ModalBaja.jsx`
+2. Pantalla vacaciones: `VacacionesModal.jsx` con formulario (fecha_inicio, fecha_fin), botón «Solicitar», resumen de días, lista de solicitudes
+3. Data-testid exactos según convenciones: empleado-*, vacaciones-*, mensaje-*, tabla-*
+4. Solo mostrar botón `vacaciones-empleado-{id}` si empleado activo; mostrar `dias_disponibles` como número
+
+**Base de datos**
+- SQLite en `backend/datos/empleados.db`; crear carpeta `datos/` al arrancar
+- Migración: crear tablas Empleado y Vacacion con índices en correo (único), empleado_id
+
+**Validaciones**
+- Backend calcula dias_habiles con función de festivos dinámicos
+- Mensajes copiados letra por letra de reglas; orden de validaciones: empleado → fechas → año → antigüedad → hábiles → disponibles

@@ -1,0 +1,391 @@
+{
+  "historia": "HU-10",
+  "casos": [
+    {
+      "id": "CP-HU10-01",
+      "escenario": "Solicitar vacaciones dentro del tope anual",
+      "nivel": "api",
+      "precondiciones": [
+        "Empleado con id 1, correo juan@empresa.com, fecha_ingreso 2024-01-15 ya existe en la BD"
+      ],
+      "pasos": [
+        "POST /api/empleados/1/vacaciones con fecha_inicio 2026-07-06 y fecha_fin 2026-07-10"
+      ],
+      "datos": {
+        "fecha_inicio": "2026-07-06",
+        "fecha_fin": "2026-07-10"
+      },
+      "resultado_esperado": "201 con dias_habiles=5 y dias_disponibles=7"
+    },
+    {
+      "id": "CP-HU10-02",
+      "escenario": "Usar exactamente los días disponibles en el año",
+      "nivel": "api",
+      "precondiciones": [
+        "Empleado con id 2, correo maria@empresa.com, fecha_ingreso 2024-01-15 existe",
+        "Empleado 2 tiene 5 días usados en 2026 (solicitudes previas registradas)"
+      ],
+      "pasos": [
+        "POST /api/empleados/2/vacaciones con fecha_inicio 2026-07-13 y fecha_fin 2026-07-21"
+      ],
+      "datos": {
+        "fecha_inicio": "2026-07-13",
+        "fecha_fin": "2026-07-21"
+      },
+      "resultado_esperado": "201 con dias_habiles=7 y dias_disponibles=0"
+    },
+    {
+      "id": "CP-HU10-03",
+      "escenario": "El periodo incluye festivos",
+      "nivel": "api",
+      "precondiciones": [
+        "Empleado con id 3, correo carlos@empresa.com, fecha_ingreso 2024-01-15 existe"
+      ],
+      "pasos": [
+        "POST /api/empleados/3/vacaciones con fecha_inicio 2026-03-16 y fecha_fin 2026-03-20"
+      ],
+      "datos": {
+        "fecha_inicio": "2026-03-16",
+        "fecha_fin": "2026-03-20"
+      },
+      "resultado_esperado": "201 con dias_habiles=4 (el 16 de marzo de 2026 es festivo)"
+    },
+    {
+      "id": "CP-HU10-04",
+      "escenario": "El periodo incluye fines de semana",
+      "nivel": "api",
+      "precondiciones": [
+        "Empleado con id 4, correo rosa@empresa.com, fecha_ingreso 2024-01-15 existe"
+      ],
+      "pasos": [
+        "POST /api/empleados/4/vacaciones con fecha_inicio 2026-03-21 y fecha_fin 2026-04-01"
+      ],
+      "datos": {
+        "fecha_inicio": "2026-03-21",
+        "fecha_fin": "2026-04-01"
+      },
+      "resultado_esperado": "201 con dias_habiles=8 (sábado 21 y domingo 22 no cuentan, domingo 29 y lunes 30 no cuentan)"
+    },
+    {
+      "id": "CP-HU10-05",
+      "escenario": "Solicitar en el mes de diciembre con festivo incluido",
+      "nivel": "api",
+      "precondiciones": [
+        "Empleado con id 5, correo luis@empresa.com, fecha_ingreso 2024-01-15 existe"
+      ],
+      "pasos": [
+        "POST /api/empleados/5/vacaciones con fecha_inicio 2026-12-21 y fecha_fin 2026-12-31"
+      ],
+      "datos": {
+        "fecha_inicio": "2026-12-21",
+        "fecha_fin": "2026-12-31"
+      },
+      "resultado_esperado": "201 con dias_habiles=8 (el 25 de diciembre es festivo; 26 es sábado, 27 es domingo)"
+    },
+    {
+      "id": "CP-HU10-06",
+      "escenario": "Rechazar solicitud sin cumplir un año",
+      "nivel": "api",
+      "precondiciones": [
+        "Empleado con id 6, correo ana@empresa.com, fecha_ingreso 2025-12-21 existe"
+      ],
+      "pasos": [
+        "POST /api/empleados/6/vacaciones con fecha_inicio 2025-12-18 y fecha_fin 2025-12-20"
+      ],
+      "datos": {
+        "fecha_inicio": "2025-12-18",
+        "fecha_fin": "2025-12-20"
+      },
+      "resultado_esperado": "422 con detail: «Necesitas al menos un año de antigüedad para solicitar vacaciones»"
+    },
+    {
+      "id": "CP-HU10-07",
+      "escenario": "Permitir solicitud exactamente en el primer aniversario",
+      "nivel": "api",
+      "precondiciones": [
+        "Empleado con id 7, correo diego@empresa.com, fecha_ingreso 2025-12-21 existe"
+      ],
+      "pasos": [
+        "POST /api/empleados/7/vacaciones con fecha_inicio 2026-12-21 y fecha_fin 2026-12-23"
+      ],
+      "datos": {
+        "fecha_inicio": "2026-12-21",
+        "fecha_fin": "2026-12-23"
+      },
+      "resultado_esperado": "201"
+    },
+    {
+      "id": "CP-HU10-08",
+      "escenario": "Rechazar solicitud un día antes del primer aniversario",
+      "nivel": "api",
+      "precondiciones": [
+        "Empleado con id 8, correo sofia@empresa.com, fecha_ingreso 2025-12-21 existe"
+      ],
+      "pasos": [
+        "POST /api/empleados/8/vacaciones con fecha_inicio 2026-12-20 y fecha_fin 2026-12-22"
+      ],
+      "datos": {
+        "fecha_inicio": "2026-12-20",
+        "fecha_fin": "2026-12-22"
+      },
+      "resultado_esperado": "422 con detail: «Necesitas al menos un año de antigüedad para solicitar vacaciones»"
+    },
+    {
+      "id": "CP-HU10-09",
+      "escenario": "El aniversario de 29 de febrero se toma el 1 de marzo",
+      "nivel": "api",
+      "precondiciones": [
+        "Empleado con id 9, correo pedro@empresa.com, fecha_ingreso 2024-02-29 existe"
+      ],
+      "pasos": [
+        "POST /api/empleados/9/vacaciones con fecha_inicio 2025-02-28 y fecha_fin 2025-03-02"
+      ],
+      "datos": {
+        "fecha_inicio": "2025-02-28",
+        "fecha_fin": "2025-03-02"
+      },
+      "resultado_esperado": "422 con detail: «Necesitas al menos un año de antigüedad para solicitar vacaciones»"
+    },
+    {
+      "id": "CP-HU10-10",
+      "escenario": "Permitir solicitud el 1 de marzo cuando el empleado ingresó el 29 de febrero",
+      "nivel": "api",
+      "precondiciones": [
+        "Empleado con id 10, correo laura@empresa.com, fecha_ingreso 2024-02-29 existe"
+      ],
+      "pasos": [
+        "POST /api/empleados/10/vacaciones con fecha_inicio 2025-03-03 y fecha_fin 2025-03-07"
+      ],
+      "datos": {
+        "fecha_inicio": "2025-03-03",
+        "fecha_fin": "2025-03-07"
+      },
+      "resultado_esperado": "201"
+    },
+    {
+      "id": "CP-HU10-11",
+      "escenario": "Rechazar cuando la fecha de fin es anterior a la de inicio",
+      "nivel": "api",
+      "precondiciones": [
+        "Empleado con id 11, correo pablo@empresa.com, fecha_ingreso 2024-01-15 existe"
+      ],
+      "pasos": [
+        "POST /api/empleados/11/vacaciones con fecha_inicio 2026-07-15 y fecha_fin 2026-07-10"
+      ],
+      "datos": {
+        "fecha_inicio": "2026-07-15",
+        "fecha_fin": "2026-07-10"
+      },
+      "resultado_esperado": "422 con detail: «La fecha de fin no puede ser anterior a la de inicio»"
+    },
+    {
+      "id": "CP-HU10-12",
+      "escenario": "Rechazar cuando las fechas están en años diferentes",
+      "nivel": "api",
+      "precondiciones": [
+        "Empleado con id 12, correo elena@empresa.com, fecha_ingreso 2024-01-15 existe"
+      ],
+      "pasos": [
+        "POST /api/empleados/12/vacaciones con fecha_inicio 2025-12-20 y fecha_fin 2026-01-10"
+      ],
+      "datos": {
+        "fecha_inicio": "2025-12-20",
+        "fecha_fin": "2026-01-10"
+      },
+      "resultado_esperado": "422 con detail: «Las vacaciones se solicitan dentro de un mismo año»"
+    },
+    {
+      "id": "CP-HU10-13",
+      "escenario": "Rechazar periodo que no incluye días hábiles (solo fines de semana)",
+      "nivel": "api",
+      "precondiciones": [
+        "Empleado con id 13, correo marcos@empresa.com, fecha_ingreso 2024-01-15 existe"
+      ],
+      "pasos": [
+        "POST /api/empleados/13/vacaciones con fecha_inicio 2026-04-04 y fecha_fin 2026-04-05"
+      ],
+      "datos": {
+        "fecha_inicio": "2026-04-04",
+        "fecha_fin": "2026-04-05"
+      },
+      "resultado_esperado": "422 con detail: «El periodo no incluye días hábiles»"
+    },
+    {
+      "id": "CP-HU10-14",
+      "escenario": "Rechazar cuando se solicitan más días de los disponibles",
+      "nivel": "api",
+      "precondiciones": [
+        "Empleado con id 14, correo isabel@empresa.com, fecha_ingreso 2024-01-15 existe",
+        "Empleado 14 tiene 12 días usados en 2026"
+      ],
+      "pasos": [
+        "POST /api/empleados/14/vacaciones con fecha_inicio 2026-07-06 y fecha_fin 2026-07-10"
+      ],
+      "datos": {
+        "fecha_inicio": "2026-07-06",
+        "fecha_fin": "2026-07-10"
+      },
+      "resultado_esperado": "422 con detail: «La solicitud excede tus días disponibles: te quedan 0»"
+    },
+    {
+      "id": "CP-HU10-15",
+      "escenario": "Rechazar cuando se piden más días de los que quedan",
+      "nivel": "api",
+      "precondiciones": [
+        "Empleado con id 15, correo juan2@empresa.com, fecha_ingreso 2024-01-15 existe",
+        "Empleado 15 tiene 4 días usados en 2026"
+      ],
+      "pasos": [
+        "POST /api/empleados/15/vacaciones con fecha_inicio 2026-07-06 y fecha_fin 2026-07-17"
+      ],
+      "datos": {
+        "fecha_inicio": "2026-07-06",
+        "fecha_fin": "2026-07-17"
+      },
+      "resultado_esperado": "422 con detail: «La solicitud excede tus días disponibles: te quedan 8» (pide 9 días hábiles)"
+    },
+    {
+      "id": "CP-HU10-16",
+      "escenario": "Rechazar solicitud para empleado que no existe",
+      "nivel": "api",
+      "precondiciones": [
+        "Empleado con id 999 no existe en la BD"
+      ],
+      "pasos": [
+        "POST /api/empleados/999/vacaciones con fecha_inicio 2026-07-06 y fecha_fin 2026-07-10"
+      ],
+      "datos": {
+        "fecha_inicio": "2026-07-06",
+        "fecha_fin": "2026-07-10"
+      },
+      "resultado_esperado": "404 con detail: «Empleado no encontrado»"
+    },
+    {
+      "id": "CP-HU10-17",
+      "escenario": "Validar que existe el empleado antes de validar el formato de fechas",
+      "nivel": "api",
+      "precondiciones": [
+        "Empleado con id 998 no existe en la BD"
+      ],
+      "pasos": [
+        "POST /api/empleados/998/vacaciones con fecha_inicio 2026-07-15 y fecha_fin 2026-07-10"
+      ],
+      "datos": {
+        "fecha_inicio": "2026-07-15",
+        "fecha_fin": "2026-07-10"
+      },
+      "resultado_esperado": "404 con detail: «Empleado no encontrado» (se valida existencia antes que orden de fechas)"
+    },
+    {
+      "id": "CP-HU10-18",
+      "escenario": "Validar el orden de las fechas antes de la antigüedad",
+      "nivel": "api",
+      "precondiciones": [
+        "Empleado con id 16, correo veronica@empresa.com, fecha_ingreso 2025-12-21 existe"
+      ],
+      "pasos": [
+        "POST /api/empleados/16/vacaciones con fecha_inicio 2026-07-15 y fecha_fin 2026-07-10"
+      ],
+      "datos": {
+        "fecha_inicio": "2026-07-15",
+        "fecha_fin": "2026-07-10"
+      },
+      "resultado_esperado": "422 con detail: «La fecha de fin no puede ser anterior a la de inicio» (se valida orden antes de antigüedad)"
+    },
+    {
+      "id": "CP-HU10-19",
+      "escenario": "Validar que el mismo año antes de validar antigüedad",
+      "nivel": "api",
+      "precondiciones": [
+        "Empleado con id 17, correo victor@empresa.com, fecha_ingreso 2025-12-21 existe"
+      ],
+      "pasos": [
+        "POST /api/empleados/17/vacaciones con fecha_inicio 2025-12-20 y fecha_fin 2026-01-10"
+      ],
+      "datos": {
+        "fecha_inicio": "2025-12-20",
+        "fecha_fin": "2026-01-10"
+      },
+      "resultado_esperado": "422 con detail: «Las vacaciones se solicitan dentro de un mismo año» (se valida año antes de antigüedad)"
+    },
+    {
+      "id": "CP-HU10-20",
+      "escenario": "Mostrar el formulario de vacaciones y registrar solicitud con éxito",
+      "nivel": "e2e",
+      "precondiciones": [
+        "Empleado activo con id 20, correo test1@empresa.com, fecha_ingreso 2024-01-15, con 0 días usados en 2026 existe en la BD"
+      ],
+      "pasos": [
+        "Navegar al directorio de empleados",
+        "Hacer clic en el botón `vacaciones-empleado-20`",
+        "Verificar que `vacaciones-fecha-inicio` está vacío, `vacaciones-fecha-fin` está vacío, `vacaciones-solicitar` está habilitado y `vacaciones-disponibles` muestra '12'",
+        "Completar `vacaciones-fecha-inicio` con '2026-07-06' y `vacaciones-fecha-fin` con '2026-07-10'",
+        "Hacer clic en el botón `vacaciones-solicitar`"
+      ],
+      "datos": {
+        "id_empleado": "20",
+        "fecha_inicio": "2026-07-06",
+        "fecha_fin": "2026-07-10"
+      },
+      "resultado_esperado": "Se muestra en `mensaje-exito` el texto 'Solicitud registrada: 5 días hábiles. Te quedan 7 días disponibles.' y aparece la solicitud en `tabla-vacaciones` con `fila-vacaciones-{id}` y `dias-vacaciones-{id}` muestra '5'"
+    },
+    {
+      "id": "CP-HU10-21",
+      "escenario": "Mostrar días disponibles cuando hay solicitudes anteriores",
+      "nivel": "e2e",
+      "precondiciones": [
+        "Empleado activo con id 21, correo test2@empresa.com, fecha_ingreso 2024-01-15, con 5 días usados en 2026 existe en la BD"
+      ],
+      "pasos": [
+        "Navegar al directorio de empleados",
+        "Hacer clic en el botón `vacaciones-empleado-21`",
+        "Verificar que `vacaciones-disponibles` muestra el número de días disponibles"
+      ],
+      "datos": {
+        "id_empleado": "21",
+        "dias_esperados": "7"
+      },
+      "resultado_esperado": "`vacaciones-disponibles` muestra '7'"
+    },
+    {
+      "id": "CP-HU10-22",
+      "escenario": "Mostrar error en la pantalla cuando se excede el tope anual",
+      "nivel": "e2e",
+      "precondiciones": [
+        "Empleado activo con id 22, correo test3@empresa.com, fecha_ingreso 2024-01-15, con 12 días usados en 2026 existe en la BD"
+      ],
+      "pasos": [
+        "Navegar al directorio de empleados",
+        "Hacer clic en el botón `vacaciones-empleado-22`",
+        "Completar `vacaciones-fecha-inicio` con '2026-07-06' y `vacaciones-fecha-fin` con '2026-07-10'",
+        "Hacer clic en el botón `vacaciones-solicitar`"
+      ],
+      "datos": {
+        "id_empleado": "22",
+        "fecha_inicio": "2026-07-06",
+        "fecha_fin": "2026-07-10"
+      },
+      "resultado_esperado": "Se muestra en `mensaje-error` el texto 'La solicitud excede tus días disponibles: te quedan 0'"
+    },
+    {
+      "id": "CP-HU10-23",
+      "escenario": "Mostrar error en la pantalla cuando no cumple antigüedad",
+      "nivel": "e2e",
+      "precondiciones": [
+        "Empleado activo con id 23, correo test4@empresa.com, fecha_ingreso 2025-12-21 existe en la BD"
+      ],
+      "pasos": [
+        "Navegar al directorio de empleados",
+        "Hacer clic en el botón `vacaciones-empleado-23`",
+        "Completar `vacaciones-fecha-inicio` con '2025-12-18' y `vacaciones-fecha-fin` con '2025-12-20'",
+        "Hacer clic en el botón `vacaciones-solicitar`"
+      ],
+      "datos": {
+        "id_empleado": "23",
+        "fecha_inicio": "2025-12-18",
+        "fecha_fin": "2025-12-20"
+      },
+      "resultado_esperado": "Se muestra en `mensaje-error` el texto 'Necesitas al menos un año de antigüedad para solicitar vacaciones'"
+    }
+  ]
+}

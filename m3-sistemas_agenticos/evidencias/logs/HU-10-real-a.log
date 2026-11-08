@@ -1,0 +1,51 @@
+Analista · intento 1
+  [analista] stop_reason=tool_use · bloques=['text', 'tool_use', 'tool_use']
+  [analista · paso 0] leer_archivo(ruta)
+  [analista · paso 0] leer_archivo(ruta)
+  [analista] stop_reason=tool_use · bloques=['text', 'tool_use']
+  [analista · paso 1] escribir_archivo(ruta, contenido)
+  [analista] stop_reason=end_turn · bloques=['text']
+  [analista] respondió sin herramientas:
+41 escenarios
+Diseñador de pruebas · intento 1
+  [disenador] stop_reason=tool_use · bloques=['text', 'tool_use', 'tool_use', 'tool_use']
+  [disenador · paso 0] leer_archivo(ruta)
+  [disenador · paso 0] leer_archivo(ruta)
+  [disenador · paso 0] leer_archivo(ruta)
+  [disenador] stop_reason=tool_use · bloques=['text', 'tool_use']
+  [disenador · paso 1] guardar_casos(historia, casos)
+  [disenador] stop_reason=end_turn · bloques=['text']
+  [disenador] respondió sin herramientas:
+36 casos escritos.
+  [desarrollador-plan] trabajando en app/ con Claude Code...
+  [desarrollador-plan] terminó en 11 turnos · 0.12 USD
+
+=== EN PAUSA (thread_id=HU-10-solicitar-vacaciones) · ver HU-10/pausa.md ===
+## plan
+# Plan de implementación HU-10: Solicitar vacaciones
+
+## Fase 1: Base de empleados (HU-01 a HU-03)
+1. **Backend:** Modelo `Empleado` (SQLAlchemy) + endpoints CRUD en FastAPI
+   - GET/POST `/api/empleados`, GET/PUT `/api/empleados/{id}`, DELETE para baja
+   - Validaciones de dominio (correo @empresa.com, antigüedad, campos requeridos)
+2. **Frontend:** Directorio, formulario de registro/edición, datos-testid de HU-01 a HU-03
+3. **BD:** SQLite con tabla `empleados`
+
+## Fase 2: Vacaciones (HU-10)
+1. **Modelo:** Tabla `vacaciones(id, empleado_id, fecha_inicio, fecha_fin, dias_habiles)`
+2. **Backend endpoints:**
+   - `POST /api/empleados/{id}/vacaciones` → validaciones (antigüedad, fechas, festivos, tope 12 días)
+   - `GET /api/empleados/{id}/vacaciones?anio=AAAA` → resumen del año
+3. **Lógica:** Función `contar_dias_habiles()` (excluye sábado/domingo y 7 festivos LFT)
+4. **Frontend:**
+   - Modal/panel de vacaciones por empleado (solo activos)
+   - Campos: fecha_inicio, fecha_fin
+   - Lista de solicitudes con dias_habiles
+   - Muestra dias_disponibles y mensajes exactos de error/éxito
+5. **Data-testid:** Todos los de CLAUDE.md HU-10 (vacaciones-empleado-{id}, vacaciones-fecha-inicio, etc.)
+
+**Orden de validación API:** 1) empleado existe (404), 2) fin ≥ inicio, 3) mismo año, 4) antigüedad (1 año), 5) días hábiles, 6) tope anual.
+
+## pregunta
+¿Aprobar el plan? Escribe 'si' o tus comentarios
+Retoma con: python -m flujos.flujo_s4 historias/HU-10-solicitar-vacaciones.md --respuesta "si"

@@ -1,0 +1,146 @@
+# Reporte · HU-10
+
+**Estado:** ESCALAR A UNA PERSONA
+**Costo de agentes:** 1.08 USD
+**Ciclos de corrección:** 1
+
+## Bitácora
+- Filtro de historia: OK
+- Criterios escritos en criterios.feature
+- Casos de prueba escritos en casos_prueba.json
+- Plan rechazado: Rechazado: 1) la baja NO es DELETE: según la regla 5 dar de baja cambia estado a 'baja' y guarda fecha_baja (POST /api/empleados/{id}/baja); el empleado sigue en el directorio. 2) Los festivos se calculan para cualquier año con la regla del art. 74 (1 ene, primer lunes de feb, tercer lunes de mar, 1 may, 16 sep, tercer lunes de nov, 25 dic y 1 oct en 2024/2030), no solo una lista fija. 3) Indica que los mensajes de error se copian letra por letra de las reglas de vacaciones.
+- Plan aprobado por una persona
+- Construcción 1
+- Verificación: OK
+- Pruebas automatizadas: OK (36 casos)
+- Despliegue: OK
+- Despliegue y pruebas listos
+- Pruebas E2E: 35 failed, 1 passed, 10 warnings in 8.90s
+- Triage → desarrollador: La API está retornando código 422 (Unprocessable Entity) cuando debería retornar 201 (Created) para solicitudes válidas de vacaciones según el criterio de aceptación. Esto indica que la lógica de validación en la aplicación es más restrictiva que la especificada o hay un error en la implementación de la funcionalidad de registro de vacaciones.
+- Código corregido; redespliegue OK
+- Pruebas E2E: 26 failed, 10 passed, 10 warnings in 11.62s
+- Escalado a una persona: Revisado por una persona: 500 en POST vacaciones por filtrar Vacacion.fecha_inicio.year en SQLAlchemy (las fechas son texto) y E2E escritas como async def. Se corrigen las instrucciones del desarrollador y del automatizador y se vuelve a ejecutar.
+
+## Última ejecución de pruebas
+```
+26 failed, 10 passed, 10 warnings in 11.62s
+- tests.api.test_hu_10::test_cp_10_01
+  assert 500 == 201
+ +  where 500 = <Response [500 Internal Server Error]>.status_code
+- tests.api.test_hu_10::test_cp_10_02
+  assert 500 == 201
+ +  where 500 = <Response [500 Internal Server Error]>.status_code
+- tests.api.test_hu_10::test_cp_10_03
+  assert 422 == 201
+ +  where 422 = <Response [422 Unprocessable Entity]>.status_code
+- tests.api.test_hu_10::test_cp_10_04
+  httpx.RemoteProtocolError: Server disconnected without sending a response.
+- tests.api.test_hu_10::test_cp_10_05
+  assert 500 == 200
+ +  where 500 = <Response [500 Internal Server Error]>.status_code
+- tests.api.test_hu_10::test_cp_10_06
+  assert 500 == 201
+ +  where 500 = <Response [500 Internal Server Error]>.status_code
+- tests.api.test_hu_10::test_cp_10_08
+  assert 500 == 201
+ +  where 500 = <Response [500 Internal Server Error]>.status_code
+- tests.api.test_hu_10::test_cp_10_10
+  assert 500 == 201
+ +  where 500 = <Response [500 Internal Server Error]>.status_code
+- tests.api.test_hu_10::test_cp_10_11
+  assert 500 == 201
+ +  where 500 = <Response [500 Internal Server Error]>.status_code
+- tests.api.test_hu_10::test_cp_10_12
+  assert 500 == 201
+ +  where 500 = <Response [500 Internal Server Error]>.status_code
+- tests.api.test_hu_10::test_cp_10_13
+  assert 500 == 201
+ +  where 500 = <Response [500 Internal Server Error]>.status_code
+- tests.api.test_hu_10::test_cp_10_15
+  assert 500 == 201
+ +  where 500 = <Response [500 Internal Server Error]>.status_code
+- tests.api.test_hu_10::test_cp_10_16
+  httpx.RemoteProtocolError: Server disconnected without sending a response.
+- tests.api.test_hu_10::test_cp_10_17
+  httpx.RemoteProtocolError: Server disconnected without sending a response.
+- tests.api.test_hu_10::test_cp_10_18
+  httpx.RemoteProtocolError: Server disconnected without sending a response.
+- tests.api.test_hu_10::test_cp_10_20
+  assert 500 == 201
+ +  where 500 = <Response [500 Internal Server Error]>.status_code
+- tests.api.test_hu_10::test_cp_10_24
+  assert 422 == 404
+ +  where 422 = <Response [422 Unprocessable Entity]>.status_code
+- tests.e2e.test_hu_10_e2e::test_cp_10_28[chromium]
+  Failed: async def functions are not natively supported.
+You need to install a suitable plugin for your async framework, for example:
+  - anyio
+  - pytest-asyncio
+  - pytest-tornasync
+  - pytest-trio
+  - pytest-twisted
+- tests.e2e.test_hu_10_e2e::test_cp_10_29[chromium]
+  Failed: async def functions are not natively supported.
+You need to install a suitable plugin for your async framework, for example:
+  - anyio
+  - pytest-asyncio
+  - pytest-tornasync
+  - pytest-trio
+  - pytest-twisted
+- tests.e2e.test_hu_10_e2e::test_cp_10_30[chromium]
+  Failed: async def functions are not natively supported.
+You need to install a suitable plugin for your async framework, for example:
+  - anyio
+  - pytest-asyncio
+  - pytest-tornasync
+  - pytest-trio
+  - pytest-twisted
+- tests.e2e.test_hu_10_e2e::test_cp_10_31[chromium]
+  Failed: async def functions are not natively supported.
+You need to install a suitable plugin for your async framework, for example:
+  - anyio
+  - pytest-asyncio
+  - pytest-tornasync
+  - pytest-trio
+  - pytest-twisted
+- tests.e2e.test_hu_10_e2e::test_cp_10_32[chromium]
+  Failed: async def functions are not natively supported.
+You need to install a suitable plugin for your async framework, for example:
+  - anyio
+  - pytest-asyncio
+  - pytest-tornasync
+  - pytest-trio
+  - pytest-twisted
+- tests.e2e.test_hu_10_e2e::test_cp_10_33[chromium]
+  Failed: async def functions are not natively supported.
+You need to install a suitable plugin for your async framework, for example:
+  - anyio
+  - pytest-asyncio
+  - pytest-tornasync
+  - pytest-trio
+  - pytest-twisted
+- tests.e2e.test_hu_10_e2e::test_cp_10_34[chromium]
+  Failed: async def functions are not natively supported.
+You need to install a suitable plugin for your async framework, for example:
+  - anyio
+  - pytest-asyncio
+  - pytest-tornasync
+  - pytest-trio
+  - pytest-twisted
+- tests.e2e.test_hu_10_e2e::test_cp_10_35[chromium]
+  Failed: async def functions are not natively supported.
+You need to install a suitable plugin for your async framework, for example:
+  - anyio
+  - pytest-asyncio
+  - pytest-tornasync
+  - pytest-trio
+  - pytest-twisted
+- tests.e2e.test_hu_10_e2e::test_cp_10_36[chromium]
+  Failed: async def functions are not natively supported.
+You need to install a suitable plugin for your async framework, for example:
+  - anyio
+  - pytest-asyncio
+  - pytest-tornasync
+  - pytest-trio
+  - pytest-twisted
+```

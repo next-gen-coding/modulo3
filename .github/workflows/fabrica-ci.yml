@@ -1,0 +1,29 @@
+# CI de la fábrica: gates de seguridad y calidad. No llama a la API de Anthropic.
+name: fabrica-ci
+on: [push, pull_request]
+defaults:
+  run:
+    working-directory: m3-sistemas_agenticos
+jobs:
+  calidad-y-seguridad:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.12" }
+      - name: Dependencias
+        run: pip install -r requirements.txt coverage pytest-cov bandit pip-audit
+      - name: Gate 1 · Secretos fuera del repo
+        run: |
+          ! git ls-files | grep -E '(^|/)\.env$'
+          ! git grep -nE 'sk-ant-[A-Za-z0-9_-]{20,}' -- . ':!*.md'
+      - name: Gate 2 · Análisis estático (bandit, falla con severidad alta)
+        run: bandit -r app/backend seguridad agentes flujos -q -lll
+      - name: Gate 3 · Dependencias vulnerables (pip-audit)
+        run: pip-audit -r app/backend/requirements.txt
+      - name: Gate 4 · Pruebas de seguridad de la fábrica (cobertura >= 80 %)
+        run: python -m pytest tests_fabrica -q --cov=seguridad --cov-fail-under=80
+      - name: Gate 5 · Pruebas de API del backend (cobertura >= 80 %)
+        run: |
+          python -m coverage run --source=app/backend evidencias/cobertura_backend.py
+          python -m coverage report --fail-under=80

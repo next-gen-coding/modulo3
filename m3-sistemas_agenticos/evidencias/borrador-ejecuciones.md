@@ -1,0 +1,10 @@
+# Borrador de ejecuciones (materia prima de decisiones.md)
+
+- (Logs de estas pruebas iniciales no se conservan.) HU-01 ejecución 1: `Connection error` (Bearer vacío). Causa: variables ANTHROPIC_* vacías heredadas de la terminal. Se corrió con entorno limpio (no es cambio de fábrica).
+- HU-01: el analista escribió `# Preguntas abiertas` con «Ninguna» y pausó el flujo. Corrección al agente: SISTEMA del analista dice que omita la sección si no hay preguntas.
+- HU-01: el diseñador se cortó por `max_tokens` (22 escenarios). Corrección: max_tokens 16000→32000 en la llamada del bucle; se retomó con `--reintentar` desde el checkpoint SQLite (sin repetir al analista).
+- HU-10 real: el desarrollador agotó max_turns=30 al construir desde cero (la llamada fallida no reportó costo; se estimaron 0.6 USD). Corrección: max_turns 60, PRESUPUESTO_USD 1.0; se retomó con `--reintentar` desde el checkpoint.
+- HU-10 real, ejecución 1: ESCALAR A UNA PERSONA (26 fallan, 10 pasan tras 1 ciclo de triage). Causa: 500 por `Vacacion.fecha_inicio.year` en SQLAlchemy y E2E `async def`. Corrección a los agentes: el desarrollador filtra el año como texto y prueba los endpoints con curl; el automatizador escribe pruebas síncronas. Evidencia en `evidencias/ejecucion-1/`.
+- Ejecución 2: el desarrollador agotó 60 turnos probando contra el puerto 8000 (contenedor con la versión anterior). Corrección: pruebas locales en 8011; PRESUPUESTO_USD 0.5 para no pasar el tope global.
+- Ejecución 2: el desarrollador llegó al tope de 0.5 USD con el código ya corregido (comprobar_hu10: 0 fallas contra el backend local). La persona marcó «construir» como completado en el checkpoint (update_state) para no gastar otra construcción; el flujo siguió con verificar, desplegar, automatizar y pruebas.
+- Ejecución 2 final: 18/23 en verde; los 5 fallos son de datos de las pruebas (p. ej. CP-02 con el festivo del 2 de feb). El triage culpó al desarrollador; el responsable era el automatizador. Escalado y cerrado por presupuesto (4.13 USD conservador).
